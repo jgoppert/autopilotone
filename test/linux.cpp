@@ -1,8 +1,7 @@
-#include <AutoPilotOne.h>
-
+#include <iostream>
+#include <apo/apo.hpp>
 int main (int argc, char const* argv[])
 {
-	using namespace APO;
-	HAL hal;
-	return 0;
+    std::cout << "linux test complete" << std::endl;
+    return 0;
 }
