@@ -17,14 +17,10 @@
 #ifndef GUIDE_HPP_
 #define GUIDE_HPP_
 
-#include "TypeUser.hpp"
+#include "apoMacros.hpp"
 
 namespace apo
 {
-
-// forward declrations
-class Navigator;
-class Parameters;
 
 class Guide: public BoardUser, ParameterTableUser, NavigatorUser {
 

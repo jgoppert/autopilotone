@@ -20,5 +20,5 @@
 #include "Guide.hpp"
 #include "Navigator.hpp"
 #include "Controller.hpp"
-#include "TypeUser.hpp"
+#include "apoMacros.hpp"
 

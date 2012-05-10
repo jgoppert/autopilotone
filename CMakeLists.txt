@@ -1,11 +1,14 @@
 project(autopilotone C CXX)
 cmake_minimum_required(VERSION 2.8)
 
+find_package(Boost 1.42 REQUIRED COMPONENTS thread system)
+
 file(GLOB_RECURSE APO_SRC "apo/*")
-include_directories(.)
+include_directories(. ${Boost_INCLUDE_DIRS})
 add_executable(test
-    test/linux.cpp
+    test/pc.cpp
     ${APO_SRC})
+target_link_libraries(test ${Boost_LIBRARIES})
 
 # doxygen
 find_program(DOXYGEN doxygen)
