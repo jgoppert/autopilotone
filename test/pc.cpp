@@ -9,31 +9,29 @@ class TestNavigator : public Navigator {
 public:
     TestNavigator(Board * board, ParameterTable * parameterTable) : Navigator(board,parameterTable) {}
     bool update() {
-        return set_lat(1);
-        return set_lon(1);
-        return set_alt(1);
+        return set_lat(1) && set_lon(1) && set_alt(1);
     }
 };
 
 void navReader(int id, apo::TestNavigator * navigator,uint32_t  * failureCount, 
-        uint32_t totalCycles, uint32_t sleepMicros) {
+        uint32_t totalCycles, uint32_t sleepmillis) {
     uint32_t lat = 0;
     for (int i=0;i<totalCycles;i++) {
-        //boost::this_thread::sleep(boost::posix_time::microseconds(sleepMicros));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
         while(!navigator->get_lat(lat)) {
             (*failureCount)++;
-            //boost::this_thread::sleep(boost::posix_time::microseconds(sleepMicros));
+            boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
         }
     }
 }
 
 void navWriter(int id, apo::TestNavigator * navigator,uint32_t  * failureCount,
-        uint32_t totalCycles, uint32_t sleepMicros) {
+        uint32_t totalCycles, uint32_t sleepmillis) {
     for (int i=0;i<totalCycles;i++) {
-        //boost::this_thread::sleep(boost::posix_time::microseconds(sleepMicros));
+        boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
         while(!navigator->update()) {
             (*failureCount)++;
-            //boost::this_thread::sleep(boost::posix_time::microseconds(sleepMicros));
+            boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
         }
     }
 }
@@ -47,11 +45,10 @@ int main (int argc, char const* argv[])
     ParameterTable parameterTable;
     TestNavigator navigator(&board,&parameterTable);
 
-    // settings
-    // sleep currently disabled, if enabled, no read/write failures occur
-    uint32_t sleepMicros1 = 0;
-    uint32_t sleepMicros2 = 0;
-    uint32_t sleepMicros3 = 0;
+    // settings // sleep currently disabled, if enabled, no read/write failures occur
+    uint32_t sleepmillis1 = 0;
+    uint32_t sleepmillis2 = 0;
+    uint32_t sleepmillis3 = 0;
     uint32_t totalCycles = 100000;
 
     // data
@@ -60,9 +57,9 @@ int main (int argc, char const* argv[])
     uint32_t failureCount3 = 0;
 
     // threads
-    boost::thread thread1(navReader,1,&navigator,&failureCount1,totalCycles,sleepMicros1);
-    boost::thread thread2(navReader,2,&navigator,&failureCount2,totalCycles,sleepMicros2);
-    boost::thread thread3(navWriter,3,&navigator,&failureCount3,totalCycles,sleepMicros3);
+    boost::thread thread1(navReader,1,&navigator,&failureCount1,totalCycles,sleepmillis1);
+    boost::thread thread2(navReader,2,&navigator,&failureCount2,totalCycles,sleepmillis2);
+    boost::thread thread3(navWriter,3,&navigator,&failureCount3,totalCycles,sleepmillis3);
 
     thread1.join();
     thread2.join();

@@ -17,6 +17,8 @@
 #ifndef APO_MACROS_HPP_
 #define APO_MACROS_HPP_
 
+#include <inttypes.h>
+
 namespace apo {
 
 #define CONCATENATE_HELPER(X,Y) X##Y
