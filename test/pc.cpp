@@ -41,6 +41,8 @@ int main (int argc, char const* argv[])
     Board board;
     ParameterTable parameterTable;
     TestNavigator navigator(&board,&parameterTable);
+    Guide guide(&board,&parameterTable,&navigator);
+    Controller controller(&board,&parameterTable,&navigator,&guide);
 
     uint32_t sleepmillis1 = 1;
     uint32_t sleepmillis2 = 2;
