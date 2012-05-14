@@ -34,9 +34,45 @@ public:
 
 // attributes
 public:
-    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint32_t,lat);
-    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint32_t,lon);
-    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint16_t,alt);
+
+    /// latitude, expressed in degrees * 1E7
+    LOCKED_ATTR(uint32_t,lat_degE7);
+    INT2FLOAT_ACCESS(lat,lat_degE7,1.0e7*M_PI/180)
+
+    /// longitude, expressed in degrees * 1E7
+    LOCKED_ATTR(uint32_t,lon_degE7);
+    INT2FLOAT_ACCESS(lon,lon_degE7,1.0e7*M_PI/180)
+
+    /// altitude, expressed in degrees * 1E7
+    LOCKED_ATTR(uint16_t,alt_degE3);
+    INT2FLOAT_ACCESS(alt,alt_degE3,1.0e3*M_PI/180)
+
+    /// north velocity, m/s
+    LOCKED_ATTR(uint32_t,vN);
+
+    /// east velocity, m/s
+    LOCKED_ATTR(uint32_t,vE);
+
+    /// down velocity, m/s
+    LOCKED_ATTR(uint32_t,vD);
+
+    /// roll, rad
+    LOCKED_ATTR(float,roll);
+
+    /// pitch, rad
+    LOCKED_ATTR(float,pitch);
+
+    /// yaw, rad
+    LOCKED_ATTR(float,yaw);
+
+    /// roll rate, rad/s
+    LOCKED_ATTR(float,rollRate);
+
+    /// pitch rate, rad/s
+    LOCKED_ATTR(float,pitchRate);
+
+    /// yaw rate, rad/s
+    LOCKED_ATTR(float,yawRate);
 
 }; // class Navigator
 

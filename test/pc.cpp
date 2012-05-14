@@ -10,6 +10,7 @@ public:
     TestNavigator(Board * board, ParameterTable * parameterTable) : Navigator(board,parameterTable) {}
     void update() {
         set_lat(1);
+        set_lon_degE7(1000);
         set_lon(1);
         set_alt(1);
     }

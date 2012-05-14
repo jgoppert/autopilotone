@@ -28,7 +28,7 @@ namespace apo {
 ///
 // This macro defines a user of a class with
 // an accessor with protected access.
-#define DEFINE_APO_MACROS(Type) \
+#define DEFINE_USER(Type) \
 class Type; \
 class CONCAT(Type,User) { \
 public: \
@@ -40,15 +40,14 @@ protected: \
     virtual Type * CONCAT(get,Type)() { return CONCAT(m_,Type); } \
 };
 
-DEFINE_APO_MACROS(Navigator);
-DEFINE_APO_MACROS(Guide);
-DEFINE_APO_MACROS(Controller);
-DEFINE_APO_MACROS(ParameterTable);
-DEFINE_APO_MACROS(Board);
+DEFINE_USER(Navigator);
+DEFINE_USER(Guide);
+DEFINE_USER(Controller);
+DEFINE_USER(ParameterTable);
+DEFINE_USER(Board);
 
 ///
-// These macros defines locking acces for a member.
-// They return true if the set/get was successful, otherwise they returns false.
+// These macros define locking access for a member.
 #define DEFINE_LOCKING_VAR(Type,Name) \
 Mutex CONCAT(m_lock_,Name); \
 Type CONCAT(m_,Name);
@@ -68,20 +67,28 @@ Type CONCAT(get_,Name)() { \
     return val; \
 }
 
-#define LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(Type,Name) \
-private: \
+#define LOCKED_ATTR_GET_SET(Type,Name,VarAccess,GetAccess,SetAccess) \
+VarAccess: \
     DEFINE_LOCKING_VAR(Type,Name); \
-protected: \
-    DEFINE_LOCKING_SET(Type,Name); \
-public: \
-    DEFINE_LOCKING_GET(Type,Name);
-
-#define LOCKED_ATTR_PUBLIC_GET_PUBLIC_SET(Type,Name) \
-private: \
-    DEFINE_LOCKING_VAR(Type,Name); \
-public: \
+GetAccess: \
     DEFINE_LOCKING_GET(Type,Name); \
-    DEFINE_LOCKING_SET(Type,Name);
+SetAccess: \
+    DEFINE_LOCKING_SET(Type,Name); \
+public:
+
+#define LOCKED_ATTR(Type,Name) LOCKED_ATTR_GET_SET(Type,Name,private,public,protected) 
+
+#define INT2FLOAT_ACCESS(Name,IntName,Scale) \
+public: \
+float CONCAT(get_,Name)() { \
+    float val = CONCAT(get_,IntName)()*Scale; \
+    return val; \
+} \
+protected: \
+void CONCAT(set_,Name)(float val) { \
+    CONCAT(set_,IntName)(val/Scale); \
+} \
+public:
 
 }; // namespace apo
 
