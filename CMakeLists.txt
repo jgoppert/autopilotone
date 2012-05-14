@@ -5,6 +5,7 @@ find_package(Boost 1.42 REQUIRED COMPONENTS thread system)
 
 file(GLOB_RECURSE APO_SRC "apo/*")
 include_directories(. ${Boost_INCLUDE_DIRS})
+add_definitions(-DOS=LINUX)
 add_executable(test
     test/pc.cpp
     ${APO_SRC})

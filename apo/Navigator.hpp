@@ -33,23 +33,11 @@ public:
     virtual ~Navigator() {};
 
 // attributes
-private:
-    DEFINE_LOCKING_VAR(uint32_t,lat);
-    DEFINE_LOCKING_VAR(uint32_t,lon);
-    DEFINE_LOCKING_VAR(uint16_t,alt);
-
-// accessors
 public:
-    DEFINE_LOCKING_GET(uint32_t,lat);
-    DEFINE_LOCKING_GET(uint32_t,lon);
-    DEFINE_LOCKING_GET(uint16_t,alt);
-        
-// setters
-protected:
-    DEFINE_LOCKING_SET(uint32_t,lat);
-    DEFINE_LOCKING_SET(uint32_t,lon);
-    DEFINE_LOCKING_SET(uint16_t,alt);
-    
+    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint32_t,lat);
+    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint32_t,lon);
+    LOCKED_ATTR_PUBLIC_GET_PROTECTED_SET(uint16_t,alt);
+
 }; // class Navigator
 
 }; // namespace apo
