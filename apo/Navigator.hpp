@@ -22,7 +22,7 @@
 namespace apo
 {
 
-class Navigator : public NavigatorReadWriteInterface
+class Navigator : public NavigatorInterface
 {
 // methods
 public:

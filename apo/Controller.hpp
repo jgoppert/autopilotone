@@ -22,12 +22,13 @@
 namespace apo
 {
 
-class Controller : public ControllerReadWriteInterface
+class Controller : public ControllerInterface
 {
 
 // methods
 public:
-    Controller () {};
+    Controller (NavigatorReadInterface * navigator, GuideReadInterface * guide) :
+        m_navigator(navigator), m_guide(guide) {};
     virtual ~Controller() {};
 
 protected:

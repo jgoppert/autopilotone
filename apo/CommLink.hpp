@@ -22,22 +22,26 @@
 namespace apo
 {
 
-class CommLink : public CommLinkReadWriteInterface {
+class CommLink : public CommLinkInterface {
 
 // methods
 public:
-    CommLink(Navigator * navigator) : m_navigator(navigator) {};
+    CommLink(NavigatorInterface * navigator, GuideInterface * guide,
+            ControllerInterface * controller) : 
+        m_navigator(navigator),
+        m_guide(guide), 
+        m_controller(controller) {};
     virtual ~CommLink() {};
 
 protected:
-    NavigatorReadWriteInterface * getNavigator() { return m_navigator; }
-    GuideReadWriteInterface * getGuide() { return m_guide; }
-    ControllerReadWriteInterface * getController() { return m_controller; }
+    NavigatorInterface * getNavigator() { return m_navigator; }
+    GuideInterface * getGuide() { return m_guide; }
+    ControllerInterface * getController() { return m_controller; }
 
 private:
-    NavigatorReadWriteInterface * m_navigator;
-    GuideReadWriteInterface * m_guide;
-    ControllerReadWriteInterface * m_controller;
+    NavigatorInterface * m_navigator;
+    GuideInterface * m_guide;
+    ControllerInterface * m_controller;
         
 }; // class CommLink
 

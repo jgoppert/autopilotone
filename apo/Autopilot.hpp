@@ -26,10 +26,10 @@ class Autopilot {
 
 // methods
 public:
-    Autopilot (NavigatorReadWriteInterface * navigator,
-            GuideReadWriteInterface * guide,
-            ControllerReadWriteInterface * controller,
-            CommLinkReadWriteInterface * commLink) :
+    Autopilot (NavigatorInterface * navigator,
+            GuideInterface * guide,
+            ControllerInterface * controller,
+            CommLinkInterface * commLink) :
         m_navigator(navigator),
         m_guide(guide),
         m_controller(controller),
@@ -37,16 +37,16 @@ public:
     virtual ~Autopilot() {};
 
 protected:
-    NavigatorReadWriteInterface * getNavigator() { return m_navigator; }
-    GuideReadWriteInterface * getGuide() { return m_guide; }
-    ControllerReadWriteInterface * getController() { return m_controller; }
-    CommLinkReadWriteInterface * getCommLink() { return m_commLink; }
+    NavigatorInterface * getNavigator() { return m_navigator; }
+    GuideInterface * getGuide() { return m_guide; }
+    ControllerInterface * getController() { return m_controller; }
+    CommLinkInterface * getCommLink() { return m_commLink; }
 
 private:
-    NavigatorReadWriteInterface * m_navigator;
-    GuideReadWriteInterface * m_guide;
-    ControllerReadWriteInterface * m_controller;
-    CommLinkReadWriteInterface * m_commLink;
+    NavigatorInterface * m_navigator;
+    GuideInterface * m_guide;
+    ControllerInterface * m_controller;
+    CommLinkInterface * m_commLink;
 }; // class Autopilot
 
 }; // namespace apo

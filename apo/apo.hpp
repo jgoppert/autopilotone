@@ -21,4 +21,3 @@
 #include "Navigator.hpp"
 #include "Controller.hpp"
 #include "CommLink.hpp"
-#include "apoMacros.hpp"

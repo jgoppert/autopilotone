@@ -46,7 +46,7 @@ struct NavigatorWriteInterface {
     virtual void set(navInt16State_t navState, int16_t val) = 0;    
 };
 
-struct NavigatorReadWriteInterface : public NavigatorReadInterface, NavigatorWriteInterface {
+struct NavigatorInterface : public NavigatorReadInterface, NavigatorWriteInterface {
     virtual void update() = 0;
 };
 
@@ -67,7 +67,7 @@ struct GuideReadInterface {
 struct GuideWriteInterface {
 };
 
-struct GuideReadWriteInterface : public GuideReadInterface, GuideWriteInterface {
+struct GuideInterface : public GuideReadInterface, GuideWriteInterface {
     virtual void update() = 0;
 };
 
@@ -78,7 +78,7 @@ struct ControllerReadInterface {
 struct ControllerWriteInterface {
 };
 
-struct ControllerReadWriteInterface : public ControllerReadInterface, ControllerWriteInterface {
+struct ControllerInterface : public ControllerReadInterface, ControllerWriteInterface {
     virtual void update() = 0;
 };
 
@@ -89,7 +89,7 @@ struct CommLinkReadInterface {
 struct CommLinkWriteInterface {
 };
 
-struct CommLinkReadWriteInterface : public CommLinkReadInterface, CommLinkWriteInterface {
+struct CommLinkInterface : public CommLinkReadInterface, CommLinkWriteInterface {
     virtual void update() = 0;
 };
 

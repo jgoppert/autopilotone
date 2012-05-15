@@ -23,11 +23,11 @@
 namespace apo
 {
 
-class Guide : public GuideReadWriteInterface {
+class Guide : public GuideInterface {
 
 // methods
 public:
-    Guide () {}; 
+    Guide (NavigatorReadInterface * navigator) : m_navigator(navigator) {}; 
     virtual ~Guide() {};
 
 protected:

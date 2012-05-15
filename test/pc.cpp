@@ -8,8 +8,8 @@ namespace apo {
 
 class TestCommLink : public CommLink {
 public:
-    TestCommLink(Navigator * navigator) : 
-        CommLink(navigator) {}
+    TestCommLink(NavigatorInterface * navigator, GuideInterface * guide, ControllerInterface * controller) : 
+        CommLink(navigator,guide,controller) {}
     void update() {
         getNavigator()->set(NAV_INT32_LAT_DEGE7,1000);
         boost::this_thread::sleep(boost::posix_time::milliseconds(10));
@@ -27,7 +27,7 @@ public:
 
 class TestGuide : public Guide {
 public:
-    TestGuide() : Guide() {}
+    TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
@@ -35,7 +35,7 @@ public:
 
 class TestController : public Controller {
 public:
-    TestController() : Controller() {}
+    TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
@@ -43,10 +43,10 @@ public:
 
 class TestAutopilot : public Autopilot {
 public:
-    TestAutopilot(NavigatorReadWriteInterface * navigator,
-            GuideReadWriteInterface * guide,
-            ControllerReadWriteInterface * controller,
-            CommLinkReadWriteInterface * commLink) :
+    TestAutopilot(NavigatorInterface * navigator,
+            GuideInterface * guide,
+            ControllerInterface * controller,
+            CommLinkInterface * commLink) :
         Autopilot(navigator,guide,controller,commLink)
     {
         // threads
@@ -96,9 +96,9 @@ int main (int argc, char const* argv[])
 {
     using namespace apo;
     TestNavigator navigator;
-    TestGuide guide;
-    TestController controller;
-    TestCommLink commLink(&navigator);
+    TestGuide guide(&navigator);
+    TestController controller(&navigator,&guide);
+    TestCommLink commLink(&navigator,&guide,&controller);
     TestAutopilot(&navigator,&guide,&controller,&commLink);
     return 0;
 };
