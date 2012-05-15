@@ -19,6 +19,7 @@
 
 #include "interfaces.hpp"
 #include "os/os.hpp"
+#include "apoMacros.hpp"
 
 namespace apo
 {
@@ -30,56 +31,28 @@ public:
     Navigator () {};
     virtual ~Navigator() {};
 
+    LOCKED_ATTR(int32_t,lat_degE7);
+    LOCKED_ATTR(int32_t,lon_degE7);
+    LOCKED_ATTR(int16_t,alt_degE3);
+    LOCKED_ATTR(float,lat);
+    LOCKED_ATTR(float,lon);
+    LOCKED_ATTR(float,alt);
+    LOCKED_ATTR(float,vNorth);
+    LOCKED_ATTR(float,vEast);
+    LOCKED_ATTR(float,vDown);
+    LOCKED_ATTR(float,roll);
+    LOCKED_ATTR(float,pitch);
+    LOCKED_ATTR(float,yaw);
+    LOCKED_ATTR(float,rollRate);
+    LOCKED_ATTR(float,pitchRate);
+    LOCKED_ATTR(float,yawRate);
+
 protected:
-    // reader
-    virtual float get(navState_t navState) {
-        m_mutex.lock();
-        float val = m_state[navState];
-        m_mutex.unlock();
-        return val;
-    }    
-    virtual int32_t get(navInt32State_t navState) {
-        m_mutex.lock();
-        int32_t val = m_stateInt32[navState];
-        m_mutex.unlock();
-        return val;
-    }    
-    virtual int16_t get(navInt16State_t navState) {
-        m_mutex.lock();
-        int16_t val = m_stateInt16[navState];
-        m_mutex.unlock();
-        return val;
-    } 
-
-    // writer
-    virtual void set(navState_t navState, float val) {
-        m_mutex.lock();
-        m_state[navState] = val;
-        m_mutex.unlock();
-    };    
-    virtual void set(navInt32State_t navState, int32_t val) {
-        m_mutex.lock();
-        m_stateInt32[navState] = val;
-        m_mutex.unlock();
-    };    
-    virtual void set(navInt16State_t navState, int16_t val) {
-        m_mutex.lock();
-        m_stateInt16[navState] = val;
-        m_mutex.unlock();
-    };    
-
     // component
     virtual void update() {};
-    virtual void setDebug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * getDebug() { return m_debug; }
+    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
+    virtual DebugInterface * get_debug() { return m_debug; }
 
-private:
-    // attributes
-    float m_state[NAV_COUNT]; 
-    int16_t m_stateInt16[NAV_INT16_COUNT]; 
-    int32_t m_stateInt32[NAV_INT32_COUNT]; 
-    Mutex m_mutex;
-    
     // interfaces
     DebugInterface * m_debug;
 };

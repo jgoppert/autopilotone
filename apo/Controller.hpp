@@ -37,8 +37,8 @@ protected:
 
     // component
     virtual void update() {};
-    virtual void setDebug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * getDebug() { return m_debug; }
+    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
+    virtual DebugInterface * get_debug() { return m_debug; }
 
 private:
 

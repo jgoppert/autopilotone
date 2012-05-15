@@ -11,8 +11,8 @@ public:
             ControllerInterface * controller, DebugInterface * debug) : 
         CommLink(navigator,guide,controller,debug) {}
     void update() {
-        getNavigator()->set(NAV_INT32_LAT_DEGE7,1000);
-        getDebug()->send("commlink update");
+        getNavigator()->set_lat(1);
+        get_debug()->send("commlink update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(10));
     }
 };
@@ -21,8 +21,8 @@ class TestNavigator : public Navigator {
 public:
     TestNavigator() : Navigator() {}
     void update() {
-        set(NAV_INT32_LAT_DEGE7,1000);
-        getDebug()->send("navigator update");
+        set_lon_degE7(10000);
+        get_debug()->send("navigator update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
@@ -31,7 +31,7 @@ class TestGuide : public Guide {
 public:
     TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
-        getDebug()->send("guide update");
+        get_debug()->send("guide update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
@@ -40,7 +40,7 @@ class TestController : public Controller {
 public:
     TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
-        getDebug()->send("controller update");
+        get_debug()->send("controller update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };

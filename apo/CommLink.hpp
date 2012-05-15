@@ -33,9 +33,9 @@ public:
         m_controller(controller),
         m_debug(debug)
     {
-        getNavigator()->setDebug(getDebug());
-        getGuide()->setDebug(getDebug());
-        getController()->setDebug(getDebug());
+        getNavigator()->set_debug(get_debug());
+        getGuide()->set_debug(get_debug());
+        getController()->set_debug(get_debug());
     };
     virtual ~CommLink() {};
 
@@ -48,8 +48,8 @@ protected:
 
     // component
     virtual void update() {};
-    virtual void setDebug(DebugInterface * debug) {m_debug = debug; }
-    DebugInterface * getDebug() { return m_debug; }
+    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
+    DebugInterface * get_debug() { return m_debug; }
 
 private:
     // interfaces

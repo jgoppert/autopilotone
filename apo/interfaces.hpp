@@ -19,48 +19,44 @@ struct DebugInterface {
 
 struct ComponentInterface {
     virtual void update() = 0;
-    virtual void setDebug(DebugInterface * debug) = 0;
-    virtual DebugInterface * getDebug() = 0;
-};
-
-// Navigator
-enum navState_t {
-    NAV_LAT=0,
-    NAV_LON,
-    NAV_ALT,
-    NAV_V_NORTH,
-    NAV_V_EAST,
-    NAV_V_DOWN,
-    NAV_ROLL,
-    NAV_PITCH,
-    NAV_YAW,
-    NAV_ROLL_RATE,
-    NAV_PITCH_RATE,
-    NAV_YAW_RATE,
-    NAV_COUNT
-};
-
-enum navInt16State_t {
-    NAV_INT_ALT_DEGE3,
-    NAV_INT16_COUNT
-};
-
-enum navInt32State_t {
-    NAV_INT32_LAT_DEGE7=0,
-    NAV_INT32_LON_DEGE7,
-    NAV_INT32_COUNT
+    virtual void set_debug(DebugInterface * debug) = 0;
+    virtual DebugInterface * get_debug() = 0;
 };
 
 struct NavigatorReadInterface {
-    virtual float get(navState_t navState) = 0;    
-    virtual int32_t get(navInt32State_t navState) = 0;    
-    virtual int16_t get(navInt16State_t navState) = 0;    
+    virtual int32_t get_lat_degE7() = 0;
+    virtual int32_t get_lon_degE7() = 0;
+    virtual int16_t get_alt_degE3() = 0;
+    virtual float get_lat() = 0;
+    virtual float get_lon() = 0;
+    virtual float get_alt() = 0;
+    virtual float get_vNorth() = 0;
+    virtual float get_vEast() = 0;
+    virtual float get_vDown() = 0;
+    virtual float get_roll() = 0;
+    virtual float get_pitch() = 0;
+    virtual float get_yaw() = 0;
+    virtual float get_rollRate() = 0;
+    virtual float get_pitchRate() = 0;
+    virtual float get_yawRate() = 0;
 };
 
 struct NavigatorWriteInterface {
-    virtual void set(navState_t navState, float val) = 0;    
-    virtual void set(navInt32State_t navState, int32_t val) = 0;    
-    virtual void set(navInt16State_t navState, int16_t val) = 0;    
+    virtual void set_lat_degE7(int32_t val) = 0;
+    virtual void set_lon_degE7(int32_t val) = 0;
+    virtual void set_alt_degE3(int16_t val) = 0;
+    virtual void set_lat(float val) = 0;
+    virtual void set_lon(float val) = 0;
+    virtual void set_alt(float val) = 0;
+    virtual void set_vNorth(float val) = 0;
+    virtual void set_vEast(float val) = 0;
+    virtual void set_vDown(float val) = 0;
+    virtual void set_roll(float val) = 0;
+    virtual void set_pitch(float val) = 0;
+    virtual void set_yaw(float val) = 0;
+    virtual void set_rollRate(float val) = 0;
+    virtual void set_pitchRate(float val) = 0;
+    virtual void set_yawRate(float val) = 0;
 };
 
 struct NavigatorInterface :
@@ -88,19 +84,19 @@ enum guideMode_t {
 };
 
 struct GuideReadInterface {
-    //virtual uint16_t getCurrentCommandIndex() = 0;
-    //virtual uint16_t getLastCommandIndex() = 0;
-    //virtual uint16_t getNextCommandIndex() = 0;
-    //virtual uint16_t getCommandCount() = 0;
-    //virtual Waypoint getCommand(uint16_t index) = 0;
-    //virtual guideMode_t getMode() = 0;
+    //virtual uint16_t get_currentCommandIndex() = 0;
+    //virtual uint16_t get_lastCommandIndex() = 0;
+    //virtual uint16_t get_nextCommandIndex() = 0;
+    //virtual uint16_t get_commandCount() = 0;
+    //virtual Waypoint get_command(uint16_t index) = 0;
+    //virtual guideMode_t get_mode() = 0;
 };
 
 struct GuideWriteInterface {
     //virtual void addWaypoint(uint16_t index, Waypoint waypoint) = 0;
     //virtual void removeWaypoint(uint16_t index) = 0;
     //virtual void clearWaypoints() = 0;
-    //virtual setMode(guideMode_t mode) = 0;
+    //virtual set_mode(guideMode_t mode) = 0;
 };
 
 struct GuideInterface :
@@ -116,11 +112,11 @@ enum controllerMode_t {
 };
 
 struct ControllerReadInterface {
-    //virtual controllerMode_t getMode() = 0;
+    //virtual controllerMode_t get_mode() = 0;
 };
 
 struct ControllerWriteInterface {
-    //virtual setMode(controllerMode_t mode) = 0;
+    //virtual set_mode(controllerMode_t mode) = 0;
 };
 
 struct ControllerInterface :
