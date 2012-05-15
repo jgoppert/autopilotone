@@ -27,7 +27,8 @@ class Guide : public GuideInterface {
 
 // methods
 public:
-    Guide (NavigatorReadInterface * navigator) : m_navigator(navigator) {}; 
+    Guide (NavigatorReadInterface * navigator) :
+        m_navigator(navigator), m_debug(&nullDebug) {}; 
     virtual ~Guide() {};
 
 protected:

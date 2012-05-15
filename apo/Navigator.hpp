@@ -28,7 +28,7 @@ class Navigator : public NavigatorInterface
 {
 // methods
 public:
-    Navigator () {};
+    Navigator (): m_debug(&nullDebug) {};
     virtual ~Navigator() {};
 
     LOCKED_ATTR(int32_t,lat_degE7);

@@ -17,6 +17,12 @@ struct DebugInterface {
     virtual void send(const std::string & str) = 0;
 };
 
+// null debug object
+class NullDebug : public DebugInterface {
+public:
+    virtual void send(const std::string & str) {};
+} nullDebug;
+
 struct ComponentInterface {
     virtual void update() = 0;
     virtual void set_debug(DebugInterface * debug) = 0;

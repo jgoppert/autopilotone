@@ -28,7 +28,7 @@ class Controller : public ControllerInterface
 // methods
 public:
     Controller (NavigatorReadInterface * navigator, GuideReadInterface * guide) :
-        m_navigator(navigator), m_guide(guide) {};
+        m_navigator(navigator), m_guide(guide), m_debug(&nullDebug) {};
     virtual ~Controller() {};
 
 protected:
