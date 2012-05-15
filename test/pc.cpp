@@ -2,63 +2,104 @@
 #include <apo/apo.hpp>
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
+#include "apo/Autopilot.hpp"
 
 namespace apo {
 
-class TestNavigator : public Navigator {
+class TestCommLink : public CommLink {
 public:
-    TestNavigator(Board * board, ParameterTable * parameterTable) : Navigator(board,parameterTable) {}
+    TestCommLink(Navigator * navigator) : 
+        CommLink(navigator) {}
     void update() {
-        set_lat(1);
-        set_lon_degE7(1000);
-        set_lon(1);
-        set_alt(1);
+        getNavigator()->set(NAV_INT32_LAT_DEGE7,1000);
+        boost::this_thread::sleep(boost::posix_time::milliseconds(10));
     }
 };
 
-void navReader(int id, apo::TestNavigator * navigator,uint32_t totalCycles, uint32_t sleepmillis) {
-    uint32_t lat = 0;
-    for (int i=0;i<totalCycles;i++) {
-        std::cout << "read " << i << std::endl;
-        boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
-        lat = navigator->get_lat();
+class TestNavigator : public Navigator {
+public:
+    TestNavigator() : Navigator() {}
+    void update() {
+        set(NAV_INT32_LAT_DEGE7,1000);
+        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
-}
+};
 
-void navWriter(int id, apo::TestNavigator * navigator,uint32_t totalCycles, uint32_t sleepmillis) {
-    for (int i=0;i<totalCycles;i++) {
-        std::cout << "write " << i << std::endl;
-        boost::this_thread::sleep(boost::posix_time::milliseconds(sleepmillis));
-        navigator->update();
+class TestGuide : public Guide {
+public:
+    TestGuide() : Guide() {}
+    void update() {
+        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
-}
+};
 
-}
+class TestController : public Controller {
+public:
+    TestController() : Controller() {}
+    void update() {
+        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
+    }
+};
+
+class TestAutopilot : public Autopilot {
+public:
+    TestAutopilot(NavigatorReadWriteInterface * navigator,
+            GuideReadWriteInterface * guide,
+            ControllerReadWriteInterface * controller,
+            CommLinkReadWriteInterface * commLink) :
+        Autopilot(navigator,guide,controller,commLink)
+    {
+        // threads
+        boost::thread thread1(boost::bind(&TestAutopilot::updateComm,this));
+        boost::thread thread2(boost::bind(&TestAutopilot::updateNavigator,this));
+        boost::thread thread3(boost::bind(&TestAutopilot::updateGuide,this));
+        boost::thread thread4(boost::bind(&TestAutopilot::updateController,this));
+
+        // join threads
+        thread1.join();
+        thread2.join();
+        thread3.join();
+        thread4.join();
+    }
+
+    void updateComm() {
+        for (int i=0;i<100;i++) { std::cout << "commlink update " << i << std::endl;
+            getCommLink()->update();
+        }
+    }
+
+    void updateNavigator() {
+        for (int i=0;i<100;i++) {
+            std::cout << "navigator update " << i << std::endl;
+            getNavigator()->update();
+        }
+    }
+
+    void updateGuide() {
+        for (int i=0;i<100;i++) {
+            std::cout << "guide update " << i << std::endl;
+            getGuide()->update();
+        }
+    }
+
+    void updateController() {
+        for (int i=0;i<100;i++) {
+            std::cout << "controller update " << i << std::endl;
+            getController()->update();
+        }
+    }
+};
+
+} // namespace apo
 
 int main (int argc, char const* argv[])
 {
     using namespace apo;
-    Board board;
-    ParameterTable parameterTable;
-    TestNavigator navigator(&board,&parameterTable);
-    Guide guide(&board,&parameterTable,&navigator);
-    Controller controller(&board,&parameterTable,&navigator,&guide);
-
-    uint32_t sleepmillis1 = 1;
-    uint32_t sleepmillis2 = 2;
-    uint32_t sleepmillis3 = 3;
-    uint32_t totalCycles = 1000;
-
-    // threads
-    boost::thread thread1(navReader,1,&navigator,totalCycles,sleepmillis1);
-    boost::thread thread2(navReader,2,&navigator,totalCycles,sleepmillis2);
-    boost::thread thread3(navWriter,3,&navigator,totalCycles,sleepmillis3);
-
-    thread1.join();
-    thread2.join();
-    thread3.join();
-
-    std::cout << "Total test cycles: # " << totalCycles << std::endl;
+    TestNavigator navigator;
+    TestGuide guide;
+    TestController controller;
+    TestCommLink commLink(&navigator);
+    TestAutopilot(&navigator,&guide,&controller,&commLink);
     return 0;
-}
+};
 

@@ -17,22 +17,26 @@
 #ifndef CONTROLLER_HPP_
 #define CONTROLLER_HPP_
 
-#include "apoMacros.hpp"
+#include "interfaces.hpp"
 
 namespace apo
 {
 
-class Controller: public BoardUser, ParameterTableUser, NavigatorUser, GuideUser
+class Controller : public ControllerReadWriteInterface
 {
 
 // methods
-    public:
-        Controller (Board * board, ParameterTable * parameterTable, Navigator * navigator, Guide * guide) : 
-            BoardUser(board), 
-            ParameterTableUser(parameterTable),
-            NavigatorUser(navigator),
-            GuideUser(guide) {};
-        virtual ~Controller() {};
+public:
+    Controller () {};
+    virtual ~Controller() {};
+
+protected:
+    NavigatorReadInterface * getNavigator() { return m_navigator; }
+    GuideReadInterface * getGuide() { return m_guide; }
+
+private:
+    NavigatorReadInterface * m_navigator;
+    GuideReadInterface * m_guide;
 
 }; // class Controller
 

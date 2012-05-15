@@ -17,23 +17,25 @@
 #ifndef GUIDE_HPP_
 #define GUIDE_HPP_
 
-#include "apoMacros.hpp"
+#include "interfaces.hpp"
+#include <vector>
 
 namespace apo
 {
 
-class Guide: public BoardUser, ParameterTableUser, NavigatorUser {
+class Guide : public GuideReadWriteInterface {
 
 // methods
 public:
-    Guide (Board * board, ParameterTable * parameterTable, Navigator * navigator) : 
-        BoardUser(board),
-        ParameterTableUser(parameterTable),
-        NavigatorUser(navigator) {};
+    Guide () {}; 
     virtual ~Guide() {};
 
-// accessors
-        
+protected:
+    NavigatorReadInterface * getNavigator() { return m_navigator; }
+
+private:
+    NavigatorReadInterface * m_navigator;
+
 }; // class Guide
 
 }; // namespace apo
