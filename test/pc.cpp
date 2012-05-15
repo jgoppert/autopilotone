@@ -1,4 +1,3 @@
-#include <iostream>
 #include <apo/apo.hpp>
 #include <boost/thread.hpp>
 #include <boost/date_time.hpp>
@@ -8,10 +7,12 @@ namespace apo {
 
 class TestCommLink : public CommLink {
 public:
-    TestCommLink(NavigatorInterface * navigator, GuideInterface * guide, ControllerInterface * controller) : 
-        CommLink(navigator,guide,controller) {}
+    TestCommLink(NavigatorInterface * navigator, GuideInterface * guide,
+            ControllerInterface * controller, DebugInterface * debug) : 
+        CommLink(navigator,guide,controller,debug) {}
     void update() {
         getNavigator()->set(NAV_INT32_LAT_DEGE7,1000);
+        getDebug()->send("commlink update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(10));
     }
 };
@@ -21,6 +22,7 @@ public:
     TestNavigator() : Navigator() {}
     void update() {
         set(NAV_INT32_LAT_DEGE7,1000);
+        getDebug()->send("navigator update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
@@ -29,6 +31,7 @@ class TestGuide : public Guide {
 public:
     TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
+        getDebug()->send("guide update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
@@ -37,6 +40,7 @@ class TestController : public Controller {
 public:
     TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
+        getDebug()->send("controller update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
@@ -63,28 +67,25 @@ public:
     }
 
     void updateComm() {
-        for (int i=0;i<100;i++) { std::cout << "commlink update " << i << std::endl;
+        for (int i=0;i<100;i++) {
             getCommLink()->update();
         }
     }
 
     void updateNavigator() {
         for (int i=0;i<100;i++) {
-            std::cout << "navigator update " << i << std::endl;
             getNavigator()->update();
         }
     }
 
     void updateGuide() {
         for (int i=0;i<100;i++) {
-            std::cout << "guide update " << i << std::endl;
             getGuide()->update();
         }
     }
 
     void updateController() {
         for (int i=0;i<100;i++) {
-            std::cout << "controller update " << i << std::endl;
             getController()->update();
         }
     }
@@ -98,7 +99,8 @@ int main (int argc, char const* argv[])
     TestNavigator navigator;
     TestGuide guide(&navigator);
     TestController controller(&navigator,&guide);
-    TestCommLink commLink(&navigator,&guide,&controller);
+    Debug debug;
+    TestCommLink commLink(&navigator,&guide,&controller,&debug);
     TestAutopilot(&navigator,&guide,&controller,&commLink);
     return 0;
 };

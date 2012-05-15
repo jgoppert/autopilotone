@@ -18,6 +18,7 @@
 #define NAVIGATOR_HPP_
 
 #include "interfaces.hpp"
+#include "os/os.hpp"
 
 namespace apo
 {
@@ -67,12 +68,20 @@ protected:
         m_mutex.unlock();
     };    
 
+    // component
+    virtual void update() {};
+    virtual void setDebug(DebugInterface * debug) {m_debug = debug; }
+    virtual DebugInterface * getDebug() { return m_debug; }
+
 private:
     // attributes
     float m_state[NAV_COUNT]; 
     int16_t m_stateInt16[NAV_INT16_COUNT]; 
     int32_t m_stateInt32[NAV_INT32_COUNT]; 
     Mutex m_mutex;
+    
+    // interfaces
+    DebugInterface * m_debug;
 };
 
 }; // namespace apo

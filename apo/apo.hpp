@@ -21,3 +21,4 @@
 #include "Navigator.hpp"
 #include "Controller.hpp"
 #include "CommLink.hpp"
+#include "os/os.hpp"

@@ -35,7 +35,15 @@ protected:
     NavigatorReadInterface * getNavigator() { return m_navigator; }
     GuideReadInterface * getGuide() { return m_guide; }
 
+    // component
+    virtual void update() {};
+    virtual void setDebug(DebugInterface * debug) {m_debug = debug; }
+    virtual DebugInterface * getDebug() { return m_debug; }
+
 private:
+
+    // interfaces
+    DebugInterface * m_debug;
     NavigatorReadInterface * m_navigator;
     GuideReadInterface * m_guide;
 
