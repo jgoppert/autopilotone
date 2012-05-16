@@ -22,7 +22,7 @@
 
 #define COMMAND_BUFFER_SIZE 32
 
-namespace apo
+namespace autopilotone
 {
 
 class FlightPlan : public FlightPlanReadInterface {

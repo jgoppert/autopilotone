@@ -219,7 +219,7 @@ if (WITH_WARNINGS)
 endif()
 
 # library
-file(GLOB_RECURSE APO_SRC "${PROJECT_SRC_ROOT}/autopilotone/*")
+file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 
 # test
 include_directories(. ${Boost_INCLUDE_DIRS})
