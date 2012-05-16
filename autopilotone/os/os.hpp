@@ -5,8 +5,8 @@
 #error must define OS
 #endif
 
-#if OS == LINUX
-#include "linux.hpp"
+#if OS == PC
+#include "pc.hpp"
 #else
 #error must unknown OS
 #endif

@@ -223,7 +223,7 @@ file(GLOB_RECURSE APO_SRC "${PROJECT_SRC_ROOT}/autopilotone/*")
 
 # test
 include_directories(. ${Boost_INCLUDE_DIRS})
-add_definitions(-DOS=LINUX)
+add_definitions(-DOS=PC)
 add_executable(test
     test/pc.cpp
     ${APO_SRC})
