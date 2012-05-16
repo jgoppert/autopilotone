@@ -3,10 +3,10 @@
 
 #include <inttypes.h>
 #include <string>
-#include "apoMacros.hpp"
+#include "macros.hpp"
 #include <cmath>
 
-namespace apo {
+namespace autopilotone {
 
 // constants
 float deg2rad = M_PI/180.0;
@@ -168,6 +168,6 @@ struct CommLinkInterface :
 {
 };
 
-} // namespace apo
+} // namespace autopilotone
 
 #endif

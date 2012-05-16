@@ -1,0 +1,14 @@
+# only keep relevant arkcmake files
+arkcmake/*
+!arkcmake/updateArkcmake.py
+!arkcmake/FindMAVLink.cmake
+!arkcmake/FindArkOsg.cmake
+!arkcmake/FindArkComm.cmake
+!arkcmake/CheckLinkType.cmake
+!arkcmake/FindOsgPlugin.cmake
+!arkcmake/FindSimGear.cmake
+!arkcmake/DefineCMakeDefaults.cmake
+!arkcmake/DefineCompilerFlags.cmake
+!arkcmake/MacroCheckCCompilerFlagSSP.cmake
+!arkcmake/MacroEnsureOutOfSourceBuild.cmake
+!arkcmake/ExternalProjectWithFilename.cmake

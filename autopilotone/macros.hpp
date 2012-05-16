@@ -1,12 +1,12 @@
-// apoMacros.hpp 
+// macros.hpp 
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
-// apoMacros.hpp is free software: you can redistribute it and/or modify it
+// macros.hpp is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
 // Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// apoMacros.hpp is distributed in the hope that it will be useful, but
+// macros.hpp is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
@@ -19,7 +19,7 @@
 
 #include <inttypes.h>
 
-namespace apo {
+namespace autopilotone {
 
 #define CONCAT_HELPER(X,Y) X##Y
 #define CONCAT(X,Y) CONCAT_HELPER(X,Y)
@@ -64,7 +64,7 @@ void CONCAT(set_,Name)(float val) { \
 INT2FLOAT_GET(Name,IntName,Scale) \
 INT2FLOAT_SET(Name,IntName,Scale)
 
-}; // namespace apo
+}; // namespace autopilotone
 
 
 

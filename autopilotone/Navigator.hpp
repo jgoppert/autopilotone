@@ -19,9 +19,9 @@
 
 #include "interfaces.hpp"
 #include "os/os.hpp"
-#include "apoMacros.hpp"
+#include "macros.hpp"
 
-namespace apo
+namespace autopilotone
 {
 
 class Navigator : public NavigatorInterface
@@ -75,7 +75,7 @@ private:
     LOCKED_ATTR(float,yawRate);
 };
 
-}; // namespace apo
+}; // namespace autopilotone
 
 #endif /* NAVIGATOR_HPP_ */
 

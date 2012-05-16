@@ -20,7 +20,7 @@
 #include "interfaces.hpp"
 #include <vector>
 
-namespace apo
+namespace autopilotone
 {
 
 class Guide : public GuideInterface {
@@ -47,7 +47,7 @@ private:
 
 }; // class Guide
 
-}; // namespace apo
+}; // namespace autopilotone
 
 
 #endif /* GUIDE_HPP_ */

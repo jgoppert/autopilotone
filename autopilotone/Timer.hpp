@@ -2,7 +2,7 @@
 #define APO_TIMER_HPP_
 
 #include "interfaces.hpp"
-namespace apo {
+namespace autopilotone {
 
 class Timer {
 public:
@@ -39,6 +39,6 @@ private:
     ClockInterface * m_clock;
 };
 
-} // apo
+} // autopilotone
 
 #endif // APO_TIMER_HPP_

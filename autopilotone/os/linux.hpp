@@ -7,7 +7,7 @@
 #include <iostream>
 #include "../interfaces.hpp"
 
-namespace apo {
+namespace autopilotone {
 
 class Mutex : public MutexInterface {
 public:
@@ -54,6 +54,6 @@ private:
 }clock;
 
 
-} // namespace apo
+} // namespace autopilotone
 
 #endif // APO_OS_LINUX_HPP_

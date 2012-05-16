@@ -19,7 +19,7 @@
 
 #include "interfaces.hpp"
 
-namespace apo
+namespace autopilotone
 {
 
 class CommLink : public CommLinkInterface {
@@ -60,7 +60,7 @@ private:
         
 }; // class CommLink
 
-} // namespace apo
+} // namespace autopilotone
 
 
 #endif /* COMMLINK_HPP_ */

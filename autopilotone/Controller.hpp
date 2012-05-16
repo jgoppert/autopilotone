@@ -19,7 +19,7 @@
 
 #include "interfaces.hpp"
 
-namespace apo
+namespace autopilotone
 {
 
 class Controller : public ControllerInterface
@@ -50,7 +50,7 @@ private:
 }; // class Controller
 
     
-}; // namespace apo
+}; // namespace autopilotone
 
 
 #endif /* CONTROLLER_HPP_ */

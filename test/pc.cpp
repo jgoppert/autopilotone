@@ -1,6 +1,6 @@
-#include <apo/apo.hpp>
+#include <autopilotone/autopilotone.hpp>
 
-namespace apo {
+namespace autopilotone {
 
 class TestCommLink : public CommLink {
 public:
@@ -16,6 +16,15 @@ public:
 class TestNavigator : public Navigator {
 public:
     TestNavigator() : Navigator() {}
+    void update() {
+        set_lon_degE7(10000);
+        get_debug()->send("navigator update");
+    }
+};
+
+class FlightGearNavigator : public Navigator {
+public:
+    FlightGearNavigator() : Navigator() {}
     void update() {
         set_lon_degE7(10000);
         get_debug()->send("navigator update");
@@ -72,11 +81,11 @@ public:
     }
 };
 
-} // namespace apo
+} // namespace autopilotone
 
 int main (int argc, char const* argv[])
 {
-    using namespace apo;
+    using namespace autopilotone;
     TestNavigator navigator;
     TestGuide guide(&navigator);
     TestController controller(&navigator,&guide);
