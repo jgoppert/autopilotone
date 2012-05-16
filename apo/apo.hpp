@@ -14,6 +14,21 @@
 //
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+
+/** 
+ * \mainpage autopilotone
+ * \section intro_sec Introduction
+ *
+ * This is the introduction.
+ *
+ * \section install_sec Installation
+ *
+ * \subsection step1 Step 1: Opening the box
+ *
+ * etc...
+ */
 
 #include "Board.hpp"
 #include "ParameterTable.hpp"
