@@ -1,5 +1,5 @@
-#ifndef APO_TIMER_HPP_
-#define APO_TIMER_HPP_
+#ifndef AUTOPILOTONE_TIMER_HPP_
+#define AUTOPILOTONE_TIMER_HPP_
 
 #include "interfaces.hpp"
 namespace autopilotone {
@@ -41,4 +41,4 @@ private:
 
 } // autopilotone
 
-#endif // APO_TIMER_HPP_
+#endif // AUTOPILOTONE_TIMER_HPP_

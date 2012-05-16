@@ -1,5 +1,5 @@
-#ifndef APO_OS_HPP_
-#define APO_OS_HPP_
+#ifndef AUTOPILOTONE_OS_HPP_
+#define AUTOPILOTONE_OS_HPP_
 
 #ifndef OS
 #error must define OS
@@ -11,4 +11,4 @@
 #error must unknown OS
 #endif
 
-#endif // APO_OS_HPP_
+#endif // AUTOPILOTONE_OS_HPP_

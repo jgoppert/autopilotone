@@ -1,5 +1,5 @@
-#ifndef APO_OS_LINUX_HPP_
-#define APO_OS_LINUX_HPP_
+#ifndef AUTOPILOTONE_OS_LINUX_HPP_
+#define AUTOPILOTONE_OS_LINUX_HPP_
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
@@ -56,4 +56,4 @@ private:
 
 } // namespace autopilotone
 
-#endif // APO_OS_LINUX_HPP_
+#endif // AUTOPILOTONE_OS_LINUX_HPP_

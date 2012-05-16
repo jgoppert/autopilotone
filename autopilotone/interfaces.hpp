@@ -1,5 +1,5 @@
-#ifndef APO_INTERFACES_HPP_
-#define APO_INTERFACES_HPP_
+#ifndef AUTOPILOTONE_INTERFACES_HPP_
+#define AUTOPILOTONE_INTERFACES_HPP_
 
 #include <inttypes.h>
 #include <string>
@@ -114,7 +114,7 @@ struct FlightPlanWriteInterface {
     //virtual void clearWaypoints() = 0;
 };
 
-struct FlightPlaneInterface {
+struct FlightPlanInterface {
 };
 
 struct GuideReadInterface {
@@ -123,7 +123,7 @@ struct GuideReadInterface {
 };
 
 struct GuideWriteInterface {
-    //virtual void set_flightPlan(FlightPlaneInterface * flightPlane) = 0;
+    //virtual void set_flightPlan(FlightPlanInterface * flightPlan) = 0;
     //virtual set_mode(guideMode_t mode) = 0;
 };
 

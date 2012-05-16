@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef APO_AUTOPILOT_HPP_
-#define APO_AUTOPILOT_HPP_
+#ifndef AUTOPILOTONE_AUTOPILOT_HPP_
+#define AUTOPILOTONE_AUTOPILOT_HPP_
 
 #include "interfaces.hpp"
 
@@ -52,5 +52,5 @@ private:
 }; // namespace autopilotone
 
 
-#endif // APO_AUTOPILOT_HPP_
+#endif // AUTOPILOTONE_AUTOPILOT_HPP_
 

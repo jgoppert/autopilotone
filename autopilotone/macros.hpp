@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef APO_MACROS_HPP_
-#define APO_MACROS_HPP_
+#ifndef AUTOPILOTONE_MACROS_HPP_
+#define AUTOPILOTONE_MACROS_HPP_
 
 #include <inttypes.h>
 
@@ -68,6 +68,4 @@ INT2FLOAT_SET(Name,IntName,Scale)
 
 
 
-#endif /* APO_MACROS_HPP_ */
-
-
+#endif /* AUTOPILOTONE_MACROS_HPP_ */
