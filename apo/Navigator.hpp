@@ -31,8 +31,7 @@ public:
     Navigator (): m_debug(&nullDebug) {};
     virtual ~Navigator() {};
 
-protected:
-
+protected: 
     LOCKED_GET_SET(int32_t,lat_degE7);
     INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);

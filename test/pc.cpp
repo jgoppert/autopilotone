@@ -10,7 +10,6 @@ public:
     void update() {
         getNavigator()->set_lat(1);
         get_debug()->send("commlink update");
-        boost::this_thread::sleep(boost::posix_time::milliseconds(10));
     }
 };
 
@@ -20,7 +19,6 @@ public:
     void update() {
         set_lon_degE7(10000);
         get_debug()->send("navigator update");
-        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
 
@@ -30,7 +28,6 @@ public:
     void update() {
         getNavigator()->get_lat();
         get_debug()->send("guide update");
-        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
 
@@ -40,7 +37,6 @@ public:
     void update() {
         getNavigator()->get_lat();
         get_debug()->send("controller update");
-        boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
 };
 
@@ -52,7 +48,7 @@ public:
             CommLinkInterface * commLink) :
         Autopilot(navigator,guide,controller,commLink)
     {
-        float navFreq = 1.0;
+        float navFreq = 100.0;
         float contFreq = 1.0;
         float guideFreq = 1.0;
         float commFreq = 1.0;
