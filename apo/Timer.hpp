@@ -2,7 +2,6 @@
 #define APO_TIMER_HPP_
 
 #include "interfaces.hpp"
-#include <iostream>
 namespace apo {
 
 class Timer {
