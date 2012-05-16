@@ -31,6 +31,33 @@ public:
     Navigator (): m_debug(&nullDebug) {};
     virtual ~Navigator() {};
 
+    LOCKED_GET_SET(int32_t,lat_degE7);
+    LOCKED_GET_SET(int32_t,lon_degE7);
+    LOCKED_GET_SET(int16_t,alt_degE3);
+    LOCKED_GET_SET(float,lat);
+    LOCKED_GET_SET(float,lon);
+    LOCKED_GET_SET(float,alt);
+    LOCKED_GET_SET(float,vNorth);
+    LOCKED_GET_SET(float,vEast);
+    LOCKED_GET_SET(float,vDown);
+    LOCKED_GET_SET(float,roll);
+    LOCKED_GET_SET(float,pitch);
+    LOCKED_GET_SET(float,yaw);
+    LOCKED_GET_SET(float,rollRate);
+    LOCKED_GET_SET(float,pitchRate);
+    LOCKED_GET_SET(float,yawRate);
+
+protected:
+    // component
+    virtual void update() {};
+    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
+    virtual DebugInterface * get_debug() { return m_debug; }
+
+    // interfaces
+    DebugInterface * m_debug;
+
+private:
+
     LOCKED_ATTR(int32_t,lat_degE7);
     LOCKED_ATTR(int32_t,lon_degE7);
     LOCKED_ATTR(int16_t,alt_degE3);
@@ -46,15 +73,6 @@ public:
     LOCKED_ATTR(float,rollRate);
     LOCKED_ATTR(float,pitchRate);
     LOCKED_ATTR(float,yawRate);
-
-protected:
-    // component
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return m_debug; }
-
-    // interfaces
-    DebugInterface * m_debug;
 };
 
 }; // namespace apo

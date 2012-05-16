@@ -3,6 +3,7 @@
 
 #include <inttypes.h>
 #include <string>
+#include "apoMacros.hpp"
 
 namespace apo {
 
@@ -27,6 +28,12 @@ struct ComponentInterface {
     virtual void update() = 0;
     virtual void set_debug(DebugInterface * debug) = 0;
     virtual DebugInterface * get_debug() = 0;
+};
+
+// Time
+struct ClockInterface {
+    virtual void sleepMicros(uint64_t micros) = 0;
+    virtual uint64_t get_micros() = 0;
 };
 
 struct NavigatorReadInterface {

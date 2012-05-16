@@ -3,7 +3,9 @@ cmake_minimum_required(VERSION 2.8)
 
 find_package(Boost 1.42 REQUIRED COMPONENTS thread system)
 
-file(GLOB_RECURSE APO_SRC "apo/*")
+
+file(GLOB_RECURSE APO_SRC "${PROJECT_SRC_ROOT}/apo/*")
+
 include_directories(. ${Boost_INCLUDE_DIRS})
 add_definitions(-DOS=LINUX)
 add_executable(test

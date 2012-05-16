@@ -53,41 +53,22 @@ public:
             CommLinkInterface * commLink) :
         Autopilot(navigator,guide,controller,commLink)
     {
+        Timer commLinkTimer(1000000.0/1.0,getCommLink(),&clock);
+        Timer navigatorTimer(1000000.0/1000.0,getNavigator(),&clock);
+        Timer guideTimer(1000000.0/10.0,getGuide(),&clock);
+        Timer controllerTimer(1000000.0/1.0,getController(),&clock);
+
         // threads
-        boost::thread thread1(boost::bind(&TestAutopilot::updateComm,this));
-        boost::thread thread2(boost::bind(&TestAutopilot::updateNavigator,this));
-        boost::thread thread3(boost::bind(&TestAutopilot::updateGuide,this));
-        boost::thread thread4(boost::bind(&TestAutopilot::updateController,this));
+        boost::thread thread1(boost::bind(&Timer::start,&commLinkTimer));
+        boost::thread thread2(boost::bind(&Timer::start,&navigatorTimer));
+        boost::thread thread3(boost::bind(&Timer::start,&guideTimer));
+        boost::thread thread4(boost::bind(&Timer::start,&controllerTimer));
 
         // join threads
         thread1.join();
         thread2.join();
         thread3.join();
         thread4.join();
-    }
-
-    void updateComm() {
-        for (int i=0;i<100;i++) {
-            getCommLink()->update();
-        }
-    }
-
-    void updateNavigator() {
-        for (int i=0;i<100;i++) {
-            getNavigator()->update();
-        }
-    }
-
-    void updateGuide() {
-        for (int i=0;i<100;i++) {
-            getGuide()->update();
-        }
-    }
-
-    void updateController() {
-        for (int i=0;i<100;i++) {
-            getController()->update();
-        }
     }
 };
 

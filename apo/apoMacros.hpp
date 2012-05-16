@@ -17,7 +17,6 @@
 #ifndef APO_MACROS_HPP_
 #define APO_MACROS_HPP_
 
-#include "os/os.hpp"
 #include <inttypes.h>
 
 namespace apo {
@@ -26,40 +25,19 @@ namespace apo {
 #define CONCAT(X,Y) CONCAT_HELPER(X,Y)
 
 ///
-// This macro defines a user of a class with
-// an accessor with protected access.
-#define DEFINE_USER(Type) \
-class Type; \
-class CONCAT(Type,User) { \
-public: \
-    CONCAT(Type,User)(Type * TypeVal) : CONCAT(m_,Type)(TypeVal) {}; \
-    virtual ~CONCAT(Type,User)() {}; \
-private: \
-    Type * CONCAT(m_,Type); \
-protected: \
-    virtual Type * CONCAT(get,Type)() { return CONCAT(m_,Type); } \
-};
-
-DEFINE_USER(Navigator);
-DEFINE_USER(Guide);
-DEFINE_USER(Controller);
-DEFINE_USER(ParameterTable);
-DEFINE_USER(Board);
-
-///
 // These macros define locking access for a member.
-#define DEFINE_LOCKING_VAR(Type,Name) \
+#define LOCKED_ATTR(Type,Name) \
 Mutex CONCAT(m_lock_,Name); \
 Type CONCAT(m_,Name);
 
-#define DEFINE_LOCKING_SET(Type,Name) \
+#define LOCKED_SET(Type,Name) \
 void CONCAT(set_,Name)(Type val) { \
     CONCAT(m_lock_,Name).lock(); \
     CONCAT(m_,Name) = val; \
     CONCAT(m_lock_,Name).unlock(); \
 }
 
-#define DEFINE_LOCKING_GET(Type,Name) \
+#define LOCKED_GET(Type,Name) \
 Type CONCAT(get_,Name)() { \
     CONCAT(m_lock_,Name).lock(); \
     Type val = CONCAT(m_,Name); \
@@ -67,28 +45,20 @@ Type CONCAT(get_,Name)() { \
     return val; \
 }
 
-#define LOCKED_ATTR_GET_SET(Type,Name,VarAccess,GetAccess,SetAccess) \
-VarAccess: \
-    DEFINE_LOCKING_VAR(Type,Name); \
-GetAccess: \
-    DEFINE_LOCKING_GET(Type,Name); \
-SetAccess: \
-    DEFINE_LOCKING_SET(Type,Name); \
-public:
+#define LOCKED_GET_SET(Type,Name) \
+LOCKED_GET(Type,Name) \
+LOCKED_SET(Type,Name)
 
-#define LOCKED_ATTR(Type,Name) LOCKED_ATTR_GET_SET(Type,Name,private,public,protected) 
-
-#define INT2FLOAT_ACCESS(Name,IntName,Scale) \
-public: \
+#define INT2FLOAT_GET(Name,IntName,Scale) \
 float CONCAT(get_,Name)() { \
     float val = CONCAT(get_,IntName)()*Scale; \
     return val; \
-} \
-protected: \
+}
+
+#define INT2FLOAT_SET(Name,IntName,Scale) \
 void CONCAT(set_,Name)(float val) { \
     CONCAT(set_,IntName)(val/Scale); \
-} \
-public:
+}
 
 }; // namespace apo
 

@@ -2,6 +2,8 @@
 #define APO_OS_LINUX_HPP_
 
 #include <boost/thread/mutex.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/date_time.hpp>
 #include <iostream>
 #include "../interfaces.hpp"
 
@@ -32,6 +34,25 @@ public:
 private:
     Mutex m_mutex;
 };
+
+class Clock : public ClockInterface {
+public:
+    Clock() : m_startTime(boost::posix_time::microsec_clock::universal_time()) {
+    }
+    void sleepMicros(uint64_t micros) {
+        boost::this_thread::sleep(boost::posix_time::microseconds(micros)); 
+    }
+    uint64_t get_micros() {
+        boost::posix_time::time_duration elapsed =
+            boost::posix_time::microsec_clock::universal_time() - get_startTime();
+        return elapsed.total_microseconds();
+    }
+protected:
+    boost::posix_time::ptime  get_startTime() { return m_startTime; }
+private:
+    boost::posix_time::ptime m_startTime;       
+}clock;
+
 
 } // namespace apo
 
