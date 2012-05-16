@@ -60,6 +60,10 @@ void CONCAT(set_,Name)(float val) { \
     CONCAT(set_,IntName)(val/Scale); \
 }
 
+#define INT2FLOAT_GET_SET(Name,IntName,Scale) \
+INT2FLOAT_GET(Name,IntName,Scale) \
+INT2FLOAT_SET(Name,IntName,Scale)
+
 }; // namespace apo
 
 

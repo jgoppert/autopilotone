@@ -31,6 +31,7 @@ class TestGuide : public Guide {
 public:
     TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
+        getNavigator()->get_lat();
         get_debug()->send("guide update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
@@ -40,6 +41,7 @@ class TestController : public Controller {
 public:
     TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
+        getNavigator()->get_lat();
         get_debug()->send("controller update");
         boost::this_thread::sleep(boost::posix_time::milliseconds(1));
     }
@@ -53,10 +55,15 @@ public:
             CommLinkInterface * commLink) :
         Autopilot(navigator,guide,controller,commLink)
     {
-        Timer commLinkTimer(1000000.0/1.0,getCommLink(),&clock);
-        Timer navigatorTimer(1000000.0/1000.0,getNavigator(),&clock);
-        Timer guideTimer(1000000.0/10.0,getGuide(),&clock);
-        Timer controllerTimer(1000000.0/1.0,getController(),&clock);
+        float navFreq = 1.0;
+        float contFreq = 1.0;
+        float guideFreq = 1.0;
+        float commFreq = 1.0;
+
+        Timer navigatorTimer(1000000.0/navFreq,getNavigator(),&clock);
+        Timer controllerTimer(1000000.0/contFreq,getController(),&clock);
+        Timer guideTimer(1000000.0/guideFreq,getGuide(),&clock);
+        Timer commLinkTimer(1000000.0/commFreq,getCommLink(),&clock);
 
         // threads
         boost::thread thread1(boost::bind(&Timer::start,&commLinkTimer));

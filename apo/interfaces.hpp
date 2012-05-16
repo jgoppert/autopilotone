@@ -4,8 +4,12 @@
 #include <inttypes.h>
 #include <string>
 #include "apoMacros.hpp"
+#include <cmath>
 
 namespace apo {
+
+// constants
+float deg2rad = M_PI/180.0;
 
 // Component Interface
 struct MutexInterface {

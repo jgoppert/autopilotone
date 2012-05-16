@@ -31,12 +31,14 @@ public:
     Navigator (): m_debug(&nullDebug) {};
     virtual ~Navigator() {};
 
+protected:
+
     LOCKED_GET_SET(int32_t,lat_degE7);
+    INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);
+    INT2FLOAT_GET_SET(lon,lon_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int16_t,alt_degE3);
-    LOCKED_GET_SET(float,lat);
-    LOCKED_GET_SET(float,lon);
-    LOCKED_GET_SET(float,alt);
+    INT2FLOAT_GET_SET(alt,alt_degE3,1.0e3*deg2rad);
     LOCKED_GET_SET(float,vNorth);
     LOCKED_GET_SET(float,vEast);
     LOCKED_GET_SET(float,vDown);
@@ -47,7 +49,6 @@ public:
     LOCKED_GET_SET(float,pitchRate);
     LOCKED_GET_SET(float,yawRate);
 
-protected:
     // component
     virtual void update() {};
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
