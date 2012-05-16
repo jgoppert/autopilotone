@@ -2,3 +2,4 @@ build/
 doc/*
 .DS_Store
 tags
+*.swp
