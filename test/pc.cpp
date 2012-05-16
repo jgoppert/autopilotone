@@ -1,7 +1,4 @@
 #include <apo/apo.hpp>
-#include <boost/thread.hpp>
-#include <boost/date_time.hpp>
-#include "apo/Autopilot.hpp"
 
 namespace apo {
 

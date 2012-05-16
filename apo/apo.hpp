@@ -38,3 +38,4 @@
 #include "CommLink.hpp"
 #include "Timer.hpp"
 #include "os/os.hpp"
+#include "Autopilot.hpp"
