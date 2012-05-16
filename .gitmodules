@@ -1,3 +1,0 @@
-[submodule "waf"]
-	path = waf
-	url = git://gitweb.samba.org/tridge/waf-svn.git
