@@ -20,6 +20,12 @@ if ( NOT "${DOXYGEN}" STREQUAL "DOXYGEN-NOTFOUND")
     configure_file(Doxyfile.cmake Doxyfile)
     add_custom_target(doxygen-build
         COMMAND ${DOXYGEN} ${CMAKE_BINARY_DIR}/Doxyfile)
+    add_custom_target(doxygen-latex
+        COMMAND ${CMAKE_MAKE_PROGRAM}
+        COMMAND ${CMAKE_COMMAND} -E copy refman.pdf ${CMAKE_BINARY_DIR}/apo.pdf
+        COMMAND ${CMAKE_MAKE_PROGRAM} clean
+        DEPENDS doxygen-build
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/doc/latex)
 endif()
 
 # doxywizard
