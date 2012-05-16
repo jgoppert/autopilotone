@@ -30,6 +30,8 @@
  * etc...
  */
 
+#include "os/os.hpp"
+#include "macros.hpp"
 #include "Board.hpp"
 #include "ParameterTable.hpp"
 #include "Guide.hpp"
@@ -38,5 +40,4 @@
 #include "CommLink.hpp"
 #include "Timer.hpp"
 #include "Autopilot.hpp"
-#include "os/os.hpp"
-#include "macros.hpp"
+#include "FlightPlan.hpp"

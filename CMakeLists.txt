@@ -24,7 +24,7 @@ set(SIMGEAR_TAG     9ab31e0d88ef2a09f6a8dd33837ba547366151fa)
 option(WITH_BUILD_DEPS "Build dependencies." ON)
 option(WITH_BUILD_SHARED "Build shared library." OFF)
 option(WITH_PREFER_STATIC "Build preferring static linking." ON)
-option(WITH_ARKCOMM "Build arkcomm communications." ON)
+option(WITH_ARKCOMM "Build arkcomm communications." OFF)
 option(WITH_WARNINGS "Enable warnings." OFF)
 
 set(RECURSE_OPTIONS_LIST
@@ -102,7 +102,9 @@ endif()
 
 # find libraries with cmake modules
 set(REQUIRED_IF_ROOT_THREAD)
-find_package(SimGear ${SIMGEAR_REQUIRED_VERSION} ${REQUIRED_IF_ROOT_THREAD} COMPONENTS io props xml structure misc debug magvar threads)
+if (WITH_ARKCOMM)
+    find_package(SimGear ${SIMGEAR_REQUIRED_VERSION} ${REQUIRED_IF_ROOT_THREAD} COMPONENTS io props xml structure misc debug magvar threads)
+endif()
 if (ROOT_THREAD)
     set(REQUIRED_IF_ROOT_THREAD "REQUIRED")
 endif()
@@ -144,7 +146,7 @@ if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
            )
     endif()
 
-    if (NOT SIMGEAR_FOUND)
+    if (WITH_ARKCOMM AND NOT SIMGEAR_FOUND)
         ExternalProjectWithFilename_Add(simgear
             URL http://gitorious.org/fg/jgopperts-simgear/archive-tarball/${SIMGEAR_TAG}
             FILENAME simgear-${SIMGEAR_TAG}.tar.gz

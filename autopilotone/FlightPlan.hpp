@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FLIGHT_PLAN_HPP_
-#define FLIGHT_PLAN_HPP_
+#ifndef AUTOPILOTONE_FLIGHT_PLAN_HPP_
+#define AUTOPILOTONE_FLIGHT_PLAN_HPP_
 
 #include "interfaces.hpp"
 #include <vector>
@@ -32,7 +32,7 @@ public:
     FlightPlan () :
         m_debug(&nullDebug) { m_commandIndex = 0;}; 
     virtual ~FlightPlan() {};
-    uint16_t get_currentCommandIndex();
+    uint16_t get_currentCommandIndex() { return m_commandIndex; };
     
 
 protected:
@@ -55,5 +55,4 @@ private:
 }; // namespace apo
 
 
-#endif /* GUIDE_HPP_ */
-
+#endif /* AUTOPILOTONE_FLIGHTPLAN_HPP_ */ 
