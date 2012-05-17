@@ -114,17 +114,20 @@ struct FlightPlanWriteInterface {
     virtual void clearWaypoints() = 0;
 };
 
-struct FlightPlanInterface {
+struct FlightPlanInterface :
+    public FlightPlanReadInterface,
+    public FlightPlanWriteInterface
+{
 };
 
 struct GuideReadInterface {
-    //virtual FlightInterface * get_flightPlan() = 0;
-    //virtual guideMode_t get_mode() = 0;
+    virtual FlightPlanInterface * get_flightPlan() = 0;
+    virtual guideMode_t get_mode() = 0;
 };
 
 struct GuideWriteInterface {
-    //virtual void set_flightPlan(FlightPlanInterface * flightPlan) = 0;
-    //virtual set_mode(guideMode_t mode) = 0;
+    virtual void set_flightPlan(FlightPlanInterface * flightPlan) = 0;
+    virtual void set_mode(guideMode_t mode) = 0;
 };
 
 struct GuideInterface :

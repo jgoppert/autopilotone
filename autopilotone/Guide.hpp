@@ -31,18 +31,36 @@ public:
     Guide (NavigatorReadInterface * navigator) :
         m_navigator(navigator), m_debug(&nullDebug)
     {
-        m_flightPlan = & m_flightPlanMaster;
+        set_flightPlan( & m_flightPlanMaster);
     }; 
     virtual ~Guide() {};
 
+    // read interface
+    virtual FlightPlanInterface * get_flightPlan() 
+    {
+        return m_flightPlan;
+    };
+
+    virtual guideMode_t get_mode() { return m_guideMode; }
+
+    // write interface
+    virtual void set_flightPlan(FlightPlanInterface * flightPlan) {
+        m_flightPlan = flightPlan;
+    }
+
+    virtual void set_mode(guideMode_t mode) { m_guideMode = mode; }
+    
 protected:
     NavigatorReadInterface * getNavigator() { return m_navigator; }
 
     // component
     FlightPlan m_flightPlanMaster;
+    guideMode_t m_guideMode;
+
     virtual void update() {};
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
     virtual DebugInterface * get_debug() { return m_debug; }
+
 
 private:
 
