@@ -112,6 +112,7 @@ endif()
 if (MSVC)
     set(Boost_USE_MULITHREADED ON)
     find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread system)
+    find_package (Threads REQUIRED)
 elseif(MINGW)
     find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread_win32-mt system-mt)
 else()
@@ -229,7 +230,7 @@ add_definitions(-DOS=PC)
 add_executable(test
     test/pc.cpp
     ${APO_SRC})
-target_link_libraries(test ${Boost_LIBRARIES})
+target_link_libraries(test ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # doxygen
 find_program(DOXYGEN doxygen)
