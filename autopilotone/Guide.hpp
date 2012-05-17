@@ -43,12 +43,24 @@ public:
 
     virtual guideMode_t get_mode() { return m_guideMode; }
 
+    virtual float get_latError_degFloat() { return m_latError_degFloat; }
+    virtual float get_lonError_degFloat() { return m_lonError_degFloat; }
+    virtual float get_altError_ftFloat() { return m_altError_ftFloat; }
+
     // write interface
     virtual void set_flightPlan(FlightPlanInterface * flightPlan) {
         m_flightPlan = flightPlan;
     }
 
     virtual void set_mode(guideMode_t mode) { m_guideMode = mode; }
+
+    virtual float update_error() {
+        Command c = m_flightPlan->get_currentCommand();
+
+        m_latError_degFloat = c.lat_degIntE7 - m_navigator->get_lat();
+        m_lonError_degFloat = c.lon_degIntE7 - m_navigator->get_lon();
+        m_altError_ftFloat = c.alt_degIntE3 - m_navigator->get_alt();
+    }
     
 protected:
     NavigatorReadInterface * getNavigator() { return m_navigator; }
@@ -62,6 +74,9 @@ protected:
     virtual DebugInterface * get_debug() { return m_debug; }
 
 
+    float m_latError_degFloat;
+    float m_lonError_degFloat;
+    float m_altError_ftFloat;
 private:
 
     // interfaces

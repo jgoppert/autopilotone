@@ -42,6 +42,10 @@ public:
     {
         return index > m_commandHighestIndex ? m_commands[m_commandHighestIndex] : m_commands[index];
     }
+    virtual Command get_currentCommand()
+    {
+        return m_commands[m_commandIndex];
+    }
 
     // write interface
     virtual void addWaypoint(uint16_t index, Command waypoint) 

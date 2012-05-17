@@ -106,6 +106,7 @@ struct FlightPlanReadInterface {
     virtual uint16_t get_nextCommandIndex() = 0;
     virtual uint16_t get_commandCount() = 0;
     virtual Command get_command(uint16_t index) = 0;
+    virtual Command get_currentCommand() = 0;
 };
 
 struct FlightPlanWriteInterface {
@@ -123,11 +124,15 @@ struct FlightPlanInterface :
 struct GuideReadInterface {
     virtual FlightPlanInterface * get_flightPlan() = 0;
     virtual guideMode_t get_mode() = 0;
+    virtual float get_latError_degFloat() = 0;
+    virtual float get_lonError_degFloat() = 0;
+    virtual float get_altError_ftFloat() = 0;
 };
 
 struct GuideWriteInterface {
     virtual void set_flightPlan(FlightPlanInterface * flightPlan) = 0;
     virtual void set_mode(guideMode_t mode) = 0;
+    //virtual float update_error() = 0;
 };
 
 struct GuideInterface :
