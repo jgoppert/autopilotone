@@ -25,15 +25,66 @@
 namespace autopilotone
 {
 
-class FlightPlan : public FlightPlanReadInterface {
+class FlightPlan : public FlightPlanInterface {
 
 // methods
 public:
     FlightPlan () :
         m_debug(&nullDebug) { m_commandIndex = 0;}; 
     virtual ~FlightPlan() {};
-    uint16_t get_currentCommandIndex() { return m_commandIndex; };
-    
+
+    // read interface
+    virtual uint16_t get_currentCommandIndex() { return m_commandIndex; }
+    virtual uint16_t get_lastCommandIndex() { return m_commandIndex-1; }
+    virtual uint16_t get_nextCommandIndex() { return m_commandIndex+1; }
+    virtual uint16_t get_commandCount() { return m_commandHighestIndex+1; }
+    virtual Command get_command(uint16_t index)
+    {
+        return index > m_commandHighestIndex ? m_commands[m_commandHighestIndex] : m_commands[index];
+    }
+
+    // write interface
+    virtual void addWaypoint(uint16_t index, Command waypoint) 
+    {
+
+        if(index > m_commandHighestIndex)
+        {
+            m_commandHighestIndex++;
+            m_commands[m_commandHighestIndex] = waypoint;
+        }
+        else
+        {
+            m_commands[index] = waypoint;
+        }
+    }
+
+    virtual void removeWaypoint(uint16_t index)
+    {
+        if(index > m_commandHighestIndex)
+        {
+            return;
+        }
+
+        // If deleting the last command, drop the current index to the
+        // new last.
+        if(index == m_commandIndex)
+        {
+            index--;
+        }
+
+
+        m_commandHighestIndex--;
+        for(; index < m_commandHighestIndex; index++)
+        {
+            m_commands[index] = m_commands[index+1];
+        }
+    }
+
+    virtual void clearWaypoints()
+    {
+        m_commandHighestIndex = -1;
+        m_commandIndex = -1;
+    }
 
 protected:
 
@@ -46,6 +97,7 @@ private:
     // component
     Command m_commands [COMMAND_BUFFER_SIZE];
     uint16_t m_commandIndex;
+    uint16_t m_commandHighestIndex;
 
     // interfaces
     DebugInterface * m_debug;

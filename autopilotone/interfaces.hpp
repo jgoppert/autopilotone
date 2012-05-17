@@ -101,17 +101,17 @@ enum guideMode_t {
 };
 
 struct FlightPlanReadInterface {
-    //virtual uint16_t get_currentCommandIndex() = 0;
-    //virtual uint16_t get_lastCommandIndex() = 0;
-    //virtual uint16_t get_nextCommandIndex() = 0;
-    //virtual uint16_t get_commandCount() = 0;
-    //virtual Waypoint get_command(uint16_t index) = 0;
+    virtual uint16_t get_currentCommandIndex() = 0;
+    virtual uint16_t get_lastCommandIndex() = 0;
+    virtual uint16_t get_nextCommandIndex() = 0;
+    virtual uint16_t get_commandCount() = 0;
+    virtual Command get_command(uint16_t index) = 0;
 };
 
 struct FlightPlanWriteInterface {
-    //virtual void addWaypoint(uint16_t index, Waypoint waypoint) = 0;
-    //virtual void removeWaypoint(uint16_t index) = 0;
-    //virtual void clearWaypoints() = 0;
+    virtual void addWaypoint(uint16_t index, Command waypoint) = 0;
+    virtual void removeWaypoint(uint16_t index) = 0;
+    virtual void clearWaypoints() = 0;
 };
 
 struct FlightPlanInterface {

@@ -18,6 +18,7 @@
 #define GUIDE_HPP_
 
 #include "interfaces.hpp"
+#include "FlightPlan.hpp"
 #include <vector>
 
 namespace autopilotone
@@ -28,13 +29,17 @@ class Guide : public GuideInterface {
 // methods
 public:
     Guide (NavigatorReadInterface * navigator) :
-        m_navigator(navigator), m_debug(&nullDebug) {}; 
+        m_navigator(navigator), m_debug(&nullDebug)
+    {
+        m_flightPlan = & m_flightPlanMaster;
+    }; 
     virtual ~Guide() {};
 
 protected:
     NavigatorReadInterface * getNavigator() { return m_navigator; }
 
     // component
+    FlightPlan m_flightPlanMaster;
     virtual void update() {};
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
     virtual DebugInterface * get_debug() { return m_debug; }
@@ -42,6 +47,7 @@ protected:
 private:
 
     // interfaces
+    FlightPlanInterface * m_flightPlan;
     DebugInterface * m_debug;
     NavigatorReadInterface * m_navigator;
 
