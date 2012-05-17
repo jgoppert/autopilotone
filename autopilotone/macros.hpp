@@ -64,6 +64,19 @@ void CONCAT(set_,Name)(float val) { \
 INT2FLOAT_GET(Name,IntName,Scale) \
 INT2FLOAT_SET(Name,IntName,Scale)
 
+#define LOCKED_FLAG(Name) \
+LOCKED_ATTR(bool,Name)
+    
+#define BLOCKING_TEST_AND_SET(Name, SleepTime) \
+LOCKED_GET_SET(bool, Name) \
+bool CONCAT(blockingTestAndSet_,Name)() { \
+    while (!CONCAT(get_,Name)() { \
+        \\sleep(SleepTime); \
+    } \
+}
+
+
+
 }; // namespace autopilotone
 
 
