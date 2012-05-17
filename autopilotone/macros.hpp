@@ -76,14 +76,27 @@ bool CONCAT(testAndSet_,Name)() { \
     CONCAT(m_lock_,Name).unlock(); \
     return testVal; \
 }
+
+#define LOCKED_CLEAR(Name) \
+bool CONCAT(clear_,Name)() { \
+    CONCAT(m_lock_,Name).lock(); \
+    CONCAT(m_,Name) = false; \
+    CONCAT(m_lock_,Name).unlock(); \
+}
+
     
+// TODO: Add a sleep to this code
 #define BLOCKING_TEST_AND_SET(Name, SleepTime) \
-LOCKED_GET_SET(bool, Name) \
 bool CONCAT(blockingTestAndSet_,Name)() { \
-    while (!CONCAT(testAndSet_,Name)() { \
-        \\sleep(SleepTime); \
+    while (!CONCAT(testAndSet_,Name)()) { \
+        ;\
     } \
 }
+
+#define COMPLETE_TEST_AND_SET(Name, SleepTime) \
+LOCKED_TEST_AND_SET(Name) \
+BLOCKING_TEST_AND_SET(Name, SleepTime) \
+LOCKED_CLEAR(Name)
 
 }; // namespace autopilotone
 

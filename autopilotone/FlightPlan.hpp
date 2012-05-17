@@ -18,6 +18,7 @@
 #define AUTOPILOTONE_FLIGHT_PLAN_HPP_
 
 #include "interfaces.hpp"
+#include "macros.hpp"
 #include <vector>
 
 #define COMMAND_BUFFER_SIZE 32
@@ -40,17 +41,22 @@ public:
     virtual uint16_t get_commandCount() { return m_commandHighestIndex+1; }
     virtual Command get_command(uint16_t index)
     {
+        blockingTestAndSet_commandAccessFlag();
         return index > m_commandHighestIndex ? m_commands[m_commandHighestIndex] : m_commands[index];
+        clear_commandAccessFlag();
     }
     virtual Command get_currentCommand()
     {
+        blockingTestAndSet_commandAccessFlag();
         return m_commands[m_commandIndex];
+        clear_commandAccessFlag();
     }
 
     // write interface
     virtual void addWaypoint(uint16_t index, Command waypoint) 
     {
 
+        blockingTestAndSet_commandAccessFlag();
         if(index > m_commandHighestIndex)
         {
             m_commandHighestIndex++;
@@ -60,10 +66,12 @@ public:
         {
             m_commands[index] = waypoint;
         }
+        clear_commandAccessFlag();
     }
 
     virtual void removeWaypoint(uint16_t index)
     {
+        blockingTestAndSet_commandAccessFlag();
         if(index > m_commandHighestIndex)
         {
             return;
@@ -82,12 +90,15 @@ public:
         {
             m_commands[index] = m_commands[index+1];
         }
+        clear_commandAccessFlag();
     }
 
     virtual void clearWaypoints()
     {
+        blockingTestAndSet_commandAccessFlag();
         m_commandHighestIndex = -1;
         m_commandIndex = -1;
+        clear_commandAccessFlag();
     }
 
 protected:
@@ -97,12 +108,16 @@ protected:
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
     virtual DebugInterface * get_debug() { return m_debug; }
 
-private:
     // component
     Command m_commands [COMMAND_BUFFER_SIZE];
     uint16_t m_commandIndex;
     uint16_t m_commandHighestIndex;
 
+    COMPLETE_TEST_AND_SET(commandAccessFlag, 25);
+
+private:
+
+    LOCKED_FLAG(commandAccessFlag);
     // interfaces
     DebugInterface * m_debug;
 
