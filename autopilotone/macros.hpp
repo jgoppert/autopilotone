@@ -66,16 +66,24 @@ INT2FLOAT_SET(Name,IntName,Scale)
 
 #define LOCKED_FLAG(Name) \
 LOCKED_ATTR(bool,Name)
+
+#define LOCKED_TEST_AND_SET(Name) \
+bool CONCAT(testAndSet_,Name)() { \
+    bool testVal; \
+    CONCAT(m_lock_,Name).lock(); \
+    testVal = CONCAT(m_,Name);\
+    CONCAT(m_,Name) = true;\
+    CONCAT(m_lock_,Name).unlock(); \
+    return testVal; \
+}
     
 #define BLOCKING_TEST_AND_SET(Name, SleepTime) \
 LOCKED_GET_SET(bool, Name) \
 bool CONCAT(blockingTestAndSet_,Name)() { \
-    while (!CONCAT(get_,Name)() { \
+    while (!CONCAT(testAndSet_,Name)() { \
         \\sleep(SleepTime); \
     } \
 }
-
-
 
 }; // namespace autopilotone
 
