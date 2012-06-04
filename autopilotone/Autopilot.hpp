@@ -37,10 +37,10 @@ public:
     virtual ~Autopilot() {};
 
 protected:
-    NavigatorInterface * getNavigator() { return m_navigator; }
-    GuideInterface * getGuide() { return m_guide; }
-    ControllerInterface * getController() { return m_controller; }
-    CommLinkInterface * getCommLink() { return m_commLink; }
+    NavigatorInterface * get_navigator() { return m_navigator; }
+    GuideInterface * get_guide() { return m_guide; }
+    ControllerInterface * get_controller() { return m_controller; }
+    CommLinkInterface * get_commLink() { return m_commLink; }
 
 private:
     NavigatorInterface * m_navigator;

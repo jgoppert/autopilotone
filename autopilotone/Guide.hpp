@@ -63,7 +63,7 @@ public:
     }
     
 protected:
-    NavigatorReadInterface * getNavigator() { return m_navigator; }
+    NavigatorReadInterface * get_navigator() { return m_navigator; }
 
     // component
     FlightPlan m_flightPlanMaster;

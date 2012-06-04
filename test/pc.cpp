@@ -8,7 +8,7 @@ public:
             ControllerInterface * controller, DebugInterface * debug) : 
         CommLink(navigator,guide,controller,debug) {}
     void update() {
-        getNavigator()->set_lat(1);
+        get_navigator()->set_lat(1);
         get_debug()->send("commlink update");
     }
 };
@@ -35,7 +35,7 @@ class TestGuide : public Guide {
 public:
     TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
-        getNavigator()->get_lat();
+        get_navigator()->get_lat();
         get_debug()->send("guide update");
     }
 };
@@ -44,7 +44,7 @@ class TestController : public Controller {
 public:
     TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
-        getNavigator()->get_lat();
+        get_navigator()->get_lat();
         get_debug()->send("controller update");
     }
 };
@@ -62,10 +62,10 @@ public:
         float guideFreq = 1.0;
         float commFreq = 1.0;
 
-        Timer navigatorTimer(1000000.0/navFreq,getNavigator(),&clock);
-        Timer controllerTimer(1000000.0/contFreq,getController(),&clock);
-        Timer guideTimer(1000000.0/guideFreq,getGuide(),&clock);
-        Timer commLinkTimer(1000000.0/commFreq,getCommLink(),&clock);
+        Timer navigatorTimer(1000000.0/navFreq,get_navigator(),&clock);
+        Timer controllerTimer(1000000.0/contFreq,get_controller(),&clock);
+        Timer guideTimer(1000000.0/guideFreq,get_guide(),&clock);
+        Timer commLinkTimer(1000000.0/commFreq,get_commLink(),&clock);
 
         // threads
         boost::thread thread1(boost::bind(&Timer::start,&commLinkTimer));

@@ -33,18 +33,18 @@ public:
         m_controller(controller),
         m_debug(debug)
     {
-        getNavigator()->set_debug(get_debug());
-        getGuide()->set_debug(get_debug());
-        getController()->set_debug(get_debug());
+        get_navigator()->set_debug(get_debug());
+        get_guide()->set_debug(get_debug());
+        get_controller()->set_debug(get_debug());
     };
     virtual ~CommLink() {};
 
 protected:
 
     // interfaces
-    NavigatorInterface * getNavigator() { return m_navigator; }
-    GuideInterface * getGuide() { return m_guide; }
-    ControllerInterface * getController() { return m_controller; }
+    NavigatorInterface * get_navigator() { return m_navigator; }
+    GuideInterface * get_guide() { return m_guide; }
+    ControllerInterface * get_controller() { return m_controller; }
 
     // component
     virtual void update() {};

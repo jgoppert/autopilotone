@@ -12,26 +12,18 @@ set(LIBRARY_VERSION ${PROJECT_VERSION})
 set(LIBRARY_SOVERSION "0.0.0")
 
 # third party library version
-set(ARKCOMM_REQUIRED_VERSION            0.1.8)
 set(BOOST_REQUIRED_VERSION              1.42) 
-set(SIMGEAR_REQUIRED_VERSION 2.7.0)
-
-# tags
-set(ARKCOMM_TAG     877f135c3bf1b76215c7f3426d1e1df964e9ad9e)
-set(SIMGEAR_TAG     9ab31e0d88ef2a09f6a8dd33837ba547366151fa)
 
 # options
 option(WITH_BUILD_DEPS "Build dependencies." ON)
 option(WITH_BUILD_SHARED "Build shared library." OFF)
 option(WITH_PREFER_STATIC "Build preferring static linking." ON)
-option(WITH_ARKCOMM "Build arkcomm communications." OFF)
 option(WITH_WARNINGS "Enable warnings." OFF)
 
 set(RECURSE_OPTIONS_LIST
     WITH_BUILD_DEPS
     WITH_BUILD_SHARED
     WITH_PREFER_STATIC
-    WITH_ARKCOMM
     WITH_BUNDLE
     WITH_WARNINGS
     CMAKE_TOOLCHAIN_FILE
@@ -61,105 +53,11 @@ include(CheckLibraryExists)
 include(ExternalProjectWithFilename)
 include(CheckLinkType)
 
-# external projects find path
-if(NOT EP_BASE_DIR)
-    set(EP_BASE_DIR "${CMAKE_BINARY_DIR}/CMakeExternals")
-endif()
-set_property(DIRECTORY PROPERTY EP_BASE ${EP_BASE_DIR})
-set(EP_INSTALL_DIR "${EP_BASE_DIR}/Install")
-list(APPEND CMAKE_FIND_ROOT_PATH ${EP_INSTALL_DIR})
-
-# spawn new cmake to build deps
-if (WITH_BUILD_DEPS AND ROOT_THREAD)
-    set(CMAKE_RECURSE_ARGS "-DROOT_THREAD=FALSE")
-    foreach(OPT ${RECURSE_OPTIONS_LIST})
-        list(APPEND CMAKE_RECURSE_ARGS "-D${OPT}=${${OPT}}")
-    endforeach()
-    execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR} ${CMAKE_RECURSE_ARGS}
-        RESULT_VARIABLE ERROR)
-    if (ERROR)
-        message(FATAL_ERROR "error, recursing loop returned error code: ${ERROR}")
-    endif()
-    message("** Making dependencies")
-    if("${RECURSE_THREADS}" STREQUAL "")
-        set(RECURSE_THREADS "1")
-    endif()
-    execute_process(COMMAND ${CMAKE_MAKE_PROGRAM} "-j${RECURSE_THREADS}" "-f${CMAKE_BINARY_DIR}/Makefile")
-    message("** Configuring ${PROJECT_NAME}")
-endif()
-
-# prefer static packages if building static library
-message("** Finding libraries")
-if (WITH_PREFER_STATIC)
-    set(BOOST_USE_STATIC_LIBS ON)
-    # prefer static libs
-    if(WIN32)
-        set(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
- else()
-        set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
-    endif()
-endif()
-
-# find libraries with cmake modules
-set(REQUIRED_IF_ROOT_THREAD)
-if (WITH_ARKCOMM)
-    find_package(SimGear ${SIMGEAR_REQUIRED_VERSION} ${REQUIRED_IF_ROOT_THREAD} COMPONENTS io props xml structure misc debug magvar threads)
-endif()
-if (ROOT_THREAD)
-    set(REQUIRED_IF_ROOT_THREAD "REQUIRED")
-endif()
-
-if (MSVC)
-    set(Boost_USE_MULITHREADED ON)
-    find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread system)
-    find_package (Threads REQUIRED)
-elseif(MINGW)
-    find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread_win32-mt system-mt)
-else()
-    find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread-mt system-mt)
-endif()
+# find packages
+set(BOOST_USE_STATIC_LIBS ON)
+set(Boost_USE_MULITHREADED ON)
+find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread system)
 find_package(Threads REQUIRED)
-	
-# build dependencies
-if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
-    message("** Configuring dependencies")
-
-    # add external projects
-    set(EP_OPTIONS_LIST
-        EP_BASE_DIR
-        CMAKE_TOOLCHAIN_FILE
-        CMAKE_INSTALL_PREFIX
-        CMAKE_OSX_ARCHITECTURES
-        WITH_BUILD_DEPS
-        )
-    set(CMAKE_EP_DEFAULT_ARGS)
-    foreach(ARG ${EP_OPTIONS_LIST})
-        list(APPEND CMAKE_EP_DEFAULT_ARGS "-D${ARG}=${${ARG}}")
-    endforeach()
-
-    if (WITH_ARKCOMM  AND (NOT ARKCOMM_FOUND))
-        ExternalProjectWithFilename_Add(arkcomm
-            URL http://nodeload.github.com/arktools/arkcomm/tarball/${ARKCOMM_TAG}
-            FILENAME arkcomm-${ARKCOMM_TAG}.tar.gz 
-            CMAKE_ARGS ${CMAKE_EP_DEFAULT_ARGS}
-            INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} DESTDIR=${EP_INSTALL_DIR} install
-            INSTALL_DIR ${EP_INSTALL_DIR}
-           )
-    endif()
-
-    if (WITH_ARKCOMM AND NOT SIMGEAR_FOUND)
-        ExternalProjectWithFilename_Add(simgear
-            URL http://gitorious.org/fg/jgopperts-simgear/archive-tarball/${SIMGEAR_TAG}
-            FILENAME simgear-${SIMGEAR_TAG}.tar.gz
-            CMAKE_ARGS ${CMAKE_EP_DEFAULT_ARGS} "-DCMAKE_FIND_ROOT=/opt/local" "-DSIMGEAR_HEADLESS=y" "-DENABLE_TESTS=n"
-            INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} DESTDIR=${EP_INSTALL_DIR} install
-            INSTALL_DIR ${EP_INSTALL_DIR}
-           )
-    endif()
-
-    # terminate non root cmake thread
-    return()
-endif()
 
 # configure
 check_include_files(expat_config.h HAVE_EXPAT_CONFIG_H)

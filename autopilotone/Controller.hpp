@@ -32,8 +32,8 @@ public:
     virtual ~Controller() {};
 
 protected:
-    NavigatorReadInterface * getNavigator() { return m_navigator; }
-    GuideReadInterface * getGuide() { return m_guide; }
+    NavigatorReadInterface * get_navigator() { return m_navigator; }
+    GuideReadInterface * get_guide() { return m_guide; }
 
     // component
     virtual void update() {};

@@ -21,27 +21,24 @@
 
 namespace autopilotone {
 
-#define CONCAT_HELPER(X,Y) X##Y
-#define CONCAT(X,Y) CONCAT_HELPER(X,Y)
-
 ///
 // These macros define locking access for a member.
 #define LOCKED_ATTR(Type,Name) \
-Mutex CONCAT(m_lock_,Name); \
-Type CONCAT(m_,Name);
+Mutex m_lock_##Name; \
+Type m_##Name;
 
 #define LOCKED_SET(Type,Name) \
-void CONCAT(set_,Name)(Type val) { \
-    CONCAT(m_lock_,Name).lock(); \
-    CONCAT(m_,Name) = val; \
-    CONCAT(m_lock_,Name).unlock(); \
+void set_##Name(Type val) { \
+    m_lock_##Name.lock(); \
+    m_##Name = val; \
+    m_lock_##Name.unlock(); \
 }
 
 #define LOCKED_GET(Type,Name) \
-Type CONCAT(get_,Name)() { \
-    CONCAT(m_lock_,Name).lock(); \
-    Type val = CONCAT(m_,Name); \
-    CONCAT(m_lock_,Name).unlock(); \
+Type get_##Name() { \
+    m_lock_##Name.lock(); \
+    Type val = m_##Name; \
+    m_lock_##Name.unlock(); \
     return val; \
 }
 
@@ -50,14 +47,14 @@ LOCKED_GET(Type,Name) \
 LOCKED_SET(Type,Name)
 
 #define INT2FLOAT_GET(Name,IntName,Scale) \
-float CONCAT(get_,Name)() { \
-    float val = CONCAT(get_,IntName)()*Scale; \
+float get_##Name() { \
+    float val = get_##IntName()*Scale; \
     return val; \
 }
 
 #define INT2FLOAT_SET(Name,IntName,Scale) \
-void CONCAT(set_,Name)(float val) { \
-    CONCAT(set_,IntName)(val/Scale); \
+void set_##Name(float val) { \
+    set_##IntName(val/Scale); \
 }
 
 #define INT2FLOAT_GET_SET(Name,IntName,Scale) \
@@ -68,27 +65,27 @@ INT2FLOAT_SET(Name,IntName,Scale)
 LOCKED_ATTR(bool,Name)
 
 #define LOCKED_TEST_AND_SET(Name) \
-bool CONCAT(testAndSet_,Name)() { \
+bool testAndSet_##Name() { \
     bool testVal; \
-    CONCAT(m_lock_,Name).lock(); \
-    testVal = CONCAT(m_,Name);\
-    CONCAT(m_,Name) = true;\
-    CONCAT(m_lock_,Name).unlock(); \
+    m_lock_##Name.lock(); \
+    testVal = m_##Name;\
+    m_##Name = true;\
+    m_lock_##Name.unlock(); \
     return testVal; \
 }
 
 #define LOCKED_CLEAR(Name) \
-bool CONCAT(clear_,Name)() { \
-    CONCAT(m_lock_,Name).lock(); \
-    CONCAT(m_,Name) = false; \
-    CONCAT(m_lock_,Name).unlock(); \
+bool clear_##Name() { \
+    m_lock_##Name.lock(); \
+    m_##Name = false; \
+    m_lock_##Name.unlock(); \
 }
 
     
 // TODO: Add a sleep to this code
 #define BLOCKING_TEST_AND_SET(Name, SleepTime) \
-bool CONCAT(blockingTestAndSet_,Name)() { \
-    while (!CONCAT(testAndSet_,Name)()) { \
+bool blockingTestAndSet_##Name() { \
+    while (!testAndSet_##Name()) { \
         ;\
     } \
 }
