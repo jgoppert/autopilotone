@@ -6,6 +6,8 @@
 #include <simgear/timing/timestamp.hxx>
 #include <simgear/threads/SGThread.hxx>
 #include <simgear/threads/SGGuard.hxx>
+#include <simgear/threads/SGQueue.hxx>
+#include <simgear/io/sg_socket.hxx>
 
 namespace autopilotone {
 
@@ -46,6 +48,29 @@ private:
 }clock;
 
 class Thread : public SGThread {
+};
+
+class Serial : public SerialInterface, Thread {
+public:
+    Serial() : m_socket("localhost","5001","udp") {
+        m_socket.open(SG_IO_BI);
+        start();
+    }
+    bool available() {
+        return 0;
+    }
+    void read(char * c, size_t bytes) {
+        m_socket.read(c,bytes);
+    }
+    void write(const char * c, size_t bytes) {
+        m_socket.write(c,bytes);
+    }
+    void run() {
+        //m_socket. 
+    }
+private:
+    SGSocket m_socket;
+    SGLockedQueue<uint8_t> m_readBuffer;
 };
 
 } // namespace autopilotone

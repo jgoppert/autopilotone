@@ -190,6 +190,13 @@ struct CommLinkInterface :
 {
 };
 
+// Serial
+struct SerialInterface {
+    virtual bool available() = 0;
+    virtual void read(uint8_t * c, size_t bytes) = 0;
+    virtual void write(const uint8_t * c, size_t bytes) = 0;
+};
+
 } // namespace autopilotone
 
 #endif
