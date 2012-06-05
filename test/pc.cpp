@@ -58,26 +58,20 @@ public:
         Autopilot(navigator,guide,controller,commLink)
     {
         float navFreq = 100.0;
-        float contFreq = 1.0;
-        float guideFreq = 1.0;
+        float contFreq = 50.0;
+        float guideFreq = 10.0;
         float commFreq = 1.0;
 
-        Timer navigatorTimer(1000000.0/navFreq,get_navigator(),&clock);
-        Timer controllerTimer(1000000.0/contFreq,get_controller(),&clock);
-        Timer guideTimer(1000000.0/guideFreq,get_guide(),&clock);
-        Timer commLinkTimer(1000000.0/commFreq,get_commLink(),&clock);
-
-        // threads
-        boost::thread thread1(boost::bind(&Timer::start,&commLinkTimer));
-        boost::thread thread2(boost::bind(&Timer::start,&navigatorTimer));
-        boost::thread thread3(boost::bind(&Timer::start,&guideTimer));
-        boost::thread thread4(boost::bind(&Timer::start,&controllerTimer));
+        TimerThread navigatorThread(1000000.0/navFreq,get_navigator(),&clock);
+        TimerThread controllerThread(1000000.0/contFreq,get_controller(),&clock);
+        TimerThread guideThread(1000000.0/guideFreq,get_guide(),&clock);
+        TimerThread commLinkThread(1000000.0/commFreq,get_commLink(),&clock);
 
         // join threads
-        thread1.join();
-        thread2.join();
-        thread3.join();
-        thread4.join();
+        navigatorThread.join();
+        controllerThread.join();
+        guideThread.join();
+        commLinkThread.join();
     }
 };
 

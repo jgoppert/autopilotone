@@ -12,7 +12,7 @@ set(LIBRARY_VERSION ${PROJECT_VERSION})
 set(LIBRARY_SOVERSION "0.0.0")
 
 # third party library version
-set(BOOST_REQUIRED_VERSION              1.42) 
+set(SIMGEAR_REQUIRED_VERSION              1.9.1) 
 
 # options
 option(WITH_BUILD_DEPS "Build dependencies." ON)
@@ -54,10 +54,35 @@ include(ExternalProjectWithFilename)
 include(CheckLinkType)
 
 # find packages
-set(BOOST_USE_STATIC_LIBS ON)
-set(Boost_USE_MULITHREADED ON)
-find_package(Boost ${BOOST_REQUIRED_VERSION} REQUIRED COMPONENTS thread system)
-find_package(Threads REQUIRED)
+find_package(SimGear 2.7.0 REQUIRED COMPONENTS
+  # core components
+    #environment
+    #nasal
+    #tsync
+    #bucket
+    route
+    #io
+    #serial
+    #math
+    #props
+    #structure
+    timing
+    #xml
+    #misc
+    threads
+    #debug
+    #magvar
+  # scene components
+    #ephem
+    #sky
+    #material
+    #tgdb
+    #model
+    #screen
+    #bvh
+    #util
+    #sound
+    )
 
 # configure
 check_include_files(expat_config.h HAVE_EXPAT_CONFIG_H)
@@ -123,12 +148,12 @@ endif()
 file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 
 # test
-include_directories(. ${Boost_INCLUDE_DIRS})
+include_directories(. ${SIMGEAR_INCLUDE_DIRS})
 add_definitions(-DOS=PC)
 add_executable(test
     test/pc.cpp
     ${APO_SRC})
-target_link_libraries(test ${Boost_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(test ${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # doxygen
 find_program(DOXYGEN doxygen)

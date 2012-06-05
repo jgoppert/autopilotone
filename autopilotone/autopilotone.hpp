@@ -38,6 +38,6 @@
 #include "Navigator.hpp"
 #include "Controller.hpp"
 #include "CommLink.hpp"
-#include "Timer.hpp"
+#include "TimerThread.hpp"
 #include "Autopilot.hpp"
 #include "FlightPlan.hpp"

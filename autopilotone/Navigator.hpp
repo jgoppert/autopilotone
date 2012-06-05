@@ -53,10 +53,11 @@ protected:
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
     virtual DebugInterface * get_debug() { return m_debug; }
 
-    // interfaces
-    DebugInterface * m_debug;
 
 private:
+
+    // interfaces
+    DebugInterface * m_debug;
 
     LOCKED_ATTR(int32_t,lat_degE7);
     LOCKED_ATTR(int32_t,lon_degE7);

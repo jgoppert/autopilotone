@@ -13,9 +13,20 @@ float deg2rad = M_PI/180.0;
 
 // Component Interface
 struct MutexInterface {
-    virtual bool try_lock() = 0;
     virtual void lock() = 0;
     virtual void unlock() = 0;
+};
+
+class ScopedLock {
+public:
+    inline ScopedLock(MutexInterface & l) : lock(l) { lock.lock(); }
+    inline ~ScopedLock() { lock.unlock(); }
+private:
+    MutexInterface & lock;
+
+    // disable copying
+    ScopedLock(const ScopedLock&);
+    ScopedLock& operator = (const ScopedLock&);
 };
 
 struct DebugInterface {
@@ -28,8 +39,11 @@ public:
     virtual void send(const std::string & str) {};
 } nullDebug;
 
-struct ComponentInterface {
+struct ProcessInterface {
     virtual void update() = 0;
+};
+
+struct ComponentInterface : public ProcessInterface {
     virtual void set_debug(DebugInterface * debug) = 0;
     virtual DebugInterface * get_debug() = 0;
 };

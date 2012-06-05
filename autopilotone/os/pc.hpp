@@ -1,11 +1,11 @@
 #ifndef AUTOPILOTONE_OS_LINUX_HPP_
 #define AUTOPILOTONE_OS_LINUX_HPP_
 
-#include <boost/thread/mutex.hpp>
-#include <boost/thread/thread.hpp>
-#include <boost/date_time.hpp>
 #include <iostream>
 #include "../interfaces.hpp"
+#include <simgear/timing/timestamp.hxx>
+#include <simgear/threads/SGThread.hxx>
+#include <simgear/threads/SGGuard.hxx>
 
 namespace autopilotone {
 
@@ -14,22 +14,18 @@ public:
     void lock() {
         return m_mutex.lock();
     }
-    bool try_lock() {
-        return m_mutex.try_lock();
-    }
     void unlock() {
         return m_mutex.unlock();
     }
 private:
-    boost::mutex m_mutex;
+    SGMutex m_mutex;
 };
 
 class Debug : public DebugInterface {
 public:
     void send(const std::string & str) {
-        m_mutex.lock();
+        ScopedLock lock(m_mutex);
         std::cout << str << std::endl;
-        m_mutex.unlock();
     }
 private:
     Mutex m_mutex;
@@ -37,22 +33,20 @@ private:
 
 class Clock : public ClockInterface {
 public:
-    Clock() : m_startTime(boost::posix_time::microsec_clock::universal_time()) {
+    Clock() : m_clock(SGTimeStamp::now()) {
     }
     void sleepMicros(uint64_t micros) {
-        boost::this_thread::sleep(boost::posix_time::microseconds(micros)); 
+        SGTimeStamp::sleepFor(SGTimeStamp::fromUSec(micros));
     }
     uint64_t get_micros() {
-        boost::posix_time::time_duration elapsed =
-            boost::posix_time::microsec_clock::universal_time() - get_startTime();
-        return elapsed.total_microseconds();
+        return (SGTimeStamp::now() - m_clock).toUSecs();
     }
-protected:
-    boost::posix_time::ptime  get_startTime() { return m_startTime; }
 private:
-    boost::posix_time::ptime m_startTime;       
+    SGTimeStamp m_clock;
 }clock;
 
+class Thread : public SGThread {
+};
 
 } // namespace autopilotone
 

@@ -4,17 +4,18 @@
 #include "interfaces.hpp"
 namespace autopilotone {
 
-class Timer {
+class TimerThread : public Thread {
 public:
-    Timer(uint64_t periodMicros, ComponentInterface * component, ClockInterface * clock) :
+    TimerThread(uint64_t periodMicros, ProcessInterface * process, ClockInterface * clock) :
             m_periodMicros(periodMicros), m_running(false),
-            m_component(component), m_clock(clock) {
+            m_process(process), m_clock(clock) {
+        start();
     }
-    void start() {
+    void run() {
         set_running(true);
         while(get_running()) {
             uint64_t start = get_clock()->get_micros();
-            get_component()->update();
+            get_process()->update();
             uint64_t elapsed = get_clock()->get_micros() - start;
             if (elapsed < 0) {
                 elapsed = get_periodMicros();
@@ -29,13 +30,13 @@ public:
     }
 protected:
     LOCKED_GET_SET(bool,running);
-    ComponentInterface * get_component() { return m_component; }
+    ProcessInterface * get_process() { return m_process; }
     ClockInterface * get_clock() { return m_clock; }
     uint64_t get_periodMicros() { return m_periodMicros; }
 private:
     LOCKED_ATTR(bool,running);
     uint64_t m_periodMicros;
-    ComponentInterface * m_component;
+    ProcessInterface * m_process;
     ClockInterface * m_clock;
 };
 

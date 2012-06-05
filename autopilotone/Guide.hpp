@@ -77,6 +77,7 @@ protected:
     float m_latError_degFloat;
     float m_lonError_degFloat;
     float m_altError_ftFloat;
+
 private:
 
     // interfaces
