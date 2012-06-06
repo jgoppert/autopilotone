@@ -35,20 +35,20 @@ public:
     virtual ~FlightPlan() {};
 
     // read interface
-    virtual uint16_t get_currentCommandIndex() { return m_commandIndex; }
-    virtual uint16_t get_lastCommandIndex() { return m_commandIndex-1; }
-    virtual uint16_t get_nextCommandIndex() { return m_commandIndex+1; }
-    virtual uint16_t get_commandCount() { return m_commandHighestIndex+1; }
+    virtual uint16_t get_currentCommandIndex() { return (m_commandIndex); }
+    virtual uint16_t get_lastCommandIndex() { return (m_commandIndex-1); }
+    virtual uint16_t get_nextCommandIndex() { return (m_commandIndex+1); }
+    virtual uint16_t get_commandCount() { return (m_commandHighestIndex+1); }
     virtual Command get_command(uint16_t index)
     {
         blockingTestAndSet_commandAccessFlag();
-        return index > m_commandHighestIndex ? m_commands[m_commandHighestIndex] : m_commands[index];
+        return (index > m_commandHighestIndex ? m_commands[m_commandHighestIndex] : m_commands[index]);
         clear_commandAccessFlag();
     }
     virtual Command get_currentCommand()
     {
         blockingTestAndSet_commandAccessFlag();
-        return m_commands[m_commandIndex];
+        return (m_commands[m_commandIndex]);
         clear_commandAccessFlag();
     }
 
@@ -106,7 +106,7 @@ protected:
     // component
     virtual void update() {};
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return m_debug; }
+    virtual DebugInterface * get_debug() { return (m_debug); }
 
     // component
     Command m_commands [COMMAND_BUFFER_SIZE];

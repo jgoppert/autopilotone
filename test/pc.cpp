@@ -20,14 +20,13 @@ public:
     TestNavigator() : Navigator() {}
     void update() {
         set_lon_degE7(10000);
-        //get_debug()->send("navigator update");
-        const char * message = "hello";
-        serial1.write((const uint8_t *)message,sizeof(message));
+        const char * message = "hello123456789";
+        serial1.write((const uint8_t *)message,14);
         while (serial1.available() > 0) {
-            get_debug()->send("got: ");
-            get_debug()->send((const char *)serial1.read());
+        	char c = serial1.read();
+        	std::cout << c;
+        	if (serial1.available() == 0) std::cout << std::endl;
         }
-
     }
 };
 
@@ -74,7 +73,7 @@ public:
         /**
          * should be moved to sim board
          */
-        uint16_t serialFreq = 100;
+        uint16_t serialFreq = 10000;
         TimerThread serialThread(1000000.0/serialFreq,&serial1,&clock);
         TimerThread navigatorThread(1000000.0/navFreq,get_navigator(),&clock);
         TimerThread controllerThread(1000000.0/contFreq,get_controller(),&clock);

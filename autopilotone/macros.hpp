@@ -39,7 +39,7 @@ Type get_##Name() { \
     m_lock_##Name.lock(); \
     Type val = m_##Name; \
     m_lock_##Name.unlock(); \
-    return val; \
+    return (val); \
 }
 
 #define LOCKED_GET_SET(Type,Name) \
@@ -49,7 +49,7 @@ LOCKED_SET(Type,Name)
 #define INT2FLOAT_GET(Name,IntName,Scale) \
 float get_##Name() { \
     float val = get_##IntName()*Scale; \
-    return val; \
+    return (val); \
 }
 
 #define INT2FLOAT_SET(Name,IntName,Scale) \
@@ -71,7 +71,7 @@ bool testAndSet_##Name() { \
     testVal = m_##Name;\
     m_##Name = true;\
     m_lock_##Name.unlock(); \
-    return testVal; \
+    return (testVal); \
 }
 
 #define LOCKED_CLEAR(Name) \

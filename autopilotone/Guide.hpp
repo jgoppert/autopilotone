@@ -38,14 +38,14 @@ public:
     // read interface
     virtual FlightPlanInterface * get_flightPlan() 
     {
-        return m_flightPlan;
+        return (m_flightPlan);
     };
 
-    virtual guideMode_t get_mode() { return m_guideMode; }
+    virtual guideMode_t get_mode() { return (m_guideMode); }
 
-    virtual float get_latError_degFloat() { return m_latError_degFloat; }
-    virtual float get_lonError_degFloat() { return m_lonError_degFloat; }
-    virtual float get_altError_ftFloat() { return m_altError_ftFloat; }
+    virtual float get_latError_degFloat() { return (m_latError_degFloat); }
+    virtual float get_lonError_degFloat() { return (m_lonError_degFloat); }
+    virtual float get_altError_ftFloat() { return (m_altError_ftFloat); }
 
     // write interface
     virtual void set_flightPlan(FlightPlanInterface * flightPlan) {
@@ -59,11 +59,11 @@ public:
         m_latError_degFloat = c.lat_degIntE7 - m_navigator->get_lat();
         m_lonError_degFloat = c.lon_degIntE7 - m_navigator->get_lon();
         m_altError_ftFloat = c.alt_degIntE3 - m_navigator->get_alt();
-        return 0; // TODO return error
+        return (0); // TODO return error
     }
     
 protected:
-    NavigatorReadInterface * get_navigator() { return m_navigator; }
+    NavigatorReadInterface * get_navigator() { return (m_navigator); }
 
     // component
     FlightPlan m_flightPlanMaster;
@@ -71,7 +71,7 @@ protected:
 
     virtual void update() {};
     virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return m_debug; }
+    virtual DebugInterface * get_debug() { return (m_debug); }
 
 
     float m_latError_degFloat;

@@ -15,6 +15,7 @@ float deg2rad = M_PI/180.0;
 struct MutexInterface {
     virtual void lock() = 0;
     virtual void unlock() = 0;
+    virtual ~MutexInterface() {};
 };
 
 class ScopedLock {
@@ -31,16 +32,19 @@ private:
 
 struct DebugInterface {
     virtual void send(const std::string & str) = 0;
+    virtual ~DebugInterface() {};
 };
 
 // null debug object
 class NullDebug : public DebugInterface {
 public:
     virtual void send(const std::string & str) {};
+    virtual ~NullDebug() {};
 } nullDebug;
 
 struct ProcessInterface {
     virtual void update() = 0;
+    virtual ~ProcessInterface() {};
 };
 
 struct ComponentInterface : public ProcessInterface {
@@ -52,6 +56,7 @@ struct ComponentInterface : public ProcessInterface {
 struct ClockInterface {
     virtual void sleepMicros(uint64_t micros) = 0;
     virtual uint64_t get_micros() = 0;
+    virtual ~ClockInterface() {};
 };
 
 struct NavigatorReadInterface {
@@ -70,6 +75,7 @@ struct NavigatorReadInterface {
     virtual float get_rollRate() = 0;
     virtual float get_pitchRate() = 0;
     virtual float get_yawRate() = 0;
+    virtual ~NavigatorReadInterface() {};
 };
 
 struct NavigatorWriteInterface {
@@ -88,6 +94,7 @@ struct NavigatorWriteInterface {
     virtual void set_rollRate(float val) = 0;
     virtual void set_pitchRate(float val) = 0;
     virtual void set_yawRate(float val) = 0;
+    virtual ~NavigatorWriteInterface() {};
 };
 
 struct NavigatorInterface :
@@ -95,6 +102,7 @@ struct NavigatorInterface :
     public NavigatorWriteInterface,
     public ComponentInterface
 {
+    virtual ~NavigatorInterface() {};
 };
 
 // Guide
@@ -121,12 +129,14 @@ struct FlightPlanReadInterface {
     virtual uint16_t get_commandCount() = 0;
     virtual Command get_command(uint16_t index) = 0;
     virtual Command get_currentCommand() = 0;
+    virtual ~FlightPlanReadInterface() {};
 };
 
 struct FlightPlanWriteInterface {
     virtual void addWaypoint(uint16_t index, Command waypoint) = 0;
     virtual void removeWaypoint(uint16_t index) = 0;
     virtual void clearWaypoints() = 0;
+    virtual ~FlightPlanWriteInterface() {};
 };
 
 struct FlightPlanInterface :
@@ -141,12 +151,14 @@ struct GuideReadInterface {
     virtual float get_latError_degFloat() = 0;
     virtual float get_lonError_degFloat() = 0;
     virtual float get_altError_ftFloat() = 0;
+    virtual ~GuideReadInterface() {};
 };
 
 struct GuideWriteInterface {
     virtual void set_flightPlan(FlightPlanInterface * flightPlan) = 0;
     virtual void set_mode(guideMode_t mode) = 0;
     //virtual float update_error() = 0;
+    virtual ~GuideWriteInterface() {};
 };
 
 struct GuideInterface :
@@ -174,7 +186,7 @@ struct ControllerInterface :
     public ControllerWriteInterface,
     public ComponentInterface
 {
-    	virtual ~ControllerInterface() {};
+    virtual ~ControllerInterface() {};
 };
 
 // CommLink
