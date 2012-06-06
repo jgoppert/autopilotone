@@ -61,11 +61,11 @@ find_package(SimGear 2.7.0 REQUIRED COMPONENTS
     #tsync
     #bucket
     route
-    #io
+    io
     #serial
     #math
     #props
-    #structure
+    structure
     timing
     #xml
     #misc

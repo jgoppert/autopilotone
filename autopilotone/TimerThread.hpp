@@ -2,6 +2,7 @@
 #define AUTOPILOTONE_TIMER_HPP_
 
 #include "interfaces.hpp"
+
 namespace autopilotone {
 
 class TimerThread : public Thread {

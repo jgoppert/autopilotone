@@ -11,7 +11,7 @@ namespace autopilotone {
 // constants
 float deg2rad = M_PI/180.0;
 
-// Component Interface
+// Mutex Interface
 struct MutexInterface {
     virtual void lock() = 0;
     virtual void unlock() = 0;
@@ -174,6 +174,7 @@ struct ControllerInterface :
     public ControllerWriteInterface,
     public ComponentInterface
 {
+    	virtual ~ControllerInterface() {};
 };
 
 // CommLink
@@ -188,12 +189,13 @@ struct CommLinkInterface :
     public CommLinkWriteInterface,
     public ComponentInterface
 {
+    	virtual ~CommLinkInterface() {};
 };
 
 // Serial
-struct SerialInterface {
+struct SerialInterface : public ProcessInterface {
     virtual bool available() = 0;
-    virtual void read(uint8_t * c, size_t bytes) = 0;
+    virtual uint8_t read() = 0;
     virtual void write(const uint8_t * c, size_t bytes) = 0;
 };
 

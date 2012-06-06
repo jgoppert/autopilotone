@@ -56,10 +56,10 @@ public:
 
     virtual float update_error() {
         Command c = m_flightPlan->get_currentCommand();
-
         m_latError_degFloat = c.lat_degIntE7 - m_navigator->get_lat();
         m_lonError_degFloat = c.lon_degIntE7 - m_navigator->get_lon();
         m_altError_ftFloat = c.alt_degIntE3 - m_navigator->get_alt();
+        return 0; // TODO return error
     }
     
 protected:

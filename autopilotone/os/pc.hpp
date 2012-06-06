@@ -2,6 +2,7 @@
 #define AUTOPILOTONE_OS_LINUX_HPP_
 
 #include <iostream>
+#include <stdexcept>
 #include "../interfaces.hpp"
 #include <simgear/timing/timestamp.hxx>
 #include <simgear/threads/SGThread.hxx>
@@ -19,6 +20,7 @@ public:
     void unlock() {
         return m_mutex.unlock();
     }
+    virtual ~Mutex() {};
 private:
     SGMutex m_mutex;
 };
@@ -29,6 +31,7 @@ public:
         ScopedLock lock(m_mutex);
         std::cout << str << std::endl;
     }
+    virtual ~Debug() {};
 private:
     Mutex m_mutex;
 };
@@ -43,6 +46,7 @@ public:
     uint64_t get_micros() {
         return (SGTimeStamp::now() - m_clock).toUSecs();
     }
+    virtual ~Clock() {};
 private:
     SGTimeStamp m_clock;
 }clock;
@@ -50,27 +54,50 @@ private:
 class Thread : public SGThread {
 };
 
-class Serial : public SerialInterface, Thread {
+class Serial : public SerialInterface {
 public:
-    Serial() : m_socket("localhost","5001","udp") {
-        m_socket.open(SG_IO_BI);
-        start();
+    Serial() : m_channel(new SGSocket("127.0.0.1","5001","udp")), m_mutex(), m_readBuffer() {
+        if (!m_channel->open(SG_IO_OUT)) {
+            throw std::runtime_error("failed to connect");
+        }
+    }
+    virtual ~Serial() {
+        m_channel->close();
     }
     bool available() {
-        return 0;
+        ScopedLock lock(m_mutex);
+        return m_readBuffer.size();
     }
-    void read(char * c, size_t bytes) {
-        m_socket.read(c,bytes);
+    uint8_t read() {
+        ScopedLock lock(m_mutex);
+        if (m_readBuffer.empty()) {
+            return 0;
+        } else {
+            return m_readBuffer.pop();
+        }
     }
-    void write(const char * c, size_t bytes) {
-        m_socket.write(c,bytes);
+    void write(const uint8_t * c, size_t bytes) {
+        ScopedLock lock(m_mutex);
+        m_channel->write((const char *)c,bytes);
+        std::cout << "writing" << std::endl;
+        const char * message = "hello";
+        m_channel->write(message,sizeof(message));
     }
-    void run() {
-        //m_socket. 
+    void update() {
+        ScopedLock lock(m_mutex);
+        char buffer[100];
+        int bytesRead = m_channel->read(buffer,sizeof(buffer));
+        std::cout << "bytesRead : " << bytesRead << std::endl;
+        if (bytesRead >0) {
+            for (int i=0;i<bytesRead;i++) {
+                m_readBuffer.push(buffer[i]);
+            }
+        }
     }
 private:
-    SGSocket m_socket;
-    SGLockedQueue<uint8_t> m_readBuffer;
+    SGIOChannel * m_channel;
+    Mutex m_mutex;
+    SGBlockingQueue<uint8_t> m_readBuffer;
 };
 
 } // namespace autopilotone

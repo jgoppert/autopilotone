@@ -2,6 +2,8 @@
 
 namespace autopilotone {
 
+Serial serial1;
+
 class TestCommLink : public CommLink {
 public:
     TestCommLink(NavigatorInterface * navigator, GuideInterface * guide,
@@ -9,7 +11,7 @@ public:
         CommLink(navigator,guide,controller,debug) {}
     void update() {
         get_navigator()->set_lat(1);
-        get_debug()->send("commlink update");
+        //get_debug()->send("commlink update");
     }
 };
 
@@ -18,7 +20,14 @@ public:
     TestNavigator() : Navigator() {}
     void update() {
         set_lon_degE7(10000);
-        get_debug()->send("navigator update");
+        //get_debug()->send("navigator update");
+        const char * message = "hello";
+        serial1.write((const uint8_t *)message,sizeof(message));
+        while (serial1.available() > 0) {
+            get_debug()->send("got: ");
+            get_debug()->send((const char *)serial1.read());
+        }
+
     }
 };
 
@@ -27,7 +36,7 @@ public:
     FlightGearNavigator() : Navigator() {}
     void update() {
         set_lon_degE7(10000);
-        get_debug()->send("navigator update");
+        //get_debug()->send("navigator update");
     }
 };
 
@@ -36,7 +45,7 @@ public:
     TestGuide(NavigatorReadInterface * navigator) : Guide(navigator) {}
     void update() {
         get_navigator()->get_lat();
-        get_debug()->send("guide update");
+        //get_debug()->send("guide update");
     }
 };
 
@@ -45,7 +54,7 @@ public:
     TestController(NavigatorReadInterface * navigator, GuideReadInterface * guide) : Controller(navigator,guide) {}
     void update() {
         get_navigator()->get_lat();
-        get_debug()->send("controller update");
+        //get_debug()->send("controller update");
     }
 };
 
@@ -62,6 +71,11 @@ public:
         float guideFreq = 10.0;
         float commFreq = 1.0;
 
+        /**
+         * should be moved to sim board
+         */
+        uint16_t serialFreq = 100;
+        TimerThread serialThread(1000000.0/serialFreq,&serial1,&clock);
         TimerThread navigatorThread(1000000.0/navFreq,get_navigator(),&clock);
         TimerThread controllerThread(1000000.0/contFreq,get_controller(),&clock);
         TimerThread guideThread(1000000.0/guideFreq,get_guide(),&clock);
@@ -72,6 +86,7 @@ public:
         controllerThread.join();
         guideThread.join();
         commLinkThread.join();
+        serialThread.join();
     }
 };
 
