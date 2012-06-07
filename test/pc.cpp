@@ -120,7 +120,7 @@ int main (int argc, char const* argv[])
     TestGuide guide(&board,&navigator);
     TestController controller(&board,&navigator,&guide);
     TestCommLink commLink(&board,&navigator,&guide,&controller);
-    TestAutopilot(&board,&navigator,1,&guide,1,&controller,1,&commLink,1);
+    TestAutopilot(&board,&navigator,10,&guide,2,&controller,5,&commLink,1);
     return(0);
 };
 
