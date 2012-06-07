@@ -7,8 +7,8 @@ namespace autopilotone {
 
 class TimerThread : public Thread {
 public:
-    TimerThread(uint64_t periodMicros, ProcessInterface * process, ClockInterface * clock) :
-            m_periodMicros(periodMicros), m_running(false),
+    TimerThread(float frequency, ProcessInterface * process, ClockInterface * clock) :
+            m_periodMicros(1000000.0/frequency), m_running(false),
             m_process(process), m_clock(clock) {
         start();
     }
@@ -28,6 +28,9 @@ public:
     }
     void stop() {
         set_running(false);
+    }
+    virtual ~TimerThread() {
+        join();
     }
 protected:
     LOCKED_GET_SET(bool,running);

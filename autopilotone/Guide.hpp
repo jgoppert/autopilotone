@@ -28,8 +28,9 @@ class Guide : public GuideInterface {
 
 // methods
 public:
-    Guide (NavigatorReadInterface * navigator) :
-        m_navigator(navigator), m_debug(&nullDebug)
+    Guide (BoardInterface * board,
+            NavigatorReadInterface * navigator) :
+        m_board(board), m_navigator(navigator)
     {
         set_flightPlan( & m_flightPlanMaster);
     }; 
@@ -63,27 +64,22 @@ public:
     }
     
 protected:
+    BoardInterface * get_board() { return (m_board); }
     NavigatorReadInterface * get_navigator() { return (m_navigator); }
 
     // component
     FlightPlan m_flightPlanMaster;
     guideMode_t m_guideMode;
 
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return (m_debug); }
-
-
     float m_latError_degFloat;
     float m_lonError_degFloat;
     float m_altError_ftFloat;
 
 private:
-
     // interfaces
-    FlightPlanInterface * m_flightPlan;
-    DebugInterface * m_debug;
+    BoardInterface * m_board;
     NavigatorReadInterface * m_navigator;
+    FlightPlanInterface * m_flightPlan;
 
 }; // class Guide
 

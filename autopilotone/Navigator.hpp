@@ -28,10 +28,12 @@ class Navigator : public NavigatorInterface
 {
 // methods
 public:
-    Navigator (): m_debug(&nullDebug) {};
+    Navigator (BoardInterface * board): m_board(board) {};
     virtual ~Navigator() {};
 
 protected: 
+    BoardInterface * get_board() { return(m_board); }
+    
     LOCKED_GET_SET(int32_t,lat_degE7);
     INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);
@@ -48,17 +50,9 @@ protected:
     LOCKED_GET_SET(float,pitchRate);
     LOCKED_GET_SET(float,yawRate);
 
-    // component
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return m_debug; }
-
-
 private:
-
-    // interfaces
-    DebugInterface * m_debug;
-
+    BoardInterface * m_board;
+    
     LOCKED_ATTR(int32_t,lat_degE7);
     LOCKED_ATTR(int32_t,lon_degE7);
     LOCKED_ATTR(int16_t,alt_degE3);

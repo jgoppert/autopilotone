@@ -23,7 +23,7 @@
 //
 //namespace autopilotone {
 //
-//class ControlBlock: public ComponentInterface {
+//class ControlBlock: public ProcessInterface {
 //
 //// methods
 //public:

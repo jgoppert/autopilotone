@@ -13,6 +13,11 @@ set(LIBRARY_SOVERSION "0.0.0")
 
 # third party library version
 set(SIMGEAR_REQUIRED_VERSION              1.9.1) 
+set(MAVLINK_REQUIRED_VERSION 1.0.4)
+
+# tags
+set(SIMGEAR_TAG 9ab31e0d88ef2a09f6a8dd33837ba547366151fa)
+set(MAVLINK_TAG 112cad9a4f6dddd0e65472fdc2a0956ab39da0e6)
 
 # options
 option(WITH_BUILD_DEPS "Build dependencies." ON)
@@ -53,8 +58,51 @@ include(CheckLibraryExists)
 include(ExternalProjectWithFilename)
 include(CheckLinkType)
 
+# external projects find path
+if(NOT EP_BASE_DIR)
+    set(EP_BASE_DIR "${CMAKE_BINARY_DIR}/CMakeExternals")
+endif()
+set_property(DIRECTORY PROPERTY EP_BASE ${EP_BASE_DIR})
+set(EP_INSTALL_DIR "${EP_BASE_DIR}/Install")
+list(APPEND CMAKE_FIND_ROOT_PATH ${EP_INSTALL_DIR})
+
+# spawn new cmake to build deps
+if (WITH_BUILD_DEPS AND ROOT_THREAD)
+    set(CMAKE_RECURSE_ARGS "-DROOT_THREAD=FALSE")
+    foreach(OPT ${RECURSE_OPTIONS_LIST})
+        list(APPEND CMAKE_RECURSE_ARGS "-D${OPT}=${${OPT}}")
+    endforeach()
+    execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR} ${CMAKE_RECURSE_ARGS}
+        RESULT_VARIABLE ERROR)
+    if (ERROR)
+        message(FATAL_ERROR "error, recursing loop returned error code: ${ERROR}")
+    endif()
+    message("** Making dependencies")
+    execute_process(COMMAND ${CMAKE_MAKE_PROGRAM} "-j4" "-f${CMAKE_BINARY_DIR}/Makefile")
+    message("** Configuring ${PROJECT_NAME}")
+endif()
+
+# prefer static packages if building static library
+message("** Finding libraries")
+if (WITH_BUILD_STATIC)
+    set(BOOST_USE_STATIC_LIBS ON)
+    # prefer static libs
+    if(WIN32)
+        set(CMAKE_FIND_LIBRARY_SUFFIXES .lib .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+    else()
+        set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+    endif()
+endif()
+
+
 # find packages
-find_package(SimGear 2.7.0 REQUIRED COMPONENTS
+if (ROOT_THREAD)
+    set(REQUIRED_IF_ROOT "REQUIRED")
+else()
+    set(REQUIRED_IF_ROOT)
+endif()
+
+find_package(SimGear 2.7.0 ${REQUIRED_IF_ROOT} COMPONENTS
   # core components
     #environment
     #nasal
@@ -83,6 +131,43 @@ find_package(SimGear 2.7.0 REQUIRED COMPONENTS
     #util
     #sound
     )
+find_package(MAVLink ${MAVLINK_REQUIRED_VERSION} ${REQUIRED_IF_ROOT})
+
+# build dependencies
+if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
+    message("** Configuring dependencies")
+
+    # add external projects
+
+    set(CMAKE_EP_DEFAULT_ARGS
+        -DEP_BASE_DIR=${EP_BASE_DIR}
+        -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
+        -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+        )
+
+    if (NOT MAVLINK_FOUND)
+        ExternalProjectWithFilename_Add(mavlink
+            URL http://nodeload.github.com/mavlink/mavlink/tarball/${MAVLINK_TAG}
+            FILENAME mavlink-${MAVLINK_TAG}.tar.gz
+            CMAKE_ARGS ${CMAKE_EP_DEFAULT_ARGS}
+            INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} DESTDIR=${EP_INSTALL_DIR} install
+            INSTALL_DIR ${EP_INSTALL_DIR}
+           )
+    endif()
+
+    if (NOT SIMGEAR_FOUND)
+        ExternalProjectWithFilename_Add(simgear
+            URL http://gitorious.org/fg/jgopperts-simgear/archive-tarball/${SIMGEAR_TAG}
+            FILENAME jgoppert-jgopperts-simgear-${SIMGEAR_TAG}.tar.gz
+            CMAKE_ARGS ${CMAKE_EP_DEFAULT_ARGS} "-DCMAKE_FIND_ROOT=/opt/local" "-DSIMGEAR_HEADLESS=ON" "-DENABLE_TESTS=OFF"
+            INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} DESTDIR=${EP_INSTALL_DIR} install
+            INSTALL_DIR ${E_INSTALL_DIR}
+           )
+    endif()
+
+    return()
+
+endif()
 
 # configure
 check_include_files(expat_config.h HAVE_EXPAT_CONFIG_H)

@@ -26,37 +26,29 @@ class CommLink : public CommLinkInterface {
 
 // methods
 public:
-    CommLink(NavigatorInterface * navigator, GuideInterface * guide,
-            ControllerInterface * controller, DebugInterface * debug) : 
+    CommLink(BoardInterface * board,
+            NavigatorInterface * navigator,
+            GuideInterface * guide,
+            ControllerInterface * controller) : 
+        m_board(board),
         m_navigator(navigator),
         m_guide(guide), 
-        m_controller(controller),
-        m_debug(debug)
+        m_controller(controller)
     {
-        get_navigator()->set_debug(get_debug());
-        get_guide()->set_debug(get_debug());
-        get_controller()->set_debug(get_debug());
     };
     virtual ~CommLink() {};
 
 protected:
-
-    // interfaces
-    NavigatorInterface * get_navigator() { return m_navigator; }
-    GuideInterface * get_guide() { return m_guide; }
-    ControllerInterface * get_controller() { return m_controller; }
-
-    // component
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    DebugInterface * get_debug() { return m_debug; }
+    BoardInterface * get_board() { return(m_board); }
+    NavigatorInterface * get_navigator() { return(m_navigator); }
+    GuideInterface * get_guide() { return(m_guide); }
+    ControllerInterface * get_controller() { return(m_controller); }
 
 private:
-    // interfaces
+    BoardInterface * m_board;
     NavigatorInterface * m_navigator;
     GuideInterface * m_guide;
     ControllerInterface * m_controller;
-    DebugInterface * m_debug;
         
 }; // class CommLink
 

@@ -26,23 +26,28 @@ class Autopilot {
 
 // methods
 public:
-    Autopilot (NavigatorInterface * navigator,
+    Autopilot(BoardInterface * board,
+            NavigatorInterface * navigator,
             GuideInterface * guide,
             ControllerInterface * controller,
             CommLinkInterface * commLink) :
+        m_board(board),
         m_navigator(navigator),
         m_guide(guide),
         m_controller(controller),
-        m_commLink(commLink) {}; 
+        m_commLink(commLink) {
+        }
     virtual ~Autopilot() {};
 
 protected:
+    BoardInterface * get_board() { return m_board; }
     NavigatorInterface * get_navigator() { return m_navigator; }
     GuideInterface * get_guide() { return m_guide; }
     ControllerInterface * get_controller() { return m_controller; }
     CommLinkInterface * get_commLink() { return m_commLink; }
 
 private:
+    BoardInterface * m_board;
     NavigatorInterface * m_navigator;
     GuideInterface * m_guide;
     ControllerInterface * m_controller;

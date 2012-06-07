@@ -14,28 +14,35 @@
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef BOARD_HPP_
-#define BOARD_HPP_
+#ifndef AUTOPILOTONE_BOARD_HPP_
+#define AUTOPILOTONE_BOARD_HPP_ 
 
-namespace autopilotone
+#include "interfaces.hpp"
+
+namespace autopilotone {
+
+class Board : public BoardInterface
 {
-
-class Board
-{
-
-// methods
 public:
-    Board () {};
+    Board() :
+        m_clock(&nullClock), m_serial(&nullSerial), m_debug(&nullDebug) {};
     virtual ~Board() {};
 
-// attributes
+    ClockInterface * get_clock() { return m_clock; }
+    SerialInterface * get_serial() { return m_serial; }
+    DebugInterface * get_debug() { return m_debug; }
 
-// accessors
-        
-}; // class Board
+protected:
+    void set_clock(ClockInterface * clock) { m_clock = clock; }
+    void set_serial(SerialInterface * serial) { m_serial = serial; }
+    void set_debug(DebugInterface * debug) { m_debug = debug; }
 
-}; // namespace autopilotone
+private:
+    ClockInterface * m_clock;
+    SerialInterface * m_serial;
+    DebugInterface * m_debug;
+};
 
+};
 
-#endif /* BOARD_HPP_ */
-
+#endif /* AUTOPILOTONE_BOARD_HPP_ */

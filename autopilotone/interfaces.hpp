@@ -8,10 +8,14 @@
 
 namespace autopilotone {
 
-// constants
+/**
+ * Constants
+ */
 float deg2rad = M_PI/180.0;
 
-// Mutex Interface
+/**
+ * Threading
+ */
 struct MutexInterface {
     virtual void lock() = 0;
     virtual void unlock() = 0;
@@ -30,35 +34,43 @@ private:
     ScopedLock& operator = (const ScopedLock&);
 };
 
-struct DebugInterface {
-    virtual void send(const std::string & str) = 0;
-    virtual ~DebugInterface() {};
-};
-
-// null debug object
-class NullDebug : public DebugInterface {
-public:
-    virtual void send(const std::string & str) {};
-    virtual ~NullDebug() {};
-} nullDebug;
-
 struct ProcessInterface {
     virtual void update() = 0;
     virtual ~ProcessInterface() {};
 };
 
-struct ComponentInterface : public ProcessInterface {
-    virtual void set_debug(DebugInterface * debug) = 0;
-    virtual DebugInterface * get_debug() = 0;
+/**
+ * Debug
+ */
+struct DebugInterface {
+    virtual void write(const std::string & str) = 0;
+    virtual ~DebugInterface() {};
 };
 
-// Time
+class NullDebug : public DebugInterface {
+public:
+    void write(const std::string & str) {};
+} nullDebug;
+
+
+/**
+ * General
+ */
 struct ClockInterface {
     virtual void sleepMicros(uint64_t micros) = 0;
     virtual uint64_t get_micros() = 0;
     virtual ~ClockInterface() {};
 };
 
+class NullClock : public ClockInterface {
+public:
+    void sleepMicros(uint64_t micros) {}
+    uint64_t get_micros() { return 0; };
+} nullClock;
+
+/**
+ * Navigator
+ */
 struct NavigatorReadInterface {
     virtual int32_t get_lat_degE7() = 0;
     virtual int32_t get_lon_degE7() = 0;
@@ -100,12 +112,14 @@ struct NavigatorWriteInterface {
 struct NavigatorInterface :
     public NavigatorReadInterface,
     public NavigatorWriteInterface,
-    public ComponentInterface
+    public ProcessInterface
 {
     virtual ~NavigatorInterface() {};
 };
 
-// Guide
+/**
+ * Guide
+ */
 struct Command {
     int32_t lat_degIntE7;
     int32_t lon_degIntE7;
@@ -114,12 +128,6 @@ struct Command {
     float heading;
     int param3;
     int param4;
-};
-
-enum guideMode_t {
-    GUIDE_MODE_AUTO=0,
-    GUIDE_MODE_MANUAL,
-    GUIDE_MODE_COUNT
 };
 
 struct FlightPlanReadInterface {
@@ -145,6 +153,12 @@ struct FlightPlanInterface :
 {
 };
 
+enum guideMode_t {
+    GUIDE_MODE_AUTO=0,
+    GUIDE_MODE_MANUAL,
+    GUIDE_MODE_COUNT
+};
+
 struct GuideReadInterface {
     virtual FlightPlanInterface * get_flightPlan() = 0;
     virtual guideMode_t get_mode() = 0;
@@ -164,11 +178,13 @@ struct GuideWriteInterface {
 struct GuideInterface :
     public GuideReadInterface,
     public GuideWriteInterface,
-    public ComponentInterface
+    public ProcessInterface
 {
 };
 
-// Controller
+/**
+ * Controller
+ */
 enum controllerMode_t {
     CONTROLLER_MODE_COUNT
 };
@@ -184,12 +200,15 @@ struct ControllerWriteInterface {
 struct ControllerInterface :
     public ControllerReadInterface,
     public ControllerWriteInterface,
-    public ComponentInterface
+    public ProcessInterface
 {
     virtual ~ControllerInterface() {};
 };
 
-// CommLink
+
+/**
+ * CommLink
+ */
 struct CommLinkReadInterface {
 };
 
@@ -199,16 +218,34 @@ struct CommLinkWriteInterface {
 struct CommLinkInterface :
     public CommLinkReadInterface,
     public CommLinkWriteInterface,
-    public ComponentInterface
+    public ProcessInterface
 {
     	virtual ~CommLinkInterface() {};
 };
 
-// Serial
 struct SerialInterface : public ProcessInterface {
     virtual bool available() = 0;
     virtual uint8_t read() = 0;
     virtual void write(const uint8_t * c, size_t bytes) = 0;
+    virtual ~SerialInterface() {};
+};
+
+class NullSerial : public SerialInterface {
+public:
+    bool available() { return false; }
+    uint8_t read() { return 0; }
+    void write(const uint8_t * c, size_t bytes) {};
+    void update() {};
+} nullSerial;
+
+/**
+ * Board
+ */
+struct BoardInterface {
+    virtual ClockInterface * get_clock() = 0;
+    virtual SerialInterface * get_serial() = 0;
+    virtual DebugInterface * get_debug() = 0;
+    virtual ~BoardInterface() {};
 };
 
 } // namespace autopilotone

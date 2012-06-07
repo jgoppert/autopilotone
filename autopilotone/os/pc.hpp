@@ -15,27 +15,21 @@ namespace autopilotone {
 class Mutex: public MutexInterface {
 public:
 	void lock() {
-		return m_mutex.lock();
+		m_mutex.lock();
 	}
 	void unlock() {
-		return m_mutex.unlock();
+		m_mutex.unlock();
 	}
-	virtual ~Mutex() {
-	}
-	;
 private:
 	SGMutex m_mutex;
 };
 
 class Debug: public DebugInterface {
 public:
-	void send(const std::string & str) {
+	void write(const std::string & str) {
 		ScopedLock lock(m_mutex);
 		std::cout << str << std::endl;
 	}
-	virtual ~Debug() {
-	}
-	;
 private:
 	Mutex m_mutex;
 };
@@ -43,20 +37,19 @@ private:
 class Clock: public ClockInterface {
 public:
 	Clock() :
-			m_clock(SGTimeStamp::now()) {
+			m_clock(SGTimeStamp::now()), m_mutex() {
 	}
 	void sleepMicros(uint64_t micros) {
 		SGTimeStamp::sleepFor(SGTimeStamp::fromUSec(micros));
 	}
 	uint64_t get_micros() {
-		return (SGTimeStamp::now() - m_clock).toUSecs();
+        ScopedLock lock(m_mutex);
+		return((SGTimeStamp::now() - m_clock).toUSecs());
 	}
-	virtual ~Clock() {
-	}
-	;
 private:
+    Mutex m_mutex;
 	SGTimeStamp m_clock;
-} clock;
+};
 
 class Thread: public SGThread {
 };

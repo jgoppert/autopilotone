@@ -27,23 +27,21 @@ class Controller : public ControllerInterface
 
 // methods
 public:
-    Controller (NavigatorReadInterface * navigator, GuideReadInterface * guide) :
-        m_navigator(navigator), m_guide(guide), m_debug(&nullDebug) {};
+    Controller (BoardInterface * board,
+            NavigatorReadInterface * navigator,
+            GuideReadInterface * guide) :
+        m_board(board),
+        m_navigator(navigator),
+        m_guide(guide) {};
     virtual ~Controller() {};
 
 protected:
-    NavigatorReadInterface * get_navigator() { return m_navigator; }
-    GuideReadInterface * get_guide() { return m_guide; }
-
-    // component
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return m_debug; }
+    BoardInterface * get_board() { return(m_board); }
+    NavigatorReadInterface * get_navigator() { return(m_navigator); }
+    GuideReadInterface * get_guide() { return(m_guide); }
 
 private:
-
-    // interfaces
-    DebugInterface * m_debug;
+    BoardInterface * m_board;
     NavigatorReadInterface * m_navigator;
     GuideReadInterface * m_guide;
 
