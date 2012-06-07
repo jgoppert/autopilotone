@@ -236,7 +236,7 @@ file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 include_directories(. ${SIMGEAR_INCLUDE_DIRS})
 add_definitions(-DOS=PC)
 add_executable(test
-    test/pc.cpp
+    test/test.cpp
     ${APO_SRC})
 target_link_libraries(test ${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
