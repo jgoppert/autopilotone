@@ -1,13 +1,13 @@
-#ifndef AUTOPILOTONE_MODULES_TESTCONTROLLER_HPP_
-#define AUTOPILOTONE_MODULES_TESTCONTROLLER_HPP_
+#ifndef AUTOPILOTONE_MODULES_CONTROLLER_TEST_HPP_
+#define AUTOPILOTONE_MODULES_CONTROLLER_TEST_HPP_
 
 #include <autopilotone/autopilotone.hpp>
 
 namespace autopilotone {
 
-class TestController : public Controller {
+class Controller_Test : public Controller {
 public:
-    TestController(BoardInterface * board,
+    Controller_Test(BoardInterface * board,
             NavigatorReadInterface * navigator,
             GuideReadInterface * guide) :
         Controller(board,navigator,guide) {}
@@ -19,4 +19,4 @@ public:
 
 }
 
-#endif /* AUTOPILOTONE_MODULES_TESTCONTROLLER_HPP_ */
+#endif /* AUTOPILOTONE_MODULES_CONTROLLER_TEST_HPP_ */

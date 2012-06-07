@@ -1,7 +1,32 @@
+cmake_minimum_required(VERSION 2.8)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/arkcmake)
+
+# options
+set(AUTOPILOTONE_OS "PC" CACHE STRING "Operating System to Compile For")
+set_property(CACHE AUTOPILOTONE_OS PROPERTY STRINGS "PC" "Arduino" "PX4")
+option(WITH_BUILD_DEPS "Build dependencies." ON)
+option(WITH_BUILD_SHARED "Build shared library." OFF)
+option(WITH_PREFER_STATIC "Build preferring static linking." ON)
+option(WITH_WARNINGS "Enable warnings." OFF)
+
+# OS
+set(OS_ARDUINO CACHE BOOL False)
+set(OS_PC CACHE BOOL False)
+set(OS_PX4 CACHE BOOL False)
+if (${AUTOPILOTONE_OS} STREQUAL "Arduino")
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/arduino-cmake)
+    set(CMAKE_TOOLCHAIN_FILE cmake/ArduinoToolchain.cmake) # Arduino Toolchain
+    set(ARDUINO True)
+elseif (${AUTOPILOTONE_OS} STREQUAL "PC")
+    set(PC True)
+elseif (${AUTOPILOTONE_OS} STREQUAL "PX4")
+    set(PX4 True)
+endif()
+
 project(autopilotone C CXX)
 
 # settings
-cmake_minimum_required(VERSION 2.8)
 set(PROJECT_VERSION_MAJOR "0")
 set(PROJECT_VERSION_MINOR "0")
 set(PROJECT_VERSION_PATCH "0")
@@ -18,12 +43,6 @@ set(MAVLINK_REQUIRED_VERSION 1.0.4)
 # tags
 set(SIMGEAR_TAG 9ab31e0d88ef2a09f6a8dd33837ba547366151fa)
 set(MAVLINK_TAG 112cad9a4f6dddd0e65472fdc2a0956ab39da0e6)
-
-# options
-option(WITH_BUILD_DEPS "Build dependencies." ON)
-option(WITH_BUILD_SHARED "Build shared library." OFF)
-option(WITH_PREFER_STATIC "Build preferring static linking." ON)
-option(WITH_WARNINGS "Enable warnings." OFF)
 
 set(RECURSE_OPTIONS_LIST
     WITH_BUILD_DEPS
@@ -44,7 +63,6 @@ if (MINGW)
 endif()
 
 # modules
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/arkcmake)
 include(DefineCMakeDefaults)
 include(DefineCompilerFlags)
 include(CheckIncludeFiles)
@@ -170,17 +188,8 @@ if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
 endif()
 
 # configure
-check_include_files(expat_config.h HAVE_EXPAT_CONFIG_H)
-check_include_files(sys_types.h HAVE_SYS_TYPES_H)
-check_include_files(sys_stat.h HAVE_SYS_STAT_H)
-check_include_files(stdlib.h HAVE_STDLIB_H)
-check_include_files(string.h HAVE_STRING_H)
-check_include_files(inttypes.h HAVE_INTTYPES_H)
-check_include_files(stdint.h HAVE_STDINT_H)
-check_include_files(unistd.h HAVE_UNISTD_H)
-check_function_exists(memcopy HAVE_MEMCOPY)
-check_function_exists(memmove HAVE_MEMMOVE)
-check_function_exists(bcopy HAVE_BCOPY)
+#check_include_files(expat_config.h HAVE_EXPAT_CONFIG_H)
+#check_function_exists(bcopy HAVE_BCOPY)
 #check_symbol_exists(LC_MESSAGES "locale.h" HAVE_LC_MESSAGES) 
 #check_library_exists(arkosg  attachNode "" HAVE_ARKOSG)
 
@@ -189,56 +198,51 @@ configure_file(config.h.in config.h)
 install(FILES ${CMAKE_BINARY_DIR}/config.h DESTINATION include/${PROJECT_NAME} COMPONENT Dev)
 
 # build settings
-if (HAVE_EXPAT_CONFIG_H OR MSVC)
-    add_definitions(-DHAVE_EXPAT_CONFIG_H)
-endif()
-if (HAVE_MEMMOVE)
-    add_definitions(-DHAVE_MEMMOVE)
-endif()
-if (HAVE_BCOPY)
-    add_definitions(-DHAVE_BCOPY)
-endif()
-if (HAVE_EXPAT_CONFIG_H)
-    add_definitions(-DHAVE_EXPAT_CONFIG_H)
-endif()
-if (MSVC)
-    add_definitions(-D_USE_MATH_DEFINES -D"NOMINMAX" -D"XML_STATIC")
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
-elseif(MINGW)
-    add_definitions(-D_WIN32_WINNT=0x0501)
-elseif(APPLE)
-    set(CMAKE_OSX_ARCHITECTURES "i386;ppc;x86_64" CACHE STRING "Build architectures for OSX" FORCE)
-    set(CMAKE_EXE_LINKER_FLAGS "-fvisiblity=hidden -framework cocoa -framework carbon")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-elseif(UNIX)
-    add_definitions(-DUSE_X11)
+add_definitions(-DAUTOPILOTONE_OS=${AUTOPILOTONE_OS})
+if (OS_PC)
+    if (MSVC)
+        add_definitions(-D_USE_MATH_DEFINES -D"NOMINMAX" -D"XML_STATIC")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
+    elseif(MINGW)
+        add_definitions(-D_WIN32_WINNT=0x0501)
+    elseif(APPLE)
+        set(CMAKE_OSX_ARCHITECTURES "i386;ppc;x86_64" CACHE STRING "Build architectures for OSX" FORCE)
+        set(CMAKE_EXE_LINKER_FLAGS "-fvisiblity=hidden -framework cocoa -framework carbon")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    elseif(UNIX)
+        add_definitions(-DUSE_X11)
+    endif()
+    include_directories(. ${SIMGEAR_INCLUDE_DIRS})
+    link_libraries(${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+    add_definitions(-DOS_PC)
+else(OS_ARDUINO)
+    add_definitions(-DOS_ARDUINO)
+else(OS_PX4)
+    add_definitions(-DOS_PX4)
 else()
-    message(ERROR "unknown operating system")
+    message(FATAL_ERROR "unknown operating system")
 endif()
 
-if (WITH_WARNINGS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
+#if (WITH_WARNINGS)
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
-endif()
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
+#endif()
 
 # library
 file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 
 # test
-include_directories(. ${SIMGEAR_INCLUDE_DIRS})
-add_definitions(-DOS=PC)
 add_executable(test
     test/test.cpp
     ${APO_SRC})
-target_link_libraries(test ${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 
 # doxygen
 find_program(DOXYGEN doxygen)

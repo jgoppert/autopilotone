@@ -1,14 +1,14 @@
-#ifndef AUTOPILOTONE_BOARDS_TESTBOARDSIM_HPP_
-#define AUTOPILOTONE_BOARDS_TESTBOARDSIM_HPP_
+#ifndef AUTOPILOTONE_BOARDS_BOARD_TEST_SIM_HPP_
+#define AUTOPILOTONE_BOARDS_BOARD_TEST_SIM_HPP_
 
 #include <autopilotone/autopilotone.hpp>
 
 namespace autopilotone {
 
-class TestBoardSim : public Board {
+class Board_Test_Sim : public Board {
 public:
     static const uint16_t serialFreq = 100; /// Serial frequency Hz
-    TestBoardSim() : m_clock(), m_serial(), m_debug(),
+    Board_Test_Sim() : m_clock(), m_serial(), m_debug(),
         m_serialThread(serialFreq,&m_serial,&m_clock) {
         // tell board what hardware is present
         set_clock(&m_clock);
@@ -24,4 +24,4 @@ private:
 
 }
 
-#endif /* AUTOPILOTONE_BOARDS_TESTBOARDSIM_HPP_ */
+#endif /* AUTOPILOTONE_BOARDS_BOARD_TEST_SIM_HPP_ */

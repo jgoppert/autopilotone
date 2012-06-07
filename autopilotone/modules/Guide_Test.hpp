@@ -1,13 +1,13 @@
-#ifndef AUTOPILOTONE_MODULES_TESTGUIDE_HPP_
-#define AUTOPILOTONE_MODULES_TESTGUIDE_HPP_
+#ifndef AUTOPILOTONE_MODULES_GUIDE_TEST_HPP_
+#define AUTOPILOTONE_MODULES_GUIDE_TEST_HPP_
 
 #include <autopilotone/autopilotone.hpp>
 
 namespace autopilotone {
 
-class TestGuide : public Guide {
+class Guide_Test : public Guide {
 public:
-    TestGuide(BoardInterface * board,
+    Guide_Test(BoardInterface * board,
             NavigatorReadInterface * navigator) :
         Guide(board,navigator) {}
     void update() {
@@ -18,4 +18,4 @@ public:
 
 }
 
-#endif /* AUTOPILOTONE_MODULES_TESTGUIDE_HPP_ */
+#endif /* AUTOPILOTONE_MODULES_GUIDE_TEST_HPP_ */

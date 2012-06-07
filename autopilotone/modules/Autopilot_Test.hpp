@@ -1,16 +1,16 @@
-#ifndef AUTOPILOTONE_MODULES_TESTAUTOPILOT_HPP_
-#define AUTOPILOTONE_MODULES_TESTAUTOPILOT_HPP_
+#ifndef AUTOPILOTONE_MODULES_AUTOPILOT_TEST_HPP_
+#define AUTOPILOTONE_MODULES_AUTOPILOT_TEST_HPP_
 
 #include <autopilotone/autopilotone.hpp>
 
 namespace  autopilotone {
 
-class TestAutopilot : public Autopilot {
+class Autopilot_Test : public Autopilot {
 public:
     static uint64_t freq2micros(float freq) {
         return(1000000.0/freq); 
     }
-    TestAutopilot(BoardInterface * board,
+    Autopilot_Test(BoardInterface * board,
             NavigatorInterface * navigator, float navFreq,
             GuideInterface * guide, float guideFreq,
             ControllerInterface * controller, float contFreq,
@@ -32,4 +32,4 @@ private:
 
 }
 
-#endif /* AUTOPILOTONE/MODULES/TESTAUTOPILOT_HPP_ */
+#endif /* AUTOPILOTONE/MODULES/AUTOPILOT_TEST_HPP_ */

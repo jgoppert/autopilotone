@@ -1,13 +1,13 @@
-#ifndef AUTOPILOTONE_MODULES_TESTCOMMLINK_HPP_
-#define AUTOPILOTONE_MODULES_TESTCOMMLINK_HPP_
+#ifndef AUTOPILOTONE_MODULES_COMMLINK_TEST_HPP_
+#define AUTOPILOTONE_MODULES_COMMLINK_TEST_HPP_
 
 #include <autopilotone/autopilotone.hpp>
 
 namespace autopilotone {
 
-class TestCommLink : public CommLink {
+class CommLink_Test : public CommLink {
 public:
-    TestCommLink(BoardInterface * board,
+    CommLink_Test(BoardInterface * board,
             NavigatorInterface * navigator,
             GuideInterface * guide,
             ControllerInterface * controller) : 
@@ -28,4 +28,4 @@ public:
 
 }
 
-#endif /* AUTOPILOTONE_MODULES_TESTCOMMLINK_HPP_ */
+#endif /* AUTOPILOTONE_MODULES_COMMLINK_TEST_HPP_ */
