@@ -38,7 +38,6 @@ endif()
 #=============================================================================#
 
 set(ARDUINO_SDK_PATH CACHE STRING "")
-message(STATUS "Arduino sdk path: ${ARDUINO_SDK_PATH}") 
 
 if("${ARDUINO_SDK_PATH}" STREQUAL "")
     message(STATUS "finding arduino sdk") 

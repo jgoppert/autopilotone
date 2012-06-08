@@ -3,25 +3,20 @@ cmake_minimum_required(VERSION 2.8)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/arkcmake)
 
 # options
-set(AUTOPILOTONE_OS "PC" CACHE STRING "Operating System to Compile For")
-set_property(CACHE AUTOPILOTONE_OS PROPERTY STRINGS "PC" "Arduino" "PX4")
+set(OS "PC" CACHE STRING "Operating System to Compile For")
+set_property(CACHE OS PROPERTY STRINGS "PC" "Arduino" "PX4")
 option(WITH_BUILD_DEPS "Build dependencies." ON)
 option(WITH_BUILD_SHARED "Build shared library." OFF)
 option(WITH_PREFER_STATIC "Build preferring static linking." ON)
 option(WITH_WARNINGS "Enable warnings." OFF)
 
 # OS
-set(OS_ARDUINO CACHE BOOL False)
-set(OS_PC CACHE BOOL False)
-set(OS_PX4 CACHE BOOL False)
-if (${AUTOPILOTONE_OS} STREQUAL "Arduino")
+if ("${OS}" STREQUAL "Arduino")
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/arduino-cmake)
     set(CMAKE_TOOLCHAIN_FILE cmake/ArduinoToolchain.cmake) # Arduino Toolchain
     set(ARDUINO True)
-elseif (${AUTOPILOTONE_OS} STREQUAL "PC")
-    set(PC True)
-elseif (${AUTOPILOTONE_OS} STREQUAL "PX4")
-    set(PX4 True)
+elseif ("${OS}" STREQUAL "PC")
+elseif ("${OS}" STREQUAL "PX4")
 endif()
 
 project(autopilotone C CXX)
@@ -53,6 +48,7 @@ set(RECURSE_OPTIONS_LIST
     CMAKE_TOOLCHAIN_FILE
     CMAKE_INSTALL_PREFIX
     EP_BASE_DIR
+    OS
 )
 
 # variables
@@ -120,35 +116,37 @@ else()
     set(REQUIRED_IF_ROOT)
 endif()
 
-find_package(SimGear 2.7.0 ${REQUIRED_IF_ROOT} COMPONENTS
-  # core components
-    #environment
-    #nasal
-    #tsync
-    #bucket
-    route
-    io
-    #serial
-    #math
-    #props
-    structure
-    timing
-    #xml
-    #misc
-    threads
-    #debug
-    #magvar
-  # scene components
-    #ephem
-    #sky
-    #material
-    #tgdb
-    #model
-    #screen
-    #bvh
-    #util
-    #sound
-    )
+if ("${OS}" STREQUAL "PC")
+    find_package(SimGear 2.7.0 ${REQUIRED_IF_ROOT} COMPONENTS
+      # core components
+        #environment
+        #nasal
+        #tsync
+        #bucket
+        route
+        io
+        #serial
+        #math
+        #props
+        structure
+        timing
+        #xml
+        #misc
+        threads
+        #debug
+        #magvar
+      # scene components
+        #ephem
+        #sky
+        #material
+        #tgdb
+        #model
+        #screen
+        #bvh
+        #util
+        #sound
+        )
+endif()
 find_package(MAVLink ${MAVLINK_REQUIRED_VERSION} ${REQUIRED_IF_ROOT})
 
 # build dependencies
@@ -173,7 +171,7 @@ if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
            )
     endif()
 
-    if (NOT SIMGEAR_FOUND)
+    if ( ("${OS}" STREQUAL "PC") AND NOT SIMGEAR_FOUND)
         ExternalProjectWithFilename_Add(simgear
             URL http://gitorious.org/fg/jgopperts-simgear/archive-tarball/${SIMGEAR_TAG}
             FILENAME jgoppert-jgopperts-simgear-${SIMGEAR_TAG}.tar.gz
@@ -198,8 +196,7 @@ configure_file(config.h.in config.h)
 install(FILES ${CMAKE_BINARY_DIR}/config.h DESTINATION include/${PROJECT_NAME} COMPONENT Dev)
 
 # build settings
-add_definitions(-DAUTOPILOTONE_OS=${AUTOPILOTONE_OS})
-if (OS_PC)
+if (${OS} STREQUAL "PC")
     if (MSVC)
         add_definitions(-D_USE_MATH_DEFINES -D"NOMINMAX" -D"XML_STATIC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
@@ -216,9 +213,9 @@ if (OS_PC)
     include_directories(. ${SIMGEAR_INCLUDE_DIRS})
     link_libraries(${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
     add_definitions(-DOS_PC)
-else(OS_ARDUINO)
+elseif ("${OS}" STREQUAL "Arduino")
     add_definitions(-DOS_ARDUINO)
-else(OS_PX4)
+elseif ("${OS}" STREQUAL "PX4")
     add_definitions(-DOS_PX4)
 else()
     message(FATAL_ERROR "unknown operating system")
