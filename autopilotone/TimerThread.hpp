@@ -13,6 +13,9 @@ public:
         start();
     }
     void run() {
+        if (get_process() == NULL) {
+            return;
+        }
         set_running(true);
         while(get_running()) {
             uint64_t start = get_clock()->get_micros();

@@ -46,13 +46,6 @@ struct DebugInterface {
     virtual ~DebugInterface() {};
 };
 
-class NullDebug : public DebugInterface {
-public:
-    void write(const char * buf, uint32_t bytes) {};
-    void writeString(const char * buf) {};
-} nullDebug;
-
-
 /**
  * General
  */
@@ -61,12 +54,6 @@ struct ClockInterface {
     virtual uint64_t get_micros() = 0;
     virtual ~ClockInterface() {};
 };
-
-class NullClock : public ClockInterface {
-public:
-    void sleepMicros(uint64_t micros) {}
-    uint64_t get_micros() { return 0; };
-} nullClock;
 
 /**
  * Navigator
@@ -220,7 +207,7 @@ struct CommLinkInterface :
     public CommLinkWriteInterface,
     public ProcessInterface
 {
-    	virtual ~CommLinkInterface() {};
+    virtual ~CommLinkInterface() {};
 };
 
 struct SerialPortInterface : public ProcessInterface {
@@ -231,14 +218,27 @@ struct SerialPortInterface : public ProcessInterface {
     virtual ~SerialPortInterface() {};
 };
 
-class NullSerialPort : public SerialPortInterface {
-public:
-    bool available() { return false; }
-    uint8_t read() { return 0; }
-    void write(const char * c, uint32_t bytes) {};
-    void writeString(const char * c) {};
-    void update() {};
-} nullSerialPort;
+class BoardInterface;
+
+/**
+ * Environment Simulation
+ */
+struct EnvironmentReadInterface : public NavigatorReadInterface {
+    virtual ~EnvironmentReadInterface() {};
+};
+
+struct EnvironmentWriteInterface : public NavigatorWriteInterface {
+    virtual ~EnvironmentWriteInterface() {};
+};
+
+struct EnvironmentInterface :
+    public EnvironmentReadInterface,
+    public EnvironmentWriteInterface,
+    public ProcessInterface
+{
+    virtual BoardInterface * get_board() = 0;
+    virtual ~EnvironmentInterface() {};
+};
 
 /**
  * Board
@@ -247,8 +247,10 @@ struct BoardInterface {
     virtual ClockInterface * get_clock() = 0;
     virtual SerialPortInterface * get_serialPort() = 0;
     virtual DebugInterface * get_debug() = 0;
+    virtual EnvironmentReadInterface * get_environment() = 0;
     virtual ~BoardInterface() {};
 };
+
 
 } // namespace autopilotone
 

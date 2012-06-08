@@ -1,12 +1,12 @@
-// Navigator.hpp 
+// Environment.hpp 
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
-// Navigator.hpp is free software: you can redistribute it and/or modify it
+// Environment.hpp is free software: you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
 // Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Navigator.hpp is distributed in the hope that it will be useful, but
+// Environment.hpp is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // See the GNU General Public License for more details.
@@ -14,8 +14,8 @@
 // You should have received a copy of the GNU General Public License along
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef NAVIGATOR_HPP_
-#define NAVIGATOR_HPP_
+#ifndef AUTOPILOTONE_ENVIRONMENTSIMULATION_HPP_
+#define AUTOPILOTONE_ENVIRONMENTSIMULATION_HPP_
 
 #include "interfaces.hpp"
 #include "os/os.hpp"
@@ -24,11 +24,11 @@
 namespace autopilotone
 {
 
-class Navigator : public NavigatorInterface
+class Environment : public EnvironmentInterface
 {
 // methods
 public:
-    Navigator (BoardInterface * board):
+    Environment (BoardInterface * board):
         m_board(board),
         m_lat_degE7(0),
         m_lon_degE7(0),
@@ -43,11 +43,10 @@ public:
         m_pitchRate(0),
         m_yawRate(0)
     {};
-    virtual ~Navigator() {};
+    virtual ~Environment() {};
 
 protected: 
     BoardInterface * get_board() { return(m_board); }
-    
     LOCKED_GET_SET(int32_t,lat_degE7);
     INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);
@@ -66,7 +65,6 @@ protected:
 
 private:
     BoardInterface * m_board;
-    
     LOCKED_ATTR(int32_t,lat_degE7);
     LOCKED_ATTR(int32_t,lon_degE7);
     LOCKED_ATTR(int16_t,alt_degE3);
@@ -81,7 +79,9 @@ private:
     LOCKED_ATTR(float,yawRate);
 };
 
+
+
 }; // namespace autopilotone
 
-#endif /* NAVIGATOR_HPP_ */
+#endif /* AUTOPILOTONE_ENVIRONMENTSIMULATION_HPP_ */
 

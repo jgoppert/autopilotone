@@ -5,12 +5,12 @@
 #include <autopilotone/modules/CommLink_Test.hpp>
 //#include <autopilotone/modules/CommLink_MAVLink.hpp>
 #include <autopilotone/modules/Autopilot_Test.hpp>
-#include <autopilotone/boards/Board_Test_Sim.hpp>
+#include <autopilotone/boards/Board_Test.hpp>
 
 int main (int argc, char const* argv[])
 {
     using namespace autopilotone;
-    Board_Test_Sim board;
+    Board_Test board;
     Navigator_Test navigator(&board);
     Guide_Test guide(&board,&navigator);
     Controller_Test controller(&board,&navigator,&guide);

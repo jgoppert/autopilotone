@@ -30,8 +30,7 @@ class FlightPlan : public FlightPlanInterface {
 
 // methods
 public:
-    FlightPlan () :
-        m_debug(&nullDebug) { m_commandIndex = 0;}; 
+    FlightPlan () : m_commandIndex(0) {}; 
     virtual ~FlightPlan() {};
 
     // read interface
@@ -104,11 +103,6 @@ public:
 protected:
 
     // component
-    virtual void update() {};
-    virtual void set_debug(DebugInterface * debug) {m_debug = debug; }
-    virtual DebugInterface * get_debug() { return (m_debug); }
-
-    // component
     Command m_commands [COMMAND_BUFFER_SIZE];
     uint16_t m_commandIndex;
     uint16_t m_commandHighestIndex;
@@ -118,8 +112,6 @@ protected:
 private:
 
     LOCKED_FLAG(commandAccessFlag);
-    // interfaces
-    DebugInterface * m_debug;
 
 }; // class FlightPlan
 
