@@ -1,5 +1,4 @@
 #ifndef AUTOPILOTONE_MODULES_NAVIGATOR_TEST_HPP_
-
 #define AUTOPILOTONE_MODULES_NAVIGATOR_TEST_HPP_
 
 #include <autopilotone/autopilotone.hpp>
