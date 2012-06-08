@@ -2,6 +2,7 @@
 #define AUTOPILOTONE_OS_ARDUINO_ARDUINO_HPP_
 
 #include "../../interfaces.hpp"
+#include "Arduino.h"
 
 namespace autopilotone {
 
@@ -22,6 +23,10 @@ public:
             Serial.print(buf[i]);
         }
 	}
+    void writeString(const char * buf) {
+		ScopedLock lock(m_mutex);
+        Serial.print(buf);
+	}
 private:
 	Mutex m_mutex;
 };
@@ -39,54 +44,28 @@ public:
 	}
 };
 
-//class Thread: public SGThread {
-//};
+class SerialPort : public SerialPortInterface {
+    bool available() {
+        return false;
+    }
+    uint8_t read() {
+        return 0;
+    }
+	void write(const char * c, uint32_t bytes) {
+    }
+    void writeString(const char * c) {
+    }
+    void update() {
+    }
+};
 
-//class Serial: public SerialInterface {
-//public:
-	//Serial() {
-	//}
-	//virtual ~Serial() {
-		//ScopedLock lockReceive(m_mutexReceive);
-		//ScopedLock lockSend(m_mutexSend);
-		//m_channelSend->close();
-		//m_channelReceive->close();
-	//}
-	//bool available() {
-		//ScopedLock lock(m_mutexReceive);
-		//return (m_readBuffer.size());
-	//}
-	//uint8_t read() {
-		//ScopedLock lock(m_mutexReceive);
-		//if (m_readBuffer.size() < 1) {
-			//return (0);
-		//} else {
-			//return (m_readBuffer.pop());
-		//}
-	//}
-	//void write(const uint8_t * c, uint32_t bytes) {
-		//ScopedLock lock(m_mutexSend);
-		//m_channelSend->write((const char *) c, bytes);
-	//}
-	//void update() {
-		//ScopedLock lock(m_mutexReceive);
-		//char buffer[100];
-		//int bytesRead = m_channelReceive->read(buffer, 100);
-		////std::cout << "bytesRead : " << bytesRead << std::endl;
-		//if (bytesRead > 0) {
-			//for (int i = 0; i < bytesRead; i++) {
-				//m_readBuffer.push(buffer[i]);
-				////std::cout << "pushing back: " << buffer[i] << std::endl;
-			//}
-		//}
-	//}
-//private:
-	//SGIOChannel * m_channelSend;
-	//SGIOChannel * m_channelReceive;
-	//Mutex m_mutexSend;
-	//Mutex m_mutexReceive;
-	//SGBlockingQueue<uint8_t> m_readBuffer;
-//};
+class Thread  {
+public:
+    void start() {
+    }
+    void join() {
+    }
+};
 
 } // namespace autopilotone
 

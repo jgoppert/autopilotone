@@ -223,29 +223,29 @@ struct CommLinkInterface :
     	virtual ~CommLinkInterface() {};
 };
 
-struct SerialInterface : public ProcessInterface {
+struct SerialPortInterface : public ProcessInterface {
     virtual bool available() = 0;
     virtual uint8_t read() = 0;
     virtual void write(const char * c, uint32_t bytes) = 0;
     virtual void writeString(const char * c) = 0;
-    virtual ~SerialInterface() {};
+    virtual ~SerialPortInterface() {};
 };
 
-class NullSerial : public SerialInterface {
+class NullSerialPort : public SerialPortInterface {
 public:
     bool available() { return false; }
     uint8_t read() { return 0; }
     void write(const char * c, uint32_t bytes) {};
     void writeString(const char * c) {};
     void update() {};
-} nullSerial;
+} nullSerialPort;
 
 /**
  * Board
  */
 struct BoardInterface {
     virtual ClockInterface * get_clock() = 0;
-    virtual SerialInterface * get_serial() = 0;
+    virtual SerialPortInterface * get_serialPort() = 0;
     virtual DebugInterface * get_debug() = 0;
     virtual ~BoardInterface() {};
 };

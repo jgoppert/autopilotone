@@ -1,7 +1,7 @@
 #ifndef AUTOPILOTONE_OS_ARDUINO_VECTOR_H_
 #define AUTOPILOTONE_OS_ARDUINO_VECTOR_H_
 
-typedef uint32_t size_t 
+#include "Arduino.h"
 
 // Minimal class to replace std::vector
 template<typename Data>

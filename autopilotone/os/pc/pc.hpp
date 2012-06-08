@@ -62,9 +62,9 @@ private:
 class Thread: public SGThread {
 };
 
-class Serial: public SerialInterface {
+class SerialPort: public SerialPortInterface {
 public:
-	Serial() :
+	SerialPort() :
 			m_channelSend(new SGSocket("127.0.0.1", "5001", "udp")),
 			m_channelReceive(new SGSocket("", "5002", "udp")),
 			m_mutexSend(), m_mutexReceive(),
@@ -76,7 +76,7 @@ public:
 			throw std::runtime_error("failed to connect receive channel");
 		}
 	}
-	virtual ~Serial() {
+	virtual ~SerialPort() {
 		ScopedLock lockReceive(m_mutexReceive);
 		ScopedLock lockSend(m_mutexSend);
 		m_channelSend->close();

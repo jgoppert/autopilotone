@@ -8,18 +8,18 @@ namespace autopilotone {
 class Board_Test_Sim : public Board {
 public:
     static const uint16_t serialFreq = 100; /// Serial frequency Hz
-    Board_Test_Sim() : m_clockInst(), m_serialInst(), m_debugInst(),
-        m_serialThreadInst(serialFreq,&m_serialInst,&m_clockInst) {
+    Board_Test_Sim() : m_clock(), m_serialPort(), m_debug(),
+        m_serialThread(serialFreq,&m_serialPort,&m_clock) {
         // tell board what hardware is present
-        set_clock(&m_clockInst);
-        set_serial(&m_serialInst);
-        set_debug(&m_debugInst);
+        set_clock(&m_clock);
+        set_serialPort(&m_serialPort);
+        set_debug(&m_debug);
     }
 private:
-    Clock m_clockInst;
-    Serial m_serialInst;
-    Debug m_debugInst;
-    TimerThread m_serialThreadInst;
+    Clock m_clock;
+    SerialPort m_serialPort;
+    Debug m_debug;
+    TimerThread m_serialThread;
 };
 
 }
