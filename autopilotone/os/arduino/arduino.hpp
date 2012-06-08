@@ -35,7 +35,7 @@ public:
         //delayMicros(micros);
 	}
 	uint64_t get_micros() {
-        return micros();
+        return 0;
 	}
 };
 
