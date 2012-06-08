@@ -12,7 +12,7 @@ public:
         Guide(board,navigator) {}
     void update() {
         float lat = get_navigator()->get_lat();
-        get_board()->get_debug()->write("guide update",12);
+        get_board()->get_debug()->writeString("guide update\n");
     }
 };
 

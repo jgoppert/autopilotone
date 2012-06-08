@@ -21,7 +21,7 @@ public:
         m_controllerThread(contFreq,controller,board->get_clock()),
         m_commLinkThread(commFreq,commLink,board->get_clock())
     {
-        get_board()->get_debug()->write("initialize autopilot",20);
+        get_board()->get_debug()->writeString("initialize autopilot\n");
     }
 private:
     TimerThread m_navigatorThread;

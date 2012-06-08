@@ -2,6 +2,7 @@
 #define AUTOPILOTONE_OS_LINUX_HPP_
 
 #include <iostream>
+#include <string.h>
 #include <stdexcept>
 #include "../../interfaces.hpp"
 #include <simgear/timing/timestamp.hxx>
@@ -28,7 +29,14 @@ class Debug: public DebugInterface {
 public:
 	void write(const char * buf, uint32_t bytes) {
 		ScopedLock lock(m_mutex);
-		std::cout << buf << std::endl;
+        char buf2[bytes+1];
+        strncpy(buf2,buf,bytes);
+        buf2[bytes] = '\0';
+		std::cout << buf2 << std::flush;
+	}
+    void writeString(const char * buf) {
+		ScopedLock lock(m_mutex);
+		std::cout << buf << std::flush;
 	}
 private:
 	Mutex m_mutex;
@@ -86,9 +94,13 @@ public:
 			return (m_readBuffer.pop());
 		}
 	}
-	void write(const uint8_t * c, uint32_t bytes) {
+	void write(const char * c, uint32_t bytes) {
 		ScopedLock lock(m_mutexSend);
 		m_channelSend->write((const char *) c, bytes);
+	}
+	void writeString(const char * c) {
+		ScopedLock lock(m_mutexSend);
+		m_channelSend->writestring((const char *)c);
 	}
 	void update() {
 		ScopedLock lock(m_mutexReceive);

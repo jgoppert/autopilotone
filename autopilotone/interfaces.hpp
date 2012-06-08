@@ -42,12 +42,14 @@ struct ProcessInterface {
  */
 struct DebugInterface {
     virtual void write(const char * buf, uint32_t bytes) = 0;
+    virtual void writeString(const char * buf) = 0;
     virtual ~DebugInterface() {};
 };
 
 class NullDebug : public DebugInterface {
 public:
     void write(const char * buf, uint32_t bytes) {};
+    void writeString(const char * buf) {};
 } nullDebug;
 
 
@@ -224,7 +226,8 @@ struct CommLinkInterface :
 struct SerialInterface : public ProcessInterface {
     virtual bool available() = 0;
     virtual uint8_t read() = 0;
-    virtual void write(const uint8_t * c, uint32_t bytes) = 0;
+    virtual void write(const char * c, uint32_t bytes) = 0;
+    virtual void writeString(const char * c) = 0;
     virtual ~SerialInterface() {};
 };
 
@@ -232,7 +235,8 @@ class NullSerial : public SerialInterface {
 public:
     bool available() { return false; }
     uint8_t read() { return 0; }
-    void write(const uint8_t * c, uint32_t bytes) {};
+    void write(const char * c, uint32_t bytes) {};
+    void writeString(const char * c) {};
     void update() {};
 } nullSerial;
 

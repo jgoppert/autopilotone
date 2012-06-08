@@ -13,7 +13,7 @@ public:
         Controller(board,navigator,guide) {}
     void update() {
         float lat = get_navigator()->get_lat();
-        get_board()->get_debug()->write("controller update",17);
+        get_board()->get_debug()->writeString("controller update\n");
     }
 };
 

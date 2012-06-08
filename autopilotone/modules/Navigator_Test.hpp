@@ -13,7 +13,7 @@ public:
     void update() {
         set_lon_degE7(10000);
         float lon = get_lon_degE7();
-        get_board()->get_debug()->write("navigator update",16);
+        get_board()->get_debug()->writeString("navigator update\n");
     }
 };
 
