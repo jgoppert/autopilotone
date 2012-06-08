@@ -12,6 +12,7 @@ option(WITH_WARNINGS "Enable warnings." OFF)
 
 # OS
 if ("${OS}" STREQUAL "Arduino")
+    #set(WITH_STACK_PROTECTOR CACHE BOOL False "Use stack protector")
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/arduino-cmake)
     set(CMAKE_TOOLCHAIN_FILE cmake/ArduinoToolchain.cmake) # Arduino Toolchain
     set(ARDUINO True)
@@ -19,7 +20,7 @@ elseif ("${OS}" STREQUAL "PC")
 elseif ("${OS}" STREQUAL "PX4")
 endif()
 
-project(autopilotone C CXX)
+project(autopilotone CXX C)
 
 # settings
 set(PROJECT_VERSION_MAJOR "0")
@@ -59,18 +60,18 @@ if (MINGW)
 endif()
 
 # modules
-include(DefineCMakeDefaults)
-include(DefineCompilerFlags)
-include(CheckIncludeFiles)
-include(CheckFunctionExists)
-include(CheckSymbolExists)
-include(CheckLibraryExists)
+#include(DefineCMakeDefaults)
+#include(DefineCompilerFlags)
+#include(CheckIncludeFiles)
+#include(CheckFunctionExists)
+#include(CheckSymbolExists)
+#include(CheckLibraryExists)
 #include(CheckTypeSize)
 #include(CheckPrototypeExists)
 #include(CheckCXXSourceCompiles)
 #include(CheckCSourceCompiles)
 include(ExternalProjectWithFilename)
-include(CheckLinkType)
+#include(CheckLinkType)
 
 # external projects find path
 if(NOT EP_BASE_DIR)
@@ -215,6 +216,7 @@ if (${OS} STREQUAL "PC")
     include_directories(. ${SIMGEAR_INCLUDE_DIRS})
     add_definitions(-DOS_PC)
 elseif ("${OS}" STREQUAL "Arduino")
+    setup_arduino_size_script("${CMAKE_BUILD_DIR}/CMakeFiles/FirmwareSize.cmake")
     add_definitions(-DOS_ARDUINO)
 elseif ("${OS}" STREQUAL "PX4")
     add_definitions(-DOS_PX4)
@@ -222,25 +224,44 @@ else()
     message(FATAL_ERROR "unknown operating system")
 endif()
 
-if (WITH_WARNINGS)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
+#if (WITH_WARNINGS)
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
 
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
-endif()
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
+#endif()
 
 # library
 file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 
 # test
-add_executable(test
-    test/test.cpp
-    ${APO_SRC})
+if ("OS" STREQUAL "Arduino")
+    #generate_arduino_firmware(Test2
+        #SKETCH ${CMAKE_SOURCE_DIR}/test/Test2
+        #PORT /dev/ttyUSB0
+        #BOARD mega)
+   #generate_arduino_firmware(Test2
+        #SKETCH ${ARDUINO_SDK_PATH}/test/Test2
+        #PORT /dev/ttyUSB0
+        #BOARD mega)
+    generate_arduino_firmware(blink_original
+        SKETCH ${ARDUINO_SDK_PATH}/examples/1.Basics/Blink
+        PORT  /dev/ttyUSB0
+        BOARD mega)
+    generate_arduino_firmware(test2
+        SRCS test/test2.cpp
+        PORT /dev/ttyUSB0
+        BOARD mega)
+else()
+    add_executable(test
+        test/test.cpp
+        ${APO_SRC})
+endif()
 
 # doxygen
 find_program(DOXYGEN doxygen)
@@ -284,6 +305,7 @@ if ( NOT "${DOXYGEN}" STREQUAL "DOXYGEN-NOTFOUND")
 
 endif()
 
+
 # install library
 install(DIRECTORY "autopilotone" DESTINATION include COMPONENT Dev PATTERN "*.git*" EXCLUDE)
 
@@ -320,5 +342,6 @@ install(FILES
     DESTINATION "lib/pkgconfig" COMPONENT Dev
     )
 # vim:sw=4:ts=4:expandtab
+
 
 

@@ -1438,14 +1438,13 @@ endfunction()
 function(SETUP_ARDUINO_SIZE_SCRIPT OUTPUT_VAR)
     set(ARDUINO_SIZE_SCRIPT_PATH ${CMAKE_BINARY_DIR}/CMakeFiles/FirmwareSize.cmake)
 
-    file(WRITE ${ARDUINO_SIZE_SCRIPT_PATH} "
+    set(FILE_BODY "
     set(AVRSIZE_PROGRAM ${AVRSIZE_PROGRAM})
     set(AVRSIZE_FLAGS --target=ihex -d)
 
     execute_process(COMMAND \${AVRSIZE_PROGRAM} \${AVRSIZE_FLAGS} \${FIRMWARE_IMAGE}
                     OUTPUT_VARIABLE SIZE_OUTPUT)
-
-    string(STRIP \"\${SIZE_OUTPUT}\" SIZE_OUTPUT)
+string(STRIP \"\${SIZE_OUTPUT}\" SIZE_OUTPUT)
 
     # Convert lines into a list
     string(REPLACE \"\\n\" \";\" SIZE_OUTPUT \"\${SIZE_OUTPUT}\")
@@ -1456,7 +1455,17 @@ function(SETUP_ARDUINO_SIZE_SCRIPT OUTPUT_VAR)
         message(\"Total size \${CMAKE_MATCH_1} bytes\")
     endif()")
 
+    message(STATUS "writing to ${ARDUINO_SIZE_SCRIPT_PATH}: ${FILE_BODY}")
+
+    file(WRITE ${ARDUINO_SIZE_SCRIPT_PATH} "${FILE_BODY}") 
+    if (NOT EXISTS ${ARDUINO_SIZE_SCRIPT_PATH})
+        message(FATAL_ERROR "file write failed")
+    else()
+        file(READ "${ARDUINO_SIZE_SCRIPT_PATH}" FILE_BODY_CHECK)
+        message(STATUS "${FILE_BODY_CHECK}")
+    endif()
     set(${OUTPUT_VAR} ${ARDUINO_SIZE_SCRIPT_PATH} PARENT_SCOPE)
+    
 endfunction()
 
 #=============================================================================#
