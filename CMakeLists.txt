@@ -198,6 +198,7 @@ configure_file(config.h.in config.h)
 install(FILES ${CMAKE_BINARY_DIR}/config.h DESTINATION include/${PROJECT_NAME} COMPONENT Dev)
 
 # build settings
+include_directories(${CMAKE_SOURCE_DIR})
 if (${OS} STREQUAL "PC")
     link_libraries(${RT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${SIMGEAR_LIBRARIES})
     if (MSVC)
@@ -213,7 +214,7 @@ if (${OS} STREQUAL "PC")
     elseif(UNIX)
         add_definitions(-DUSE_X11)
     endif()
-    include_directories(. ${SIMGEAR_INCLUDE_DIRS})
+    include_directories(${SIMGEAR_INCLUDE_DIRS})
     add_definitions(-DOS_PC)
 elseif ("${OS}" STREQUAL "Arduino")
     setup_arduino_size_script("${CMAKE_BUILD_DIR}/CMakeFiles/FirmwareSize.cmake")
@@ -249,12 +250,16 @@ if ("OS" STREQUAL "Arduino")
         #SKETCH ${ARDUINO_SDK_PATH}/test/Test2
         #PORT /dev/ttyUSB0
         #BOARD mega)
-    generate_arduino_firmware(blink_original
-        SKETCH ${ARDUINO_SDK_PATH}/examples/1.Basics/Blink
-        PORT  /dev/ttyUSB0
-        BOARD mega)
-    generate_arduino_firmware(test2
-        SRCS test/test2.cpp
+    #generate_arduino_firmware(blink_original
+        #SKETCH ${ARDUINO_SDK_PATH}/examples/1.Basics/Blink
+        #PORT  /dev/ttyUSB0
+        #BOARD mega)
+    #generate_arduino_firmware(test2
+        #SRCS test/test2.cpp
+        #PORT /dev/ttyUSB0
+        #BOARD mega)
+    generate_arduino_firmware(test
+        SRCS test/test.cpp ${APO_SRCS}
         PORT /dev/ttyUSB0
         BOARD mega)
 else()
