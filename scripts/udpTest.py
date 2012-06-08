@@ -27,7 +27,7 @@ class UdpTest:
     def sendMessage(self):
         """send a message"""
         while True:
-            message = "hello"
+            message = "hello\n"
             print "sending", message
             self.sockSend.sendto(message, (self.host, self.portSend))
             time.sleep(0.1)
