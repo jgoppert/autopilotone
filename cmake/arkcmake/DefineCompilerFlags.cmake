@@ -31,7 +31,7 @@ if (${CMAKE_C_COMPILER_ID} MATCHES GNU)
     endif(UNIX AND NOT WIN32)
 
     check_c_compiler_flag_ssp("-fstack-protector" WITH_STACK_PROTECTOR)
-    if (WITH_STACK_PROTECTOR)
+    if (0)#WITH_STACK_PROTECTOR)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector")
         set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fstack-protector")
