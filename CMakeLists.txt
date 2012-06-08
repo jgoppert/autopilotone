@@ -117,9 +117,11 @@ else()
 endif()
 
 if ("${OS}" STREQUAL "PC")
+    find_package(Threads)
+    find_library(RT_LIBRARY rt)
     find_package(SimGear 2.7.0 ${REQUIRED_IF_ROOT} COMPONENTS
       # core components
-        environment
+        #environment
         #nasal
         #bucket
         route
@@ -196,6 +198,7 @@ install(FILES ${CMAKE_BINARY_DIR}/config.h DESTINATION include/${PROJECT_NAME} C
 
 # build settings
 if (${OS} STREQUAL "PC")
+    link_libraries(${RT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${SIMGEAR_LIBRARIES})
     if (MSVC)
         add_definitions(-D_USE_MATH_DEFINES -D"NOMINMAX" -D"XML_STATIC")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc" CACHE STRING "Flags used by the compiler during all build types." FORCE)
@@ -238,7 +241,6 @@ file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 add_executable(test
     test/test.cpp
     ${APO_SRC})
-target_link_libraries(test ${SIMGEAR_LIBRARIES})
 
 # doxygen
 find_program(DOXYGEN doxygen)
