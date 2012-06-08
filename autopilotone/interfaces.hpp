@@ -2,16 +2,14 @@
 #define AUTOPILOTONE_INTERFACES_HPP_
 
 #include <inttypes.h>
-#include <string>
 #include "macros.hpp"
-#include <cmath>
 
 namespace autopilotone {
 
 /**
  * Constants
  */
-float deg2rad = M_PI/180.0;
+float deg2rad = 3.14159/180.0;
 
 /**
  * Threading
@@ -43,13 +41,13 @@ struct ProcessInterface {
  * Debug
  */
 struct DebugInterface {
-    virtual void write(const std::string & str) = 0;
+    virtual void write(const char * buf, uint32_t bytes) = 0;
     virtual ~DebugInterface() {};
 };
 
 class NullDebug : public DebugInterface {
 public:
-    void write(const std::string & str) {};
+    void write(const char * buf, uint32_t bytes) {};
 } nullDebug;
 
 
@@ -226,7 +224,7 @@ struct CommLinkInterface :
 struct SerialInterface : public ProcessInterface {
     virtual bool available() = 0;
     virtual uint8_t read() = 0;
-    virtual void write(const uint8_t * c, size_t bytes) = 0;
+    virtual void write(const uint8_t * c, uint32_t bytes) = 0;
     virtual ~SerialInterface() {};
 };
 
@@ -234,7 +232,7 @@ class NullSerial : public SerialInterface {
 public:
     bool available() { return false; }
     uint8_t read() { return 0; }
-    void write(const uint8_t * c, size_t bytes) {};
+    void write(const uint8_t * c, uint32_t bytes) {};
     void update() {};
 } nullSerial;
 

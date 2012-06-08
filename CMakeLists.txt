@@ -119,9 +119,8 @@ endif()
 if ("${OS}" STREQUAL "PC")
     find_package(SimGear 2.7.0 ${REQUIRED_IF_ROOT} COMPONENTS
       # core components
-        #environment
+        environment
         #nasal
-        #tsync
         #bucket
         route
         io
@@ -133,7 +132,7 @@ if ("${OS}" STREQUAL "PC")
         #xml
         #misc
         threads
-        #debug
+        debug
         #magvar
       # scene components
         #ephem
@@ -211,7 +210,6 @@ if (${OS} STREQUAL "PC")
         add_definitions(-DUSE_X11)
     endif()
     include_directories(. ${SIMGEAR_INCLUDE_DIRS})
-    link_libraries(${SIMGEAR_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
     add_definitions(-DOS_PC)
 elseif ("${OS}" STREQUAL "Arduino")
     add_definitions(-DOS_ARDUINO)
@@ -221,17 +219,17 @@ else()
     message(FATAL_ERROR "unknown operating system")
 endif()
 
-#if (WITH_WARNINGS)
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
+if (WITH_WARNINGS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
 
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
-#endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
+endif()
 
 # library
 file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
@@ -240,6 +238,7 @@ file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
 add_executable(test
     test/test.cpp
     ${APO_SRC})
+target_link_libraries(test ${SIMGEAR_LIBRARIES})
 
 # doxygen
 find_program(DOXYGEN doxygen)

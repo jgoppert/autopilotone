@@ -2,8 +2,9 @@
 #define AUTOPILOTONE_OS_HPP_
 
 #if OS_PC
-#include "pc.hpp"
+#include "pc/pc.hpp"
 #elif OS_ARDUINO
+#include "arduino/arduino.hpp"
 #endif
 
 #endif // AUTOPILOTONE_OS_HPP_

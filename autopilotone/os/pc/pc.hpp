@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <stdexcept>
-#include "../interfaces.hpp"
+#include "../../interfaces.hpp"
 #include <simgear/timing/timestamp.hxx>
 #include <simgear/threads/SGThread.hxx>
 #include <simgear/threads/SGGuard.hxx>
@@ -26,9 +26,9 @@ private:
 
 class Debug: public DebugInterface {
 public:
-	void write(const std::string & str) {
+	void write(const char * buf, uint32_t bytes) {
 		ScopedLock lock(m_mutex);
-		std::cout << str << std::endl;
+		std::cout << buf << std::endl;
 	}
 private:
 	Mutex m_mutex;
@@ -86,7 +86,7 @@ public:
 			return (m_readBuffer.pop());
 		}
 	}
-	void write(const uint8_t * c, size_t bytes) {
+	void write(const uint8_t * c, uint32_t bytes) {
 		ScopedLock lock(m_mutexSend);
 		m_channelSend->write((const char *) c, bytes);
 	}
