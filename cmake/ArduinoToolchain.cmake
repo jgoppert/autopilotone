@@ -37,10 +37,10 @@ endif()
 #                         Detect Arduino SDK                                  #
 #=============================================================================#
 
-set(ARDUINO_SDK_PATH CACHE STRING "")
-
+# save sdk path
+set(ARDUINO_SDK_PATH CACHE INTERNAL "${ARDUINO_SDK_PATH}" FORCE)
 if("${ARDUINO_SDK_PATH}" STREQUAL "")
-    message(STATUS "finding arduino sdk") 
+    message(STATUS "search for arduino sdk") 
 
     set(ARDUINO_PATHS)
     foreach(VERSION 22 1)
@@ -62,10 +62,9 @@ if("${ARDUINO_SDK_PATH}" STREQUAL "")
               DOC "Arduino SDK path.")
 
     if("${ARDUINO_SDK_PATH}" STREQUAL "ARDUINO_SDK_PATH-NOTFOUND")
-        message(FATAL_ERROR "Could not find Arduino SDK (set ARDUINO_SDK_PATH)!")
+        message(FATAL_ERROR "Could not find Arduino SDK in ${ARDUINO_SDK_PATH} (set ARDUINO_SDK_PATH)!")
     else()
         list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/bin)
         list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/utils/bin)
     endif()
 endif()
-
