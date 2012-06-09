@@ -157,11 +157,6 @@
 cmake_minimum_required(VERSION 2.8.5)
 include(CMakeParseArguments)
 
-
-
-
-
-
 #=============================================================================#
 #                           User Functions                                    
 #=============================================================================#
@@ -1455,14 +1450,14 @@ string(STRIP \"\${SIZE_OUTPUT}\" SIZE_OUTPUT)
         message(\"Total size \${CMAKE_MATCH_1} bytes\")
     endif()")
 
-    message(STATUS "writing to ${ARDUINO_SIZE_SCRIPT_PATH}: ${FILE_BODY}")
+    #message(STATUS "writing to ${ARDUINO_SIZE_SCRIPT_PATH}: ${FILE_BODY}")
 
     file(WRITE ${ARDUINO_SIZE_SCRIPT_PATH} "${FILE_BODY}") 
     if (NOT EXISTS ${ARDUINO_SIZE_SCRIPT_PATH})
         message(FATAL_ERROR "file write failed")
     else()
-        file(READ "${ARDUINO_SIZE_SCRIPT_PATH}" FILE_BODY_CHECK)
-        message(STATUS "${FILE_BODY_CHECK}")
+        #file(READ "${ARDUINO_SIZE_SCRIPT_PATH}" FILE_BODY_CHECK)
+        #message(STATUS "${FILE_BODY_CHECK}")
     endif()
     set(${OUTPUT_VAR} ${ARDUINO_SIZE_SCRIPT_PATH} PARENT_SCOPE)
     
@@ -1652,6 +1647,7 @@ set(ARDUINO_AVRDUDE_FLAGS -V                              CACHE STRING "")
 #=============================================================================#
 #                          Initialization                                     
 #=============================================================================#
+
 if(NOT ARDUINO_FOUND AND ARDUINO_SDK_PATH)
     find_file(ARDUINO_CORES_PATH
               NAMES cores

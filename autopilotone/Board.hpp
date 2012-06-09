@@ -25,22 +25,25 @@ class Board : public BoardInterface
 {
 public:
     Board() :
-        m_clock(&nullClock), m_serialPort(&nullSerialPort), m_debug(&nullDebug) {};
+        m_clock(), m_serialPort(), m_debug(), m_environment() {};
     virtual ~Board() {};
 
     ClockInterface * get_clock() { return m_clock; }
     SerialPortInterface * get_serialPort() { return m_serialPort; }
     DebugInterface * get_debug() { return m_debug; }
+    EnvironmentReadInterface * get_environment() { return m_environment; }
 
 protected:
     void set_clock(ClockInterface * clock) { m_clock = clock; }
     void set_serialPort(SerialPortInterface * serialPort) { m_serialPort = serialPort; }
     void set_debug(DebugInterface * debug) { m_debug = debug; }
+    void set_environment(EnvironmentReadInterface * environment) { m_environment = environment; }
 
 private:
     ClockInterface * m_clock;
     SerialPortInterface * m_serialPort;
     DebugInterface * m_debug;
+    EnvironmentReadInterface * m_environment;
 };
 
 };

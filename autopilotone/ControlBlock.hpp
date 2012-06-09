@@ -28,22 +28,12 @@
 //// methods
 //public:
 //	ControlBlock(GuideReadInterface * guide) :
-//			m_guide(guide), m_debug(&nullDebug) {
+//			m_guide(guide) {
 //	}
 //	;
 //	virtual ~ControlBlock() {
 //	}
 //	;
-//
-//	virtual void update() {
-//	}
-//	;
-//	virtual void set_debug(DebugInterface * debug) {
-//		m_debug = debug;
-//	}
-//	virtual DebugInterface * get_debug() {
-//		return m_debug;
-//	}
 //
 //	// read interface
 //
@@ -68,7 +58,6 @@
 //
 //	float m_cutoffFrequency_radps;
 //private:
-//	DebugInterface * m_debug;
 //	GuideReadInterface * m_guide;
 //
 //};

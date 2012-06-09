@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_SOURCE_DIR}/cmake/arkcmake)
 
 # options
@@ -14,8 +15,8 @@ option(WITH_WARNINGS "Enable warnings." OFF)
 if ("${OS}" STREQUAL "Arduino")
     #set(WITH_STACK_PROTECTOR CACHE BOOL False "Use stack protector")
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/arduino-cmake)
-    set(CMAKE_TOOLCHAIN_FILE cmake/ArduinoToolchain.cmake) # Arduino Toolchain
-    set(ARDUINO True)
+    set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/cmake/ArduinoToolchain.cmake) # Arduino Toolchain
+    set(ARDUINO_SDK_PATH "/hsl/local/share/arduino-1.0" CACHE PATH "")
 elseif ("${OS}" STREQUAL "PC")
 elseif ("${OS}" STREQUAL "PX4")
 endif()
@@ -42,10 +43,8 @@ set(MAVLINK_TAG 112cad9a4f6dddd0e65472fdc2a0956ab39da0e6)
 
 set(RECURSE_OPTIONS_LIST
     WITH_BUILD_DEPS
-    WITH_BUILD_SHARED
-    WITH_PREFER_STATIC
-    WITH_BUNDLE
-    WITH_WARNINGS
+    #WITH_PREFER_STATIC
+    #WITH_WARNINGS
     CMAKE_TOOLCHAIN_FILE
     CMAKE_INSTALL_PREFIX
     EP_BASE_DIR
@@ -60,18 +59,18 @@ if (MINGW)
 endif()
 
 # modules
-#include(DefineCMakeDefaults)
-#include(DefineCompilerFlags)
-#include(CheckIncludeFiles)
-#include(CheckFunctionExists)
-#include(CheckSymbolExists)
-#include(CheckLibraryExists)
-#include(CheckTypeSize)
+include(DefineCMakeDefaults)
+include(DefineCompilerFlags)
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
+include(CheckSymbolExists)
+include(CheckLibraryExists)
+include(CheckTypeSize)
 #include(CheckPrototypeExists)
-#include(CheckCXXSourceCompiles)
-#include(CheckCSourceCompiles)
+include(CheckCXXSourceCompiles)
+include(CheckCSourceCompiles)
 include(ExternalProjectWithFilename)
-#include(CheckLinkType)
+include(CheckLinkType)
 
 # external projects find path
 if(NOT EP_BASE_DIR)
@@ -227,17 +226,17 @@ else()
     message(FATAL_ERROR "unknown operating system")
 endif()
 
-#if (WITH_WARNINGS)
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    #set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
+if (WITH_WARNINGS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu99 -pedantic")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Wshadow -Wmissing-prototypes -Wdeclaration-after-statement")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wmissing-format-attribute")
 
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
-    #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
-#endif()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wshadow")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wunused -Wfloat-equal -Wpointer-arith -Wwrite-strings -Wformat-security")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wmissing-format-attribute")
+endif()
 
 # library
 file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
