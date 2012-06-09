@@ -157,11 +157,6 @@
 cmake_minimum_required(VERSION 2.8.5)
 include(CMakeParseArguments)
 
-
-
-
-
-
 #=============================================================================#
 #                           User Functions                                    
 #=============================================================================#
@@ -1652,6 +1647,7 @@ set(ARDUINO_AVRDUDE_FLAGS -V                              CACHE STRING "")
 #=============================================================================#
 #                          Initialization                                     
 #=============================================================================#
+
 if(NOT ARDUINO_FOUND AND ARDUINO_SDK_PATH)
     find_file(ARDUINO_CORES_PATH
               NAMES cores

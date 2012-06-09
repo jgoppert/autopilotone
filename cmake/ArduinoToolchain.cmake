@@ -37,9 +37,15 @@ endif()
 #                         Detect Arduino SDK                                  #
 #=============================================================================#
 
-# save sdk path
-set(ARDUINO_SDK_PATH CACHE INTERNAL "${ARDUINO_SDK_PATH}" FORCE)
+# this allows the user to specify the ARDUINO_SDK_PATH initially on the 
+# command line, it then saves it into an auxilliary cmake system file
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/Platform/ArduinoSystemConfig.cmake")
+    message(STATUS "include system config")
+    include("${CMAKE_CURRENT_LIST_DIR}/Platform/ArduinoSystemConfig.cmake")
+endif()
+
 if("${ARDUINO_SDK_PATH}" STREQUAL "")
+
     message(STATUS "search for arduino sdk") 
 
     set(ARDUINO_PATHS)
@@ -60,11 +66,16 @@ if("${ARDUINO_SDK_PATH}" STREQUAL "")
                             ${ARDUINO_PATHS}
               HINTS ${SDK_PATH_HINTS}
               DOC "Arduino SDK path.")
+endif()
 
-    if("${ARDUINO_SDK_PATH}" STREQUAL "ARDUINO_SDK_PATH-NOTFOUND")
-        message(FATAL_ERROR "Could not find Arduino SDK in ${ARDUINO_SDK_PATH} (set ARDUINO_SDK_PATH)!")
-    else()
-        list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/bin)
-        list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/utils/bin)
+if("${ARDUINO_SDK_PATH}" STREQUAL "ARDUINO_SDK_PATH-NOTFOUND")
+    message(FATAL_ERROR "Could not find Arduino SDK in ${ARDUINO_SDK_PATH} (set ARDUINO_SDK_PATH)!")
+else()
+    if(EXISTS  ${CMAKE_CURRENT_LIST_DIR}/Platform/ArduinoSystemConfig.cmake.in)
+        configure_file(${CMAKE_CURRENT_LIST_DIR}/Platform/ArduinoSystemConfig.cmake.in
+            ${CMAKE_CURRENT_LIST_DIR}/Platform/ArduinoSystemConfig.cmake
+            IMMEDIATE @ONLY)
     endif()
+    list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/bin)
+    list(APPEND CMAKE_SYSTEM_PREFIX_PATH ${ARDUINO_SDK_PATH}/hardware/tools/avr/utils/bin)
 endif()
