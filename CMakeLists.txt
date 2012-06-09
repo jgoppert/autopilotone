@@ -40,6 +40,7 @@ set(MAVLINK_REQUIRED_VERSION 1.0.4)
 # tags
 set(SIMGEAR_TAG 9ab31e0d88ef2a09f6a8dd33837ba547366151fa)
 set(MAVLINK_TAG 112cad9a4f6dddd0e65472fdc2a0956ab39da0e6)
+set(AVR_THREADS_TAG 42172f917c3f)
 
 set(RECURSE_OPTIONS_LIST
     WITH_BUILD_DEPS
@@ -70,6 +71,7 @@ include(CheckTypeSize)
 include(CheckCXXSourceCompiles)
 include(CheckCSourceCompiles)
 include(ExternalProjectWithFilename)
+#include(ExternalProject)
 include(CheckLinkType)
 
 # external projects find path
@@ -181,6 +183,18 @@ if (WITH_BUILD_DEPS AND (NOT ROOT_THREAD) )
             INSTALL_DIR ${E_INSTALL_DIR}
            )
     endif()
+
+    if (0) #("${OS}" STREQUAL "Arduino")
+        ExternalProjectWithFilename_Add(avr-threads
+            URL https://bitbucket.org/dferreyra/avr-threads/get/${AVR_THREADS_TAG}.tar.gz
+            FILENAME avr-threads-${AVR_THREADS_TAG}.tar.gz
+            SOURCE_DIR avr-threads/avr-threads/
+            CONFIGURE_COMMAND make
+            BUILD_COMMAND make
+            INSTALL_COMMAND make
+            BUILD_IN_SOURCE 1
+           )
+       endif()
 
     return()
 

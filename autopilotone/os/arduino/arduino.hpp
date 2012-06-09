@@ -3,16 +3,37 @@
 
 #include "../../interfaces.hpp"
 #include "Arduino.h"
+#include <util/atomic.h>
 
 namespace autopilotone {
 
 // no need for mutex on arduino, single threaded
 class Mutex: public MutexInterface {
 public:
+    Mutex() {
+        //lockFlag = false;
+    }
 	void lock() {
+        //lockFlag = true;
+
+        /*
+        bool test = false;
+        while(!test) {
+            ATOMIC_BLOCK(ATOMIC_FORCEON)
+            {
+                test = lockFlag;
+                lockFlag = true;
+            }
+            // delay
+         }
+         */
 	}
 	void unlock() {
+        //lockFlag = false;
 	}
+
+private:
+    //bool lockFlag;    
 };
 
 class Debug: public DebugInterface {
