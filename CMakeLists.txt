@@ -264,6 +264,10 @@ if ("OS" STREQUAL "Arduino")
         SRCS test/test.cpp ${APO_SRCS}
         PORT /dev/ttyUSB0
         BOARD mega)
+    generate_arduino_firmware(test2
+        SRCS test/test2.cpp 
+        PORT /dev/ttyUSB0
+        BOARD mega)
 else()
     add_executable(test
         test/test.cpp
