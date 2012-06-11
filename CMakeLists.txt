@@ -294,9 +294,9 @@ if ("OS" STREQUAL "Arduino")
         PORT /dev/ttyUSB0
         BOARD mega)
 else()
-    #add_executable(test
-        #test/Test/Test.cpp
-        #${APO_SRC})
+    add_executable(test
+        test/Test/Test.cpp
+        ${APO_SRC})
 endif()
 
 # astyle

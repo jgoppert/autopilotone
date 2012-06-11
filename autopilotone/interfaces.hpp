@@ -17,7 +17,6 @@ float deg2rad = 3.14159/180.0;
 struct ThreadInterface {
     virtual void start() = 0;
     virtual void join() = 0;
-    virtual void run() = 0;
 };
 
 struct MutexInterface {

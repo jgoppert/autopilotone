@@ -3,5 +3,6 @@ doc/*
 .DS_Store
 tags
 *.swp
+*.orig
 CMakeFiles
 .project

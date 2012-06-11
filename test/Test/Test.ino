@@ -15,25 +15,15 @@ Navigator_Test navigator(&board);
 Guide_Test guide(&board,&navigator);
 Controller_Test controller(&board,&navigator,&guide);
 CommLink_Test commLink(&board,&navigator,&guide,&controller);
-Autopilot_Test autopilot(&board,&navigator,1,&guide,1,&controller,1,&commLink,1);
+Autopilot_Test autopilot(&board,&navigator,10,&guide,2,&controller,5,&commLink,1);
 //CommLink_MAVLink commLink(0,0,MAV_TYPE_GENERIC,
         //&board,&navigator,&guide,&controller);
 }
 
 void setup() {
-    Serial.begin(115200);
+    //Serial.begin(115200);
 }
 
 void loop() {
     autopilotone::scheduler.run(); 
 }
-
-//int main (int argc, char const* argv[])
-//{
-//    init();
-//    setup();
-//    for(;;) {
-//        loop();
-//    }
-//    return 0;
-//}

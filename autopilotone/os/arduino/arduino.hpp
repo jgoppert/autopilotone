@@ -62,11 +62,10 @@ public:
     Clock() {
     }
     void sleepMicros(uint64_t micros) {
-        // TODO need to implement task scheduling
-        //delayMicros(micros);
+        delayMicroseconds(micros);
     }
     uint64_t get_micros() {
-        return 0;
+        return micros();
     }
 };
 
@@ -85,57 +84,73 @@ class SerialPort : public SerialPortInterface {
     }
 };
 
-class Thread : public pt {
-public:
-    Thread(uint32_t interval) : pt(), m_timestamp(), m_interval(interval) {
-        PT_INIT(this);
+struct ThreadInterface_PT : public ThreadInterface, public pt {
+    ThreadInterface_PT() : pt() {
     }
-    int run() {
-        PT_BEGIN(this);
-        while(1) {
-            PT_WAIT_UNTIL(this, millis() - m_timestamp > m_interval );
-            m_timestamp = millis();
-            toggleLED();
-        }
-        PT_END(this);
-    }
-private:
-    uint32_t m_timestamp;
-    uint32_t m_interval;
+    virtual int pt_run() = 0;
 };
 
 class Scheduler {
 public:
-    Scheduler() {
-    }
     /**
      * A simple round robin scheduling system
      */
-    void run() {
-        while(1) {
-            for (int i=0; i<m_threads.size(); i++) {
-                m_threads[i]->run();
-            }
+    int run() {
+        for (int i=0; i<m_threads.size(); i++) {
+            m_threads[i]->pt_run();
         }
     }
-    void addThread(ThreadInterface * thread) {
+    void addThread(ThreadInterface_PT * thread) {
         m_threads.push_back(thread);
     }
 private:
-    Vector<ThreadInterface *> m_threads;
+    Vector<ThreadInterface_PT *> m_threads;
 } scheduler;
 
-class Thread : public ThreadInterface {
+
+class TimerThread : public ThreadInterface_PT {
 public:
-    Thread() {
+    TimerThread(float frequency, ProcessInterface * process, ClockInterface * clock) :
+        m_periodMicros(1000000.0/frequency), m_running(false),
+        m_start(), m_timestamp(),
+        m_process(process), m_clock(clock) {
+        PT_INIT(this);
+        start();
     }
     void start() {
         scheduler.addThread(this);
     }
     void join() {
-        // do nothing
     }
+    int pt_run() {
+        PT_BEGIN(this);
+        while(1) {
+            PT_WAIT_UNTIL(this, get_clock()->get_micros() - m_timestamp > m_periodMicros );
+            m_timestamp = get_clock()->get_micros();
+            get_process()->update();
+        }
+        PT_END(this);
+    }
+protected:
+    LOCKED_GET_SET(bool,running);
+    ProcessInterface * get_process() {
+        return m_process;
+    }
+    ClockInterface * get_clock() {
+        return m_clock;
+    }
+    uint64_t get_periodMicros() {
+        return m_periodMicros;
+    }
+private:
+    uint64_t m_periodMicros;
+    LOCKED_ATTR(volatile bool,running);
+    uint64_t m_start;
+    uint32_t m_timestamp;
+    ProcessInterface * m_process;
+    ClockInterface * m_clock;
 };
+
 
 } // namespace autopilotone
 
