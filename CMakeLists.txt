@@ -211,7 +211,10 @@ configure_file(config.h.in config.h)
 install(FILES ${CMAKE_BINARY_DIR}/config.h DESTINATION include/${PROJECT_NAME} COMPONENT Dev)
 
 # build settings
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(
+    ${CMAKE_SOURCE_DIR}
+    ${CMAKE_SOURCE_DIR}/thirdParty/pt-1.4
+    )
 if (${OS} STREQUAL "PC")
     include_directories(${CMAKE_SOURCE_DIR}/autopilotone/os/pc)
     link_libraries(${RT_LIBRARY} ${CMAKE_THREAD_LIBS_INIT} ${SIMGEAR_LIBRARIES})
@@ -231,10 +234,7 @@ if (${OS} STREQUAL "PC")
     include_directories(${SIMGEAR_INCLUDE_DIRS})
     add_definitions(-DOS_PC)
 elseif ("${OS}" STREQUAL "Arduino")
-    include_directories(
-        ${CMAKE_SOURCE_DIR}/autopilotone/os/arduino
-        ${CMAKE_SOURCE_DIR}/thirdParty/pt-1.4
-        )
+    include_directories(${CMAKE_SOURCE_DIR}/autopilotone/os/arduino)
     setup_arduino_size_script("${CMAKE_BUILD_DIR}/CMakeFiles/FirmwareSize.cmake")
     add_definitions(-DOS_ARDUINO)
 elseif ("${OS}" STREQUAL "PX4")

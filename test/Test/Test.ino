@@ -21,7 +21,9 @@ Autopilot_Test autopilot(&board,&navigator,10,&guide,2,&controller,5,&commLink,1
 }
 
 void setup() {
-    //Serial.begin(115200);
+#ifdef OS_ARDUINO
+    Serial.begin(115200);
+#endif
 }
 
 void loop() {
