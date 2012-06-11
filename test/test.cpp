@@ -20,4 +20,3 @@ int main (int argc, char const* argv[])
     Autopilot_Test(&board,&navigator,10,&guide,2,&controller,5,&commLink,1);
     return(0);
 };
-

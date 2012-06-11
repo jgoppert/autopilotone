@@ -89,9 +89,8 @@ public:
         get_threadManager().addThread(this);
     }
     void join() {
-        // join does nothing, since
-        // deallocating memory is discouraged
-        // for arduino
+        // this is a hack, first time thread attempts to join, start scheduler
+        get_threadManager().run();
     }
     virtual void run() = 0;
 private:
@@ -112,7 +111,7 @@ private:
         void addThread(Thread * thread) {
         }
     private:
-        static Vector<Thread *> m_threads;
+        Vector<Thread *> m_threads;
     };
     static ThreadManager m_threadManager;
 protected:
@@ -120,9 +119,7 @@ protected:
         return m_threadManager;
     }
 };
-
-
-
+Thread::ThreadManager Thread::m_threadManager;
 
 } // namespace autopilotone
 
