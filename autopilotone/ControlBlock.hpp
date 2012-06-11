@@ -1,4 +1,4 @@
-// ControlBlock.hpp 
+// ControlBlock.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // ControlBlock.hpp is free software: you can redistribute it and/or modify it

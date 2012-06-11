@@ -1,4 +1,4 @@
-// FlightPlan.hpp 
+// FlightPlan.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // FlightPlan.hpp is free software: you can redistribute it and/or modify it
@@ -30,14 +30,22 @@ class FlightPlan : public FlightPlanInterface {
 
 // methods
 public:
-    FlightPlan () : m_commandIndex(0) {}; 
+    FlightPlan () : m_commandIndex(0) {};
     virtual ~FlightPlan() {};
 
     // read interface
-    virtual uint16_t get_currentCommandIndex() { return (m_commandIndex); }
-    virtual uint16_t get_lastCommandIndex() { return (m_commandIndex-1); }
-    virtual uint16_t get_nextCommandIndex() { return (m_commandIndex+1); }
-    virtual uint16_t get_commandCount() { return (m_commandHighestIndex+1); }
+    virtual uint16_t get_currentCommandIndex() {
+        return (m_commandIndex);
+    }
+    virtual uint16_t get_lastCommandIndex() {
+        return (m_commandIndex-1);
+    }
+    virtual uint16_t get_nextCommandIndex() {
+        return (m_commandIndex+1);
+    }
+    virtual uint16_t get_commandCount() {
+        return (m_commandHighestIndex+1);
+    }
     virtual Command get_command(uint16_t index)
     {
         blockingTestAndSet_commandAccessFlag();
@@ -52,7 +60,7 @@ public:
     }
 
     // write interface
-    virtual void addWaypoint(uint16_t index, Command waypoint) 
+    virtual void addWaypoint(uint16_t index, Command waypoint)
     {
 
         blockingTestAndSet_commandAccessFlag();
@@ -118,4 +126,4 @@ private:
 }; // namespace apo
 
 
-#endif /* AUTOPILOTONE_FLIGHTPLAN_HPP_ */ 
+#endif /* AUTOPILOTONE_FLIGHTPLAN_HPP_ */

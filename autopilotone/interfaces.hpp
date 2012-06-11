@@ -14,16 +14,31 @@ float deg2rad = 3.14159/180.0;
 /**
  * Threading
  */
+struct ThreadInterface {
+    virtual void start() = 0;
+    virtual void join() = 0;
+    virtual void run() = 0;
+};
+
 struct MutexInterface {
     virtual void lock() = 0;
     virtual void unlock() = 0;
     virtual ~MutexInterface() {};
 };
 
+struct SchedulerInterface {
+    virtual void addThread(ThreadInterface * thread) = 0;
+    virtual void run() = 0;
+};
+
 class ScopedLock {
 public:
-    inline ScopedLock(MutexInterface & l) : lock(l) { lock.lock(); }
-    inline ~ScopedLock() { lock.unlock(); }
+    inline ScopedLock(MutexInterface & l) : lock(l) {
+        lock.lock();
+    }
+    inline ~ScopedLock() {
+        lock.unlock();
+    }
 private:
     MutexInterface & lock;
 
@@ -250,7 +265,6 @@ struct BoardInterface {
     virtual EnvironmentReadInterface * get_environment() = 0;
     virtual ~BoardInterface() {};
 };
-
 
 } // namespace autopilotone
 

@@ -8,8 +8,8 @@ namespace autopilotone {
 class Controller_Test : public Controller {
 public:
     Controller_Test(BoardInterface * board,
-            NavigatorReadInterface * navigator,
-            GuideReadInterface * guide) :
+                    NavigatorReadInterface * navigator,
+                    GuideReadInterface * guide) :
         Controller(board,navigator,guide) {}
     void update() {
         float lat = get_navigator()->get_lat();

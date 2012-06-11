@@ -1,4 +1,4 @@
-// macros.hpp 
+// macros.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // macros.hpp is free software: you can redistribute it and/or modify it
@@ -81,7 +81,7 @@ bool clear_##Name() { \
     m_lock_##Name.unlock(); \
 }
 
-    
+
 // TODO: Add a sleep to this code
 #define BLOCKING_TEST_AND_SET(Name, SleepTime) \
 bool blockingTestAndSet_##Name() { \

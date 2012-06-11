@@ -231,7 +231,10 @@ if (${OS} STREQUAL "PC")
     include_directories(${SIMGEAR_INCLUDE_DIRS})
     add_definitions(-DOS_PC)
 elseif ("${OS}" STREQUAL "Arduino")
-    include_directories(${CMAKE_SOURCE_DIR}/autopilotone/os/arduino)
+    include_directories(
+        ${CMAKE_SOURCE_DIR}/autopilotone/os/arduino
+        ${CMAKE_SOURCE_DIR}/thirdParty/pt-1.4
+        )
     setup_arduino_size_script("${CMAKE_BUILD_DIR}/CMakeFiles/FirmwareSize.cmake")
     add_definitions(-DOS_ARDUINO)
 elseif ("${OS}" STREQUAL "PX4")
@@ -253,7 +256,12 @@ if (WITH_WARNINGS)
 endif()
 
 # library
-file(GLOB_RECURSE APO_SRC "${CMAKE_SOURCE_DIR}/autopilotone/*")
+file(GLOB_RECURSE APO_SRC
+    "${CMAKE_SOURCE_DIR}/autopilotone/*.c"
+    "${CMAKE_SOURCE_DIR}/autopilotone/*.cpp"
+    "${CMAKE_SOURCE_DIR}/autopilotone/*.h"
+    "${CMAKE_SOURCE_DIR}/autopilotone/*.hpp"
+    )
 
 # test
 if ("OS" STREQUAL "Arduino")
@@ -273,18 +281,31 @@ if ("OS" STREQUAL "Arduino")
         #SRCS test/test2.cpp
         #PORT /dev/ttyUSB0
         #BOARD mega)
-    generate_arduino_firmware(test
-        SRCS test/test.cpp ${APO_SRCS}
-        PORT /dev/ttyUSB0
-        BOARD mega)
-    generate_arduino_firmware(test2
-        SRCS test/test2.cpp 
+    #generate_arduino_firmware(test
+        #SRCS test/test.cpp ${APO_SRC}
+        #PORT /dev/ttyUSB0
+        #BOARD mega)
+    #generate_arduino_firmware(test2
+        #SRCS test/test2.cpp 
+        #PORT /dev/ttyUSB0
+        #BOARD mega)
+    generate_arduino_firmware(Test
+        SKETCH ${CMAKE_SOURCE_DIR}/test/Test
         PORT /dev/ttyUSB0
         BOARD mega)
 else()
-    add_executable(test
-        test/test.cpp
-        ${APO_SRC})
+    #add_executable(test
+        #test/Test/Test.cpp
+        #${APO_SRC})
+endif()
+
+# astyle
+find_program(ASTYLE astyle)
+if ( NOT "${ASTYLE}" STREQUAL "ASTYLE-NOTFOUND")
+    message(STATUS "Found astyle")
+    add_custom_target(format
+        DEPENDS ${APO_SRC}
+        COMMAND ${ASTYLE} ${APO_SRC})
 endif()
 
 # doxygen

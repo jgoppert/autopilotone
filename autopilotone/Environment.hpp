@@ -1,4 +1,4 @@
-// Environment.hpp 
+// Environment.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // Environment.hpp is free software: you can redistribute it and/or modify it
@@ -45,8 +45,10 @@ public:
     {};
     virtual ~Environment() {};
 
-protected: 
-    BoardInterface * get_board() { return(m_board); }
+protected:
+    BoardInterface * get_board() {
+        return(m_board);
+    }
     LOCKED_GET_SET(int32_t,lat_degE7);
     INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);

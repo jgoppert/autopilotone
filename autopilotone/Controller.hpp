@@ -1,4 +1,4 @@
-// Controller.hpp 
+// Controller.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // Controller.hpp is free software: you can redistribute it and/or modify it
@@ -28,17 +28,23 @@ class Controller : public ControllerInterface
 // methods
 public:
     Controller (BoardInterface * board,
-            NavigatorReadInterface * navigator,
-            GuideReadInterface * guide) :
+                NavigatorReadInterface * navigator,
+                GuideReadInterface * guide) :
         m_board(board),
         m_navigator(navigator),
         m_guide(guide) {};
     virtual ~Controller() {};
 
 protected:
-    BoardInterface * get_board() { return(m_board); }
-    NavigatorReadInterface * get_navigator() { return(m_navigator); }
-    GuideReadInterface * get_guide() { return(m_guide); }
+    BoardInterface * get_board() {
+        return(m_board);
+    }
+    NavigatorReadInterface * get_navigator() {
+        return(m_navigator);
+    }
+    GuideReadInterface * get_guide() {
+        return(m_guide);
+    }
 
 private:
     BoardInterface * m_board;
@@ -47,7 +53,7 @@ private:
 
 }; // class Controller
 
-    
+
 }; // namespace autopilotone
 
 

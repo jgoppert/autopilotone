@@ -1,5 +1,5 @@
 //
-// autopilotone.hpp 
+// autopilotone.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // autopilotone.hpp is free software: you can redistribute it and/or modify it
@@ -17,7 +17,7 @@
 //
 
 
-/** 
+/**
  * \mainpage autopilotone
  * \section intro_sec Introduction
  *

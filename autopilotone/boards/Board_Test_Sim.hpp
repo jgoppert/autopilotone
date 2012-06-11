@@ -10,7 +10,7 @@ class Board_Test_Sim : public Board {
 public:
     static const uint16_t serialFreq = 100; /// Serial frequency Hz
     static const uint16_t environmentFreq = 100; /// Environment frequency Hz
-    Board_Test_Sim() : 
+    Board_Test_Sim() :
         m_clock(),
         m_serialPort(),
         m_debug(),

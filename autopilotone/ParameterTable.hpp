@@ -1,4 +1,4 @@
-// ParameterTable.hpp 
+// ParameterTable.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // ParameterTable.hpp is free software: you can redistribute it and/or modify it
@@ -24,9 +24,9 @@ class ParameterTable
 {
 
 // methods
-    public:
-        ParameterTable() {};
-        virtual ~ParameterTable() {};
+public:
+    ParameterTable() {};
+    virtual ~ParameterTable() {};
 
 }; // class ParameterTable
 

@@ -5,6 +5,7 @@
 #include "Arduino.h"
 #include <util/atomic.h>
 #include <vector>
+#include <pt.h>
 
 namespace autopilotone {
 
@@ -14,7 +15,7 @@ public:
     Mutex() {
         //lockFlag = false;
     }
-	void lock() {
+    void lock() {
         //lockFlag = true;
 
         /*
@@ -28,42 +29,45 @@ public:
             // delay
          }
          */
-	}
-	void unlock() {
+    }
+    void unlock() {
         //lockFlag = false;
-	}
+    }
 
 private:
-    //bool lockFlag;    
+    //bool lockFlag;
 };
 
 class Debug: public DebugInterface {
 public:
-	void write(const char * buf, uint32_t bytes) {
-		ScopedLock lock(m_mutex);
-        for (int i=0;i<bytes;i++) {
+    Debug() {
+        Serial.begin(115200);
+    }
+    void write(const char * buf, uint32_t bytes) {
+        ScopedLock lock(m_mutex);
+        for (int i=0; i<bytes; i++) {
             Serial.print(buf[i]);
         }
-	}
+    }
     void writeString(const char * buf) {
-		ScopedLock lock(m_mutex);
+        ScopedLock lock(m_mutex);
         Serial.print(buf);
-	}
+    }
 private:
-	Mutex m_mutex;
+    Mutex m_mutex;
 };
 
 class Clock: public ClockInterface {
 public:
-	Clock() {
-	}
-	void sleepMicros(uint64_t micros) {
+    Clock() {
+    }
+    void sleepMicros(uint64_t micros) {
         // TODO need to implement task scheduling
         //delayMicros(micros);
-	}
-	uint64_t get_micros() {
+    }
+    uint64_t get_micros() {
         return 0;
-	}
+    }
 };
 
 class SerialPort : public SerialPortInterface {
@@ -73,7 +77,7 @@ class SerialPort : public SerialPortInterface {
     uint8_t read() {
         return 0;
     }
-	void write(const char * c, uint32_t bytes) {
+    void write(const char * c, uint32_t bytes) {
     }
     void writeString(const char * c) {
     }
@@ -81,45 +85,57 @@ class SerialPort : public SerialPortInterface {
     }
 };
 
-class Thread  {
+class Thread : public pt {
+public:
+    Thread(uint32_t interval) : pt(), m_timestamp(), m_interval(interval) {
+        PT_INIT(this);
+    }
+    int run() {
+        PT_BEGIN(this);
+        while(1) {
+            PT_WAIT_UNTIL(this, millis() - m_timestamp > m_interval );
+            m_timestamp = millis();
+            toggleLED();
+        }
+        PT_END(this);
+    }
+private:
+    uint32_t m_timestamp;
+    uint32_t m_interval;
+};
+
+class Scheduler {
+public:
+    Scheduler() {
+    }
+    /**
+     * A simple round robin scheduling system
+     */
+    void run() {
+        while(1) {
+            for (int i=0; i<m_threads.size(); i++) {
+                m_threads[i]->run();
+            }
+        }
+    }
+    void addThread(ThreadInterface * thread) {
+        m_threads.push_back(thread);
+    }
+private:
+    Vector<ThreadInterface *> m_threads;
+} scheduler;
+
+class Thread : public ThreadInterface {
 public:
     Thread() {
     }
     void start() {
-        get_threadManager().addThread(this);
+        scheduler.addThread(this);
     }
     void join() {
-        // this is a hack, first time thread attempts to join, start scheduler
-        get_threadManager().run();
-    }
-    virtual void run() = 0;
-private:
-    class ThreadManager {
-    public:
-        ThreadManager() {
-        }
-        /**
-         * A simple round robin scheduling system
-         */
-        void run() {
-            while(1) {
-                for (int i=0;i<m_threads.size();i++) {
-                    m_threads[i]->run();
-                }
-            }
-        }
-        void addThread(Thread * thread) {
-        }
-    private:
-        Vector<Thread *> m_threads;
-    };
-    static ThreadManager m_threadManager;
-protected:
-    static ThreadManager & get_threadManager() {
-        return m_threadManager;
+        // do nothing
     }
 };
-Thread::ThreadManager Thread::m_threadManager;
 
 } // namespace autopilotone
 

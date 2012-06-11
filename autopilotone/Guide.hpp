@@ -1,4 +1,4 @@
-// Guide.hpp 
+// Guide.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // Guide.hpp is free software: you can redistribute it and/or modify it
@@ -29,31 +29,41 @@ class Guide : public GuideInterface {
 // methods
 public:
     Guide (BoardInterface * board,
-            NavigatorReadInterface * navigator) :
+           NavigatorReadInterface * navigator) :
         m_board(board), m_navigator(navigator)
     {
         set_flightPlan( & m_flightPlanMaster);
-    }; 
+    };
     virtual ~Guide() {};
 
     // read interface
-    virtual FlightPlanInterface * get_flightPlan() 
+    virtual FlightPlanInterface * get_flightPlan()
     {
         return (m_flightPlan);
     };
 
-    virtual guideMode_t get_mode() { return (m_guideMode); }
+    virtual guideMode_t get_mode() {
+        return (m_guideMode);
+    }
 
-    virtual float get_latError_degFloat() { return (m_latError_degFloat); }
-    virtual float get_lonError_degFloat() { return (m_lonError_degFloat); }
-    virtual float get_altError_ftFloat() { return (m_altError_ftFloat); }
+    virtual float get_latError_degFloat() {
+        return (m_latError_degFloat);
+    }
+    virtual float get_lonError_degFloat() {
+        return (m_lonError_degFloat);
+    }
+    virtual float get_altError_ftFloat() {
+        return (m_altError_ftFloat);
+    }
 
     // write interface
     virtual void set_flightPlan(FlightPlanInterface * flightPlan) {
         m_flightPlan = flightPlan;
     }
 
-    virtual void set_mode(guideMode_t mode) { m_guideMode = mode; }
+    virtual void set_mode(guideMode_t mode) {
+        m_guideMode = mode;
+    }
 
     virtual float update_error() {
         Command c = m_flightPlan->get_currentCommand();
@@ -62,10 +72,14 @@ public:
         m_altError_ftFloat = c.alt_degIntE3 - m_navigator->get_alt();
         return (0); // TODO return error
     }
-    
+
 protected:
-    BoardInterface * get_board() { return (m_board); }
-    NavigatorReadInterface * get_navigator() { return (m_navigator); }
+    BoardInterface * get_board() {
+        return (m_board);
+    }
+    NavigatorReadInterface * get_navigator() {
+        return (m_navigator);
+    }
 
     // component
     FlightPlan m_flightPlanMaster;

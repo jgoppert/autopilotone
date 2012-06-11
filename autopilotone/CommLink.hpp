@@ -1,4 +1,4 @@
-// CommLink.hpp 
+// CommLink.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // CommLink.hpp is free software: you can redistribute it and/or modify it
@@ -27,29 +27,37 @@ class CommLink : public CommLinkInterface {
 // methods
 public:
     CommLink(BoardInterface * board,
-            NavigatorInterface * navigator,
-            GuideInterface * guide,
-            ControllerInterface * controller) : 
+             NavigatorInterface * navigator,
+             GuideInterface * guide,
+             ControllerInterface * controller) :
         m_board(board),
         m_navigator(navigator),
-        m_guide(guide), 
+        m_guide(guide),
         m_controller(controller)
     {
     };
     virtual ~CommLink() {};
 
 protected:
-    BoardInterface * get_board() { return(m_board); }
-    NavigatorInterface * get_navigator() { return(m_navigator); }
-    GuideInterface * get_guide() { return(m_guide); }
-    ControllerInterface * get_controller() { return(m_controller); }
+    BoardInterface * get_board() {
+        return(m_board);
+    }
+    NavigatorInterface * get_navigator() {
+        return(m_navigator);
+    }
+    GuideInterface * get_guide() {
+        return(m_guide);
+    }
+    ControllerInterface * get_controller() {
+        return(m_controller);
+    }
 
 private:
     BoardInterface * m_board;
     NavigatorInterface * m_navigator;
     GuideInterface * m_guide;
     ControllerInterface * m_controller;
-        
+
 }; // class CommLink
 
 } // namespace autopilotone

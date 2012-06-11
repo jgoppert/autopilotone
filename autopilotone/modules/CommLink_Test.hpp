@@ -8,9 +8,9 @@ namespace autopilotone {
 class CommLink_Test : public CommLink {
 public:
     CommLink_Test(BoardInterface * board,
-            NavigatorInterface * navigator,
-            GuideInterface * guide,
-            ControllerInterface * controller) : 
+                  NavigatorInterface * navigator,
+                  GuideInterface * guide,
+                  ControllerInterface * controller) :
         CommLink(board,navigator,guide,controller) {}
     void update() {
         get_navigator()->set_lat(1);

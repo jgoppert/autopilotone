@@ -2,7 +2,7 @@
 #define AUTOPILOTONE_BOARDS_BOARD_TEST_HPP_
 
 #ifdef OS_PC // Running simulation on PC
-    #include "Board_Test_Sim.hpp"
+#include "Board_Test_Sim.hpp"
 #else // Running real software
 
 #include "../autopilotone.hpp"
@@ -11,7 +11,7 @@ namespace autopilotone {
 
 class Board_Test : public Board {
 public:
-    Board_Test() : 
+    Board_Test() :
         m_clock(),
         m_serialPort(),
         m_debug()

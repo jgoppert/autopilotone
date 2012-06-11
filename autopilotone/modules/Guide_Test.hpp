@@ -8,7 +8,7 @@ namespace autopilotone {
 class Guide_Test : public Guide {
 public:
     Guide_Test(BoardInterface * board,
-            NavigatorReadInterface * navigator) :
+               NavigatorReadInterface * navigator) :
         Guide(board,navigator) {}
     void update() {
         float lat = get_navigator()->get_lat();

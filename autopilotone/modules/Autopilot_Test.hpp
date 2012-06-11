@@ -8,14 +8,14 @@ namespace  autopilotone {
 class Autopilot_Test : public Autopilot {
 public:
     static uint64_t freq2micros(float freq) {
-        return(1000000.0/freq); 
+        return(1000000.0/freq);
     }
     Autopilot_Test(BoardInterface * board,
-            NavigatorInterface * navigator, float navFreq,
-            GuideInterface * guide, float guideFreq,
-            ControllerInterface * controller, float contFreq,
-            CommLinkInterface * commLink, float commFreq) :
-        Autopilot(board,navigator,guide,controller,commLink), 
+                   NavigatorInterface * navigator, float navFreq,
+                   GuideInterface * guide, float guideFreq,
+                   ControllerInterface * controller, float contFreq,
+                   CommLinkInterface * commLink, float commFreq) :
+        Autopilot(board,navigator,guide,controller,commLink),
         m_navigatorThread(navFreq,navigator,board->get_clock()),
         m_guideThread(guideFreq,guide,board->get_clock()),
         m_controllerThread(contFreq,controller,board->get_clock()),

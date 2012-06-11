@@ -8,9 +8,9 @@ namespace autopilotone {
 class CommLink_Null : public CommLink {
 public:
     CommLink_Null(BoardInterface * board,
-            NavigatorInterface * navigator,
-            GuideInterface * guide,
-            ControllerInterface * controller) : 
+                  NavigatorInterface * navigator,
+                  GuideInterface * guide,
+                  ControllerInterface * controller) :
         CommLink_Null(board,navigator,guide,controller) {}
     void update() {
     }

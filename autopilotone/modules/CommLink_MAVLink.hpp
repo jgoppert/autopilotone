@@ -9,13 +9,13 @@ namespace autopilotone {
 class CommLink_MAVLink : public CommLink {
 public:
     CommLink_MAVLink(const uint8_t sysid, const uint8_t compid, const MAV_TYPE type,
-            BoardInterface * board,
-            NavigatorInterface * navigator,
-            GuideInterface * guide,
-            ControllerInterface * controller) : 
+                     BoardInterface * board,
+                     NavigatorInterface * navigator,
+                     GuideInterface * guide,
+                     ControllerInterface * controller) :
         CommLink(board,navigator,guide,controller),
         m_system(), m_status() {
-          
+
         // system
         m_system.sysid = sysid;
         m_system.compid = compid;
@@ -46,13 +46,13 @@ public:
         int16_t zacc = 3*1e3;
 
         mavlink_message_t msg;
-        mavlink_msg_hil_state_pack(m_system.sysid, m_system.compid, &msg, 
-            get_board()->get_clock()->get_micros()/1000000.0,
-            roll,pitch,yaw,
-            rollRate,pitchRate,yawRate,
-            lat,lon,alt,
-            vx,vy,vz,
-            xacc,yacc,zacc);
+        mavlink_msg_hil_state_pack(m_system.sysid, m_system.compid, &msg,
+                                   get_board()->get_clock()->get_micros()/1000000.0,
+                                   roll,pitch,yaw,
+                                   rollRate,pitchRate,yawRate,
+                                   lat,lon,alt,
+                                   vx,vy,vz,
+                                   xacc,yacc,zacc);
         sendMessage(msg);
     }
     void receive() {
@@ -97,13 +97,13 @@ public:
 private:
 
     // private attributes
-    
+
     mavlink_system_t m_system;
     mavlink_status_t m_status;
     static const double m_rad2deg = 180.0/3.14159;
 
     // private methods
-    
+
     // send a mavlink message to the comm port
     void sendMessage(const mavlink_message_t & msg) {
         uint8_t buf[MAVLINK_MAX_PACKET_LEN];

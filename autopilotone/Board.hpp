@@ -1,4 +1,4 @@
-// Board.hpp 
+// Board.hpp
 // Copyright (C) James Goppert 2012 <james.goppert@gmail.com>
 //
 // Board.hpp is free software: you can redistribute it and/or modify it
@@ -15,7 +15,7 @@
 // with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef AUTOPILOTONE_BOARD_HPP_
-#define AUTOPILOTONE_BOARD_HPP_ 
+#define AUTOPILOTONE_BOARD_HPP_
 
 #include "interfaces.hpp"
 
@@ -28,16 +28,32 @@ public:
         m_clock(), m_serialPort(), m_debug(), m_environment() {};
     virtual ~Board() {};
 
-    ClockInterface * get_clock() { return m_clock; }
-    SerialPortInterface * get_serialPort() { return m_serialPort; }
-    DebugInterface * get_debug() { return m_debug; }
-    EnvironmentReadInterface * get_environment() { return m_environment; }
+    ClockInterface * get_clock() {
+        return m_clock;
+    }
+    SerialPortInterface * get_serialPort() {
+        return m_serialPort;
+    }
+    DebugInterface * get_debug() {
+        return m_debug;
+    }
+    EnvironmentReadInterface * get_environment() {
+        return m_environment;
+    }
 
 protected:
-    void set_clock(ClockInterface * clock) { m_clock = clock; }
-    void set_serialPort(SerialPortInterface * serialPort) { m_serialPort = serialPort; }
-    void set_debug(DebugInterface * debug) { m_debug = debug; }
-    void set_environment(EnvironmentReadInterface * environment) { m_environment = environment; }
+    void set_clock(ClockInterface * clock) {
+        m_clock = clock;
+    }
+    void set_serialPort(SerialPortInterface * serialPort) {
+        m_serialPort = serialPort;
+    }
+    void set_debug(DebugInterface * debug) {
+        m_debug = debug;
+    }
+    void set_environment(EnvironmentReadInterface * environment) {
+        m_environment = environment;
+    }
 
 private:
     ClockInterface * m_clock;

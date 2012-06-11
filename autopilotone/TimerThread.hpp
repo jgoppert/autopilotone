@@ -8,8 +8,8 @@ namespace autopilotone {
 class TimerThread : public Thread {
 public:
     TimerThread(float frequency, ProcessInterface * process, ClockInterface * clock) :
-            m_periodMicros(1000000.0/frequency), m_running(false),
-            m_process(process), m_clock(clock) {
+        m_periodMicros(1000000.0/frequency), m_running(false),
+        m_process(process), m_clock(clock) {
         start();
     }
     void run() {
@@ -38,14 +38,21 @@ public:
     }
 protected:
     LOCKED_GET_SET(bool,running);
-    ProcessInterface * get_process() { return m_process; }
-    ClockInterface * get_clock() { return m_clock; }
-    uint64_t get_periodMicros() { return m_periodMicros; }
+    ProcessInterface * get_process() {
+        return m_process;
+    }
+    ClockInterface * get_clock() {
+        return m_clock;
+    }
+    uint64_t get_periodMicros() {
+        return m_periodMicros;
+    }
 private:
     LOCKED_ATTR(bool,running);
     uint64_t m_periodMicros;
     ProcessInterface * m_process;
     ClockInterface * m_clock;
+    uint64_t m_start;
 };
 
 } // autopilotone
