@@ -4,6 +4,7 @@
 #include "../../interfaces.hpp"
 #include "Arduino.h"
 #include <util/atomic.h>
+#include <vector>
 
 namespace autopilotone {
 
@@ -82,11 +83,46 @@ class SerialPort : public SerialPortInterface {
 
 class Thread  {
 public:
+    Thread() {
+    }
     void start() {
+        get_threadManager().addThread(this);
     }
     void join() {
+        // join does nothing, since
+        // deallocating memory is discouraged
+        // for arduino
+    }
+    virtual void run() = 0;
+private:
+    class ThreadManager {
+    public:
+        ThreadManager() {
+        }
+        /**
+         * A simple round robin scheduling system
+         */
+        void run() {
+            while(1) {
+                for (int i=0;i<m_threads.size();i++) {
+                    m_threads[i]->run();
+                }
+            }
+        }
+        void addThread(Thread * thread) {
+        }
+    private:
+        static Vector<Thread *> m_threads;
+    };
+    static ThreadManager m_threadManager;
+protected:
+    static ThreadManager & get_threadManager() {
+        return m_threadManager;
     }
 };
+
+
+
 
 } // namespace autopilotone
 

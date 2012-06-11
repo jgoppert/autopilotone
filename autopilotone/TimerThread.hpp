@@ -31,9 +31,10 @@ public:
     }
     void stop() {
         set_running(false);
+        join();
     }
     virtual ~TimerThread() {
-        join();
+        stop();
     }
 protected:
     LOCKED_GET_SET(bool,running);
