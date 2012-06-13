@@ -54,22 +54,22 @@ private:
 class SerialPort: public SerialPortInterface {
 public:
     SerialPort() :
-        m_channelSend(new SGSocket("127.0.0.1", "5001", "udp")),
-        m_channelReceive(new SGSocket("", "5002", "udp")),
+        m_channelSend("127.0.0.1", "5001", "udp"),
+        m_channelReceive("", "5002", "udp"),
         m_mutexSend(), m_mutexReceive(),
         m_readBuffer() {
-        if (!m_channelSend->open(SG_IO_OUT)) {
+        if (!m_channelSend.open(SG_IO_OUT)) {
             throw std::runtime_error("failed to connect send channel");
         }
-        if (!m_channelReceive->open(SG_IO_IN)) {
+        if (!m_channelReceive.open(SG_IO_IN)) {
             throw std::runtime_error("failed to connect receive channel");
         }
     }
     virtual ~SerialPort() {
         ScopedLock lockReceive(m_mutexReceive);
         ScopedLock lockSend(m_mutexSend);
-        m_channelSend->close();
-        m_channelReceive->close();
+        m_channelSend.close();
+        m_channelReceive.close();
     }
     bool available() {
         ScopedLock lock(m_mutexReceive);
@@ -85,16 +85,16 @@ public:
     }
     void write(const char * c, uint32_t bytes) {
         ScopedLock lock(m_mutexSend);
-        m_channelSend->write((const char *) c, bytes);
+        m_channelSend.write((const char *) c, bytes);
     }
     void writeString(const char * c) {
         ScopedLock lock(m_mutexSend);
-        m_channelSend->writestring((const char *)c);
+        m_channelSend.writestring((const char *)c);
     }
     void update() {
         ScopedLock lock(m_mutexReceive);
         char buffer[100];
-        int bytesRead = m_channelReceive->read(buffer, 100);
+        int bytesRead = m_channelReceive.read(buffer, 100);
         //std::cout << "bytesRead : " << bytesRead << std::endl;
         if (bytesRead > 0) {
             for (int i = 0; i < bytesRead; i++) {
@@ -104,8 +104,8 @@ public:
         }
     }
 private:
-    SGIOChannel * m_channelSend;
-    SGIOChannel * m_channelReceive;
+    SGSocket m_channelSend;
+    SGSocket m_channelReceive;
     Mutex m_mutexSend;
     Mutex m_mutexReceive;
     SGBlockingQueue<uint8_t> m_readBuffer;

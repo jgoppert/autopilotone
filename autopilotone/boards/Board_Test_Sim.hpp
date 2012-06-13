@@ -2,7 +2,7 @@
 #define AUTOPILOTONE_BOARDS_BOARD_TEST_SIM_HPP_
 
 #include "../autopilotone.hpp"
-#include "../modules/Environment_Test.hpp"
+#include "../modules/Environment_JSBSim.hpp"
 
 namespace autopilotone {
 
@@ -28,7 +28,7 @@ private:
     Clock m_clock;
     SerialPort m_serialPort;
     Debug m_debug;
-    Environment_Test m_environment;
+    Environment_JSBSim m_environment;
     TimerThread m_serialThread;
     TimerThread m_environmentThread;
 };
