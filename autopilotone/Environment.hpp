@@ -32,7 +32,8 @@ public:
         m_board(board),
         m_lat_degE7(0),
         m_lon_degE7(0),
-        m_alt_degE3(0),
+        m_asl_mE3(0),
+        m_agl_mE3(0),
         m_vNorth(0),
         m_vEast(0),
         m_vDown(0),
@@ -42,6 +43,7 @@ public:
         m_rollRate(0),
         m_pitchRate(0),
         m_yawRate(0)
+
     {};
     virtual ~Environment() {};
 
@@ -49,12 +51,15 @@ protected:
     BoardInterface * get_board() {
         return(m_board);
     }
+
     LOCKED_GET_SET(int32_t,lat_degE7);
     INT2FLOAT_GET_SET(lat,lat_degE7,1.0e7*deg2rad);
     LOCKED_GET_SET(int32_t,lon_degE7);
     INT2FLOAT_GET_SET(lon,lon_degE7,1.0e7*deg2rad);
-    LOCKED_GET_SET(int16_t,alt_degE3);
-    INT2FLOAT_GET_SET(alt,alt_degE3,1.0e3*deg2rad);
+    LOCKED_GET_SET(int16_t,asl_mE3);
+    INT2FLOAT_GET_SET(asl,asl_mE3,1.0e3);
+    LOCKED_GET_SET(int16_t,agl_mE3);
+    INT2FLOAT_GET_SET(agl,agl_mE3,1.0e3);
     LOCKED_GET_SET(float,vNorth);
     LOCKED_GET_SET(float,vEast);
     LOCKED_GET_SET(float,vDown);
@@ -67,9 +72,11 @@ protected:
 
 private:
     BoardInterface * m_board;
+
     LOCKED_ATTR(int32_t,lat_degE7);
     LOCKED_ATTR(int32_t,lon_degE7);
-    LOCKED_ATTR(int16_t,alt_degE3);
+    LOCKED_ATTR(int16_t,asl_mE3);
+    LOCKED_ATTR(int16_t,agl_mE3);
     LOCKED_ATTR(float,vNorth);
     LOCKED_ATTR(float,vEast);
     LOCKED_ATTR(float,vDown);

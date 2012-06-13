@@ -74,11 +74,13 @@ struct ClockInterface {
  */
 struct NavigatorReadInterface {
     virtual int32_t get_lat_degE7() = 0;
-    virtual int32_t get_lon_degE7() = 0;
-    virtual int16_t get_alt_degE3() = 0;
     virtual float get_lat() = 0;
+    virtual int32_t get_lon_degE7() = 0;
     virtual float get_lon() = 0;
-    virtual float get_alt() = 0;
+    virtual int16_t get_asl_mE3() = 0;
+    virtual float get_asl() = 0;
+    virtual int16_t get_agl_mE3() = 0;
+    virtual float get_agl() = 0;
     virtual float get_vNorth() = 0;
     virtual float get_vEast() = 0;
     virtual float get_vDown() = 0;
@@ -93,11 +95,13 @@ struct NavigatorReadInterface {
 
 struct NavigatorWriteInterface {
     virtual void set_lat_degE7(int32_t val) = 0;
-    virtual void set_lon_degE7(int32_t val) = 0;
-    virtual void set_alt_degE3(int16_t val) = 0;
     virtual void set_lat(float val) = 0;
+    virtual void set_lon_degE7(int32_t val) = 0;
     virtual void set_lon(float val) = 0;
-    virtual void set_alt(float val) = 0;
+    virtual void set_asl_mE3(int16_t val) = 0;
+    virtual void set_asl(float val) = 0;
+    virtual void set_agl_mE3(int16_t val) = 0;
+    virtual void set_agl(float val) = 0;
     virtual void set_vNorth(float val) = 0;
     virtual void set_vEast(float val) = 0;
     virtual void set_vDown(float val) = 0;
