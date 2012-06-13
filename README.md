@@ -21,10 +21,11 @@ Building for PC:
 mkdir build; cd build
 cmake ..
 make
+cd ..
 ```
 
-Test with JSBSim (from build directory)
+Test with JSBSim (from source directory)
 ``` bash
-../scripts/jsbsim.sh
-./test.sh
+./scripts/jsbsim.sh
+./build/test.sh
 ```
