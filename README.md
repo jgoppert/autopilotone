@@ -15,3 +15,16 @@ Requirements:
 
 Future Plans:
 * Add alternative subscription based mult-threading environment for comparison. 
+
+Building for PC:
+``` bash
+mkdir build; cd build
+cmake ..
+make
+```
+
+Test with JSBSim (from build directory)
+``` bash
+../scripts/jsbsim.sh
+./test.sh
+```
