@@ -1,12 +1,12 @@
-autopilotone: A universal autopilot interface library.
+#autopilotone: A universal autopilot interface library.
 
-#Features
+##Features
 * Standardizes guidance/navigatoin/control module interfaces so that they can be used on any autopilot running autopilotone.
 * Limits access to components for security and better object-oriented design.
 * Thread-safe: Can run on multi-threaded applications. Each component( guide, navigator, control) is assumed to run in a unique thread. Communication between modules is garunteed thread-safe through the use of mutex locks.
 * Mutex locks are added per attribute, to ensure little time is wasted waiting for a lock. This had memory overhead of 1 byte/ attribute as a trade-off.
 
-#Requirements
+##Requirements
 * C++
 * OS:
     * Currently supports Unix/ Windows for pc build.
@@ -16,7 +16,7 @@ autopilotone: A universal autopilot interface library.
 #Future Plans
 * Add alternative subscription based mult-threading environment for comparison. 
 
-#Building for PC
+##Building for PC
 ``` bash
 mkdir build; cd build
 cmake ..
@@ -24,7 +24,7 @@ make
 cd ..
 ```
 
-#Test with JSBSim (from source directory)
+##Test with JSBSim (from source directory)
 ``` bash
 ./scripts/jsbsim.sh
 ./build/test.sh
